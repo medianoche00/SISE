@@ -1,0 +1,5 @@
+﻿[
+  { "NombreModalidad": "Presencial", "Estado": true },
+  { "NombreModalidad": "Remoto", "Estado": true },
+  { "NombreModalidad": "Híbrido", "Estado": true }
+]

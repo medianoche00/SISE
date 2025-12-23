@@ -3,8 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\controllers\\todosusuarioscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:controllers\\todosusuarioscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\todosusuarios.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:todosusuarios.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,23 +34,84 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Usuario.cs",
+              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Models\\Usuario.cs",
+              "RelativeDocumentMoniker": "Models\\Usuario.cs",
+              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Models\\Usuario.cs",
+              "RelativeToolTip": "Models\\Usuario.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAowBsAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-23T04:02:02.095Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAArwDMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-23T03:50:11.499Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\appsettings.json",
-              "RelativeDocumentMoniker": "appsettings.json",
-              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\appsettings.json",
-              "RelativeToolTip": "appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-12-22T20:06:00.471Z",
+              "Title": "TodosUsuariosController.cs",
+              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Controllers\\TodosUsuariosController.cs",
+              "RelativeDocumentMoniker": "Controllers\\TodosUsuariosController.cs",
+              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Controllers\\TodosUsuariosController.cs",
+              "RelativeToolTip": "Controllers\\TodosUsuariosController.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABIAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-23T03:44:09.008Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "WeatherForecastController.cs",
+              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Controllers\\WeatherForecastController.cs",
+              "RelativeDocumentMoniker": "Controllers\\WeatherForecastController.cs",
+              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Controllers\\WeatherForecastController.cs",
+              "RelativeToolTip": "Controllers\\WeatherForecastController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-23T04:20:08.03Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "TodosUsuarios.cs",
+              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\TodosUsuarios.cs",
+              "RelativeDocumentMoniker": "TodosUsuarios.cs",
+              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\TodosUsuarios.cs",
+              "RelativeToolTip": "TodosUsuarios.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-23T03:45:41.608Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "WeatherForecast.cs",
+              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\WeatherForecast.cs",
+              "RelativeDocumentMoniker": "WeatherForecast.cs",
+              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\WeatherForecast.cs",
+              "RelativeToolTip": "WeatherForecast.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-23T03:43:05.666Z",
               "EditorCaption": ""
             }
           ]

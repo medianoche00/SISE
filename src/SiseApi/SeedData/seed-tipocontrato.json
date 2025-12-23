@@ -1,0 +1,5 @@
+﻿[
+  { "NombreTipo": "Tiempo Completo", "Estado": true },
+  { "NombreTipo": "Medio Tiempo", "Estado": true },
+  { "NombreTipo": "Prácticas Profesionales", "Estado": true }
+]

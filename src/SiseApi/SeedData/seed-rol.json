@@ -1,0 +1,5 @@
+﻿[
+  { "NombreRol": "Administrador", "Descripcion": "Acceso total al sistema", "Estado": true },
+  { "NombreRol": "Egresado", "Descripcion": "Acceso a ofertas y perfil", "Estado": true },
+  { "NombreRol": "Empresa", "Descripcion": "Publicación de ofertas", "Estado": true }
+]

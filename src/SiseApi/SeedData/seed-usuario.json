@@ -1,0 +1,4 @@
+﻿[
+  { "Usuario": "admin", "ClavePlana": "Admin123!", "Rol": "Administrador", "Estado": true },
+  { "Usuario": "demograd", "ClavePlana": "User123!", "Rol": "Egresado", "Estado": true }
+]

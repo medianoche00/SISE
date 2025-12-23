@@ -1,0 +1,6 @@
+﻿[
+  { "NombreTipoFormacion": "Curso de Especialización", "Estado": true },
+  { "NombreTipoFormacion": "Diplomado", "Estado": true },
+  { "NombreTipoFormacion": "Taller Práctico", "Estado": true },
+  { "NombreTipoFormacion": "Seminario", "Estado": true }
+]

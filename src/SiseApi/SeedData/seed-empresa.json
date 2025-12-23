@@ -1,0 +1,20 @@
+﻿[
+  {
+    "Ruc": "20100000001",
+    "RazonSocial": "Tech Solutions Peru S.A.C.",
+    "Direccion": "Av. Javier Prado 123, Lima",
+    "Telefono": "012345678",
+    "Correo": "rrhh@techsolutions.pe",
+    "Descripcion": "Empresa líder en desarrollo de software y consultoría TI.",
+    "Estado": true
+  },
+  {
+    "Ruc": "20600000002",
+    "RazonSocial": "Constructora y Servicios Generales S.A.",
+    "Direccion": "Calle Los Pinos 456, Arequipa",
+    "Telefono": "054987654",
+    "Correo": "contacto@constructora.com",
+    "Descripcion": "Infraestructura y proyectos de ingeniería civil.",
+    "Estado": true
+  }
+]

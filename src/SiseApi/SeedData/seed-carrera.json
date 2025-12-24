@@ -1,6 +1,27 @@
 ﻿[
-  { "NombreCarrera": "Ingeniería de Sistemas e Informática", "Escuela": "Escuela de Ingeniería de Sistemas", "Estado": true },
-  { "NombreCarrera": "Ingeniería de Software", "Escuela": "Escuela de Ingeniería de Sistemas", "Estado": true },
-  { "NombreCarrera": "Administración de Empresas", "Escuela": "Escuela de Administración", "Estado": true },
-  { "NombreCarrera": "Negocios Internacionales", "Escuela": "Escuela de Administración", "Estado": true }
+  {
+    "IdEscuela": 1,
+    "NombreCarrera": "Ingeniería de Software",
+    "Estado": true
+  },
+  {
+    "IdEscuela": 1,
+    "NombreCarrera": "Sistemas de Información",
+    "Estado": true
+  },
+  {
+    "IdEscuela": 2,
+    "NombreCarrera": "Ingeniería Civil",
+    "Estado": true
+  },
+  {
+    "IdEscuela": 3,
+    "NombreCarrera": "Medicina General",
+    "Estado": true
+  },
+  {
+    "IdEscuela": 4,
+    "NombreCarrera": "Administración de Empresas",
+    "Estado": true
+  }
 ]

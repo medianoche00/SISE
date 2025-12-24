@@ -1,8 +1,12 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
 using SiseApi.Data;
-using SiseApi.Models;
 using SiseApi.Seed;
+using SiseApi.Services;
+using System.Text;
+using SiseApi.Data.Models;
 //using SiseApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,6 +40,39 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 
 // Registrar seeder
 builder.Services.AddScoped<IDbSeeder, DbSeeder>();
+
+// Registrar token service
+builder.Services.AddScoped<ITokenService, TokenService>();
+
+// Configurar autenticación JWT
+var key = builder.Configuration["Jwt:Key"];
+var issuer = builder.Configuration["Jwt:Issuer"];
+var audience = builder.Configuration["Jwt:Audience"];
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false; // en desarrollo puede ser false
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = issuer,
+        ValidAudience = audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+        ClockSkew = TimeSpan.FromSeconds(30)
+    };
+});
+
+builder.Services.AddAuthorization(); // añade policies luego si las necesitas
+
 
 var app = builder.Build();
 

@@ -1,6 +1,22 @@
 ﻿[
-  { "NombreEscuela": "Escuela de Ingeniería de Sistemas", "Facultad": "Ingeniería", "Estado": true },
-  { "NombreEscuela": "Escuela de Ingeniería Industrial", "Facultad": "Ingeniería", "Estado": true },
-  { "NombreEscuela": "Escuela de Administración", "Facultad": "Ciencias Empresariales", "Estado": true },
-  { "NombreEscuela": "Escuela de Marketing", "Facultad": "Ciencias Empresariales", "Estado": true }
+  {
+    "IdFacultad": 1,
+    "NombreEscuela": "Escuela Profesional de Ingeniería de Sistemas",
+    "Estado": true
+  },
+  {
+    "IdFacultad": 1,
+    "NombreEscuela": "Escuela Profesional de Ingeniería Civil",
+    "Estado": true
+  },
+  {
+    "IdFacultad": 2,
+    "NombreEscuela": "Escuela Profesional de Medicina Humana",
+    "Estado": true
+  },
+  {
+    "IdFacultad": 3,
+    "NombreEscuela": "Escuela Profesional de Administración",
+    "Estado": true
+  }
 ]

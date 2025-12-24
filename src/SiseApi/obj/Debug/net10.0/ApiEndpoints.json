@@ -1,5 +1,21 @@
 [
   {
+    "ContainingType": "SiseApi.Controllers.AuthController",
+    "Method": "Login",
+    "RelativePath": "api/Auth/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SiseApi.Models.LoginRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SiseApi.Controllers.TodosUsuariosController",
     "Method": "Get",
     "RelativePath": "TodosUsuarios",

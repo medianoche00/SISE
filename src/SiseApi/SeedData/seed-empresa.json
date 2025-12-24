@@ -1,20 +1,20 @@
 ﻿[
   {
-    "Ruc": "20100000001",
-    "RazonSocial": "Tech Solutions Peru S.A.C.",
-    "Direccion": "Av. Javier Prado 123, Lima",
-    "Telefono": "012345678",
-    "Correo": "rrhh@techsolutions.pe",
+    "Ruc": "20123456789",
+    "RazonSocial": "Tech Solutions S.A.C.",
+    "Direccion": "Av. Javier Prado Este 1234, Lima",
+    "Telefono": "012223333",
+    "Correo": "contacto@techsolutions.com",
     "Descripcion": "Empresa líder en desarrollo de software y consultoría TI.",
     "Estado": true
   },
   {
-    "Ruc": "20600000002",
-    "RazonSocial": "Constructora y Servicios Generales S.A.",
+    "Ruc": "20987654321",
+    "RazonSocial": "Constructora Los Andes S.A.",
     "Direccion": "Calle Los Pinos 456, Arequipa",
-    "Telefono": "054987654",
-    "Correo": "contacto@constructora.com",
-    "Descripcion": "Infraestructura y proyectos de ingeniería civil.",
+    "Telefono": "054111222",
+    "Correo": "rrhh@constructorandes.pe",
+    "Descripcion": "Ejecución de obras civiles y proyectos de infraestructura.",
     "Estado": true
   }
 ]

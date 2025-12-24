@@ -1,0 +1,29 @@
+﻿[
+  {
+    "Nombres": "Administrador",
+    "ApellidoPaterno": "Sistema",
+    "ApellidoMaterno": "General",
+    "DocumentoIdentidad": "00000001",
+    "Telefono": "999000111",
+    "CorreoPersonal": "admin@university.edu.pe",
+    "Estado": true
+  },
+  {
+    "Nombres": "Juan Alberto",
+    "ApellidoPaterno": "Pérez",
+    "ApellidoMaterno": "Gómez",
+    "DocumentoIdentidad": "45879632",
+    "Telefono": "987654321",
+    "CorreoPersonal": "juan.perez@personal.com",
+    "Estado": true
+  },
+  {
+    "Nombres": "María Fernanda",
+    "ApellidoPaterno": "López",
+    "ApellidoMaterno": "Torres",
+    "DocumentoIdentidad": "10203040",
+    "Telefono": "998877665",
+    "CorreoPersonal": "maria.rrhh@techsolutions.com",
+    "Estado": true
+  }
+]

@@ -1,7 +1,28 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\siseapi.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:siseapi.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\seeddata\\seed-users.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:seeddata\\seed-users.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\seed\\dbseeder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:seed\\dbseeder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,11 +30,76 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "DbSeeder.cs",
+              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Seed\\DbSeeder.cs",
+              "RelativeDocumentMoniker": "Seed\\DbSeeder.cs",
+              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Seed\\DbSeeder.cs",
+              "RelativeToolTip": "Seed\\DbSeeder.cs",
+              "ViewState": "AgIAAHcAAAAAAAAAAAAjwGIAAABDAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T05:18:48.371Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SiseApi.http",
+              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\SiseApi.http",
+              "RelativeDocumentMoniker": "SiseApi.http",
+              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\SiseApi.http",
+              "RelativeToolTip": "SiseApi.http",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
+              "WhenOpened": "2025-12-24T06:01:58.816Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "appsettings.Development.json",
+              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\appsettings.Development.json",
+              "RelativeToolTip": "appsettings.Development.json",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAQwAgAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-24T05:34:21.675Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "seed-users.json",
+              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\SeedData\\seed-users.json",
+              "RelativeDocumentMoniker": "SeedData\\seed-users.json",
+              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\SeedData\\seed-users.json",
+              "RelativeToolTip": "SeedData\\seed-users.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-24T05:31:07.089Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "Controllers\\AuthController.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAQwBwAAABcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T05:26:22.943Z",
+              "EditorCaption": ""
             }
           ]
         }

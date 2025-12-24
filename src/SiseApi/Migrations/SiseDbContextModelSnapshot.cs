@@ -125,7 +125,7 @@ namespace SiseApi.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("SiseApi.Models.ApplicationRole", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.ApplicationRole", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -155,7 +155,7 @@ namespace SiseApi.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("SiseApi.Models.ApplicationUser", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.ApplicationUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -176,9 +176,6 @@ namespace SiseApi.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<int?>("IdUsuario")
-                        .HasColumnType("int");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -226,7 +223,7 @@ namespace SiseApi.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("SiseApi.Models.Auditoria", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.Auditoria", b =>
                 {
                     b.Property<int>("IdAuditoria")
                         .ValueGeneratedOnAdd()
@@ -248,7 +245,7 @@ namespace SiseApi.Migrations
 
                     b.Property<DateTime>("FechaHora")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
+                        .HasColumnType("datetime2")
                         .HasColumnName("fechaHora")
                         .HasDefaultValueSql("(getdate())");
 
@@ -277,7 +274,7 @@ namespace SiseApi.Migrations
                     b.ToTable("Auditoria");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.Carrera", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.Carrera", b =>
                 {
                     b.Property<int>("IdCarrera")
                         .ValueGeneratedOnAdd()
@@ -309,7 +306,7 @@ namespace SiseApi.Migrations
                     b.ToTable("Carrera");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.Egresado", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.Egresado", b =>
                 {
                     b.Property<int>("IdEgresado")
                         .ValueGeneratedOnAdd()
@@ -324,8 +321,8 @@ namespace SiseApi.Migrations
 
                     b.Property<string>("CodigoUniversitario")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
                         .HasColumnName("codigoUniversitario");
 
                     b.Property<bool>("Estado")
@@ -348,16 +345,20 @@ namespace SiseApi.Migrations
 
                     b.HasKey("IdEgresado");
 
+                    b.HasIndex("CodigoUniversitario")
+                        .IsUnique();
+
                     b.HasIndex("IdCarrera");
 
                     b.HasIndex("IdPersona");
 
-                    b.HasIndex("IdUsuario");
+                    b.HasIndex("IdUsuario")
+                        .IsUnique();
 
                     b.ToTable("Egresado");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.Empresa", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.Empresa", b =>
                 {
                     b.Property<int>("IdEmpresa")
                         .ValueGeneratedOnAdd()
@@ -408,13 +409,13 @@ namespace SiseApi.Migrations
 
                     b.HasKey("IdEmpresa");
 
-                    b.HasIndex(new[] { "Ruc" }, "UQ__Empresa__C2B74E61241D7335")
+                    b.HasIndex("Ruc")
                         .IsUnique();
 
                     b.ToTable("Empresa");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.Escuela", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.Escuela", b =>
                 {
                     b.Property<int>("IdEscuela")
                         .ValueGeneratedOnAdd()
@@ -424,7 +425,9 @@ namespace SiseApi.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdEscuela"));
 
                     b.Property<bool>("Estado")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
+                        .HasDefaultValue(true)
                         .HasColumnName("estado");
 
                     b.Property<int>("IdFacultad")
@@ -437,14 +440,15 @@ namespace SiseApi.Migrations
                         .HasColumnType("nvarchar(150)")
                         .HasColumnName("nombreEscuela");
 
-                    b.HasKey("IdEscuela");
+                    b.HasKey("IdEscuela")
+                        .HasName("PK__Escuela__9F67B289F35514A8");
 
                     b.HasIndex("IdFacultad");
 
                     b.ToTable("Escuela");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.ExperienciaLaboral", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.ExperienciaLaboral", b =>
                 {
                     b.Property<int>("IdExperiencia")
                         .ValueGeneratedOnAdd()
@@ -470,7 +474,9 @@ namespace SiseApi.Migrations
                         .HasColumnName("empresa");
 
                     b.Property<bool>("Estado")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
+                        .HasDefaultValue(true)
                         .HasColumnName("estado");
 
                     b.Property<DateOnly?>("FechaFin")
@@ -485,14 +491,21 @@ namespace SiseApi.Migrations
                         .HasColumnType("int")
                         .HasColumnName("idEgresado");
 
-                    b.HasKey("IdExperiencia");
+                    b.Property<int?>("IdEmpresaRegistrada")
+                        .HasColumnType("int")
+                        .HasColumnName("idEmpresaRegistrada");
+
+                    b.HasKey("IdExperiencia")
+                        .HasName("PK__Experien__77DCF2941080D70A");
 
                     b.HasIndex("IdEgresado");
+
+                    b.HasIndex("IdEmpresaRegistrada");
 
                     b.ToTable("ExperienciaLaboral");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.Facultad", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.Facultad", b =>
                 {
                     b.Property<int>("IdFacultad")
                         .ValueGeneratedOnAdd()
@@ -502,7 +515,9 @@ namespace SiseApi.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdFacultad"));
 
                     b.Property<bool>("Estado")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
+                        .HasDefaultValue(true)
                         .HasColumnName("estado");
 
                     b.Property<string>("NombreFacultad")
@@ -511,12 +526,13 @@ namespace SiseApi.Migrations
                         .HasColumnType("nvarchar(150)")
                         .HasColumnName("nombreFacultad");
 
-                    b.HasKey("IdFacultad");
+                    b.HasKey("IdFacultad")
+                        .HasName("PK__Facultad__B57E5B202D9641D0");
 
                     b.ToTable("Facultad");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.FormacionComplementaria", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.FormacionComplementaria", b =>
                 {
                     b.Property<int>("IdFormacion")
                         .ValueGeneratedOnAdd()
@@ -526,7 +542,9 @@ namespace SiseApi.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdFormacion"));
 
                     b.Property<bool>("Estado")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
+                        .HasDefaultValue(true)
                         .HasColumnName("estado");
 
                     b.Property<DateOnly?>("FechaFin")
@@ -556,16 +574,17 @@ namespace SiseApi.Migrations
                         .HasColumnType("nvarchar(150)")
                         .HasColumnName("nombreDelCurso");
 
-                    b.HasKey("IdFormacion");
+                    b.HasKey("IdFormacion")
+                        .HasName("PK__Formacio__9DE85F3DDE9E96E9");
 
                     b.HasIndex("IdEgresado");
 
                     b.HasIndex("IdTipoFormacion");
 
-                    b.ToTable("FormacionesComplementarias");
+                    b.ToTable("FormacionComplementaria");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.ModalidadTrabajo", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.ModalidadTrabajo", b =>
                 {
                     b.Property<int>("IdModalidadTrabajo")
                         .ValueGeneratedOnAdd()
@@ -575,7 +594,9 @@ namespace SiseApi.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdModalidadTrabajo"));
 
                     b.Property<bool>("Estado")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
+                        .HasDefaultValue(true)
                         .HasColumnName("estado");
 
                     b.Property<string>("NombreModalidad")
@@ -584,15 +605,16 @@ namespace SiseApi.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("nombreModalidad");
 
-                    b.HasKey("IdModalidadTrabajo");
+                    b.HasKey("IdModalidadTrabajo")
+                        .HasName("PK__Modalida__82081B5D073BB510");
 
-                    b.HasIndex(new[] { "NombreModalidad" }, "UQ__Modalida__5DEA366D6F69E6E5")
+                    b.HasIndex("NombreModalidad")
                         .IsUnique();
 
                     b.ToTable("ModalidadTrabajo");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.OfertaLaboral", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.OfertaLaboral", b =>
                 {
                     b.Property<int>("IdOferta")
                         .ValueGeneratedOnAdd()
@@ -606,7 +628,9 @@ namespace SiseApi.Migrations
                         .HasColumnName("descripcion");
 
                     b.Property<bool>("Estado")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
+                        .HasDefaultValue(true)
                         .HasColumnName("estado");
 
                     b.Property<DateOnly>("FechaCierre")
@@ -652,7 +676,8 @@ namespace SiseApi.Migrations
                         .HasColumnType("nvarchar(150)")
                         .HasColumnName("ubicacion");
 
-                    b.HasKey("IdOferta");
+                    b.HasKey("IdOferta")
+                        .HasName("PK__OfertaLa__05A1245E53519920");
 
                     b.HasIndex("IdEgresadoGanador");
 
@@ -665,7 +690,7 @@ namespace SiseApi.Migrations
                     b.ToTable("OfertaLaboral");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.Persona", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.Persona", b =>
                 {
                     b.Property<int>("IdPersona")
                         .ValueGeneratedOnAdd()
@@ -686,25 +711,21 @@ namespace SiseApi.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("apellidoPaterno");
 
-                    b.Property<string>("Correo")
+                    b.Property<string>("CorreoPersonal")
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)")
-                        .HasColumnName("correo");
+                        .HasColumnName("correoPersonal");
 
-                    b.Property<string>("Dni")
+                    b.Property<string>("DocumentoIdentidad")
                         .IsRequired()
-                        .HasMaxLength(8)
+                        .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(8)")
-                        .HasColumnName("dni");
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("documentoIdentidad");
 
                     b.Property<bool>("Estado")
                         .HasColumnType("bit")
                         .HasColumnName("estado");
-
-                    b.Property<int?>("IdUsuario")
-                        .HasColumnType("int")
-                        .HasColumnName("idUsuario");
 
                     b.Property<string>("Nombres")
                         .IsRequired()
@@ -719,17 +740,13 @@ namespace SiseApi.Migrations
 
                     b.HasKey("IdPersona");
 
-                    b.HasIndex("IdUsuario")
-                        .IsUnique()
-                        .HasFilter("[idUsuario] IS NOT NULL");
-
-                    b.HasIndex(new[] { "Dni" }, "UQ__Persona__D87608A7915FF7BB")
+                    b.HasIndex("DocumentoIdentidad")
                         .IsUnique();
 
                     b.ToTable("Persona");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.Representante", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.Representante", b =>
                 {
                     b.Property<int>("IdRepresentante")
                         .ValueGeneratedOnAdd()
@@ -767,12 +784,13 @@ namespace SiseApi.Migrations
 
                     b.HasIndex("IdPersona");
 
-                    b.HasIndex("IdUsuario");
+                    b.HasIndex("IdUsuario")
+                        .IsUnique();
 
                     b.ToTable("Representante");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.TipoContrato", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.TipoContrato", b =>
                 {
                     b.Property<int>("IdTipoContrato")
                         .ValueGeneratedOnAdd()
@@ -793,13 +811,13 @@ namespace SiseApi.Migrations
 
                     b.HasKey("IdTipoContrato");
 
-                    b.HasIndex(new[] { "NombreTipo" }, "UQ__TipoCont__634171E76788CD20")
+                    b.HasIndex("NombreTipo")
                         .IsUnique();
 
                     b.ToTable("TipoContrato");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.TipoFormacion", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.TipoFormacion", b =>
                 {
                     b.Property<int>("IdTipoFormacion")
                         .ValueGeneratedOnAdd()
@@ -823,7 +841,7 @@ namespace SiseApi.Migrations
                     b.ToTable("TipoFormacion");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.VwOfertasDisponible", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.VwOfertasDisponible", b =>
                 {
                     b.Property<int?>("DiasRestantes")
                         .HasColumnType("int")
@@ -877,7 +895,7 @@ namespace SiseApi.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("SiseApi.Models.ApplicationRole", null)
+                    b.HasOne("SiseApi.Data.Models.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -886,7 +904,7 @@ namespace SiseApi.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("SiseApi.Models.ApplicationUser", null)
+                    b.HasOne("SiseApi.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -895,7 +913,7 @@ namespace SiseApi.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("SiseApi.Models.ApplicationUser", null)
+                    b.HasOne("SiseApi.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -904,13 +922,13 @@ namespace SiseApi.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.HasOne("SiseApi.Models.ApplicationRole", null)
+                    b.HasOne("SiseApi.Data.Models.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SiseApi.Models.ApplicationUser", null)
+                    b.HasOne("SiseApi.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -919,16 +937,16 @@ namespace SiseApi.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("SiseApi.Models.ApplicationUser", null)
+                    b.HasOne("SiseApi.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SiseApi.Models.Auditoria", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.Auditoria", b =>
                 {
-                    b.HasOne("SiseApi.Models.ApplicationUser", "Usuario")
+                    b.HasOne("SiseApi.Data.Models.ApplicationUser", "Usuario")
                         .WithMany("Auditorias")
                         .HasForeignKey("IdUsuario")
                         .HasConstraintName("FK_Auditoria_Usuario_Identity");
@@ -936,9 +954,9 @@ namespace SiseApi.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.Carrera", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.Carrera", b =>
                 {
-                    b.HasOne("SiseApi.Models.Escuela", "IdEscuelaNavigation")
+                    b.HasOne("SiseApi.Data.Models.Escuela", "IdEscuelaNavigation")
                         .WithMany("Carreras")
                         .HasForeignKey("IdEscuela")
                         .IsRequired()
@@ -947,25 +965,25 @@ namespace SiseApi.Migrations
                     b.Navigation("IdEscuelaNavigation");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.Egresado", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.Egresado", b =>
                 {
-                    b.HasOne("SiseApi.Models.Carrera", "Carrera")
+                    b.HasOne("SiseApi.Data.Models.Carrera", "Carrera")
                         .WithMany("Egresados")
                         .HasForeignKey("IdCarrera")
                         .IsRequired()
                         .HasConstraintName("FK_Egresado_Carrera");
 
-                    b.HasOne("SiseApi.Models.Persona", "Persona")
+                    b.HasOne("SiseApi.Data.Models.Persona", "Persona")
                         .WithMany("Egresados")
                         .HasForeignKey("IdPersona")
                         .IsRequired()
                         .HasConstraintName("FK_Egresado_Persona");
 
-                    b.HasOne("SiseApi.Models.ApplicationUser", "Usuario")
+                    b.HasOne("SiseApi.Data.Models.ApplicationUser", "Usuario")
                         .WithMany("Egresados")
                         .HasForeignKey("IdUsuario")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Egresado_Usuario");
 
                     b.Navigation("Carrera");
 
@@ -974,70 +992,77 @@ namespace SiseApi.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.Escuela", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.Escuela", b =>
                 {
-                    b.HasOne("SiseApi.Models.Facultad", "IdFacultadNavigation")
+                    b.HasOne("SiseApi.Data.Models.Facultad", "IdFacultadNavigation")
                         .WithMany("Escuelas")
                         .HasForeignKey("IdFacultad")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__Escuela__idFacul__06CD04F7");
 
                     b.Navigation("IdFacultadNavigation");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.ExperienciaLaboral", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.ExperienciaLaboral", b =>
                 {
-                    b.HasOne("SiseApi.Models.Egresado", "IdEgresadoNavigation")
+                    b.HasOne("SiseApi.Data.Models.Egresado", "IdEgresadoNavigation")
                         .WithMany("ExperienciaLaborals")
                         .HasForeignKey("IdEgresado")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__Experienc__idEgr__07C12930");
+
+                    b.HasOne("SiseApi.Data.Models.Empresa", "EmpresaRegistrada")
+                        .WithMany()
+                        .HasForeignKey("IdEmpresaRegistrada");
+
+                    b.Navigation("EmpresaRegistrada");
 
                     b.Navigation("IdEgresadoNavigation");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.FormacionComplementaria", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.FormacionComplementaria", b =>
                 {
-                    b.HasOne("SiseApi.Models.Egresado", "IdEgresadoNavigation")
+                    b.HasOne("SiseApi.Data.Models.Egresado", "IdEgresadoNavigation")
                         .WithMany("FormacionComplementaria")
                         .HasForeignKey("IdEgresado")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__Formacion__idEgr__08B54D69");
 
-                    b.HasOne("SiseApi.Models.TipoFormacion", "IdTipoFormacionNavigation")
+                    b.HasOne("SiseApi.Data.Models.TipoFormacion", "IdTipoFormacionNavigation")
                         .WithMany("FormacionComplementaria")
                         .HasForeignKey("IdTipoFormacion")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__Formacion__idTip__09A971A2");
 
                     b.Navigation("IdEgresadoNavigation");
 
                     b.Navigation("IdTipoFormacionNavigation");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.OfertaLaboral", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.OfertaLaboral", b =>
                 {
-                    b.HasOne("SiseApi.Models.Egresado", "IdEgresadoGanadorNavigation")
+                    b.HasOne("SiseApi.Data.Models.Egresado", "IdEgresadoGanadorNavigation")
                         .WithMany("OfertaLaborals")
-                        .HasForeignKey("IdEgresadoGanador");
+                        .HasForeignKey("IdEgresadoGanador")
+                        .HasConstraintName("FK__OfertaLab__idEgr__0A9D95DB");
 
-                    b.HasOne("SiseApi.Models.Empresa", "IdEmpresaNavigation")
+                    b.HasOne("SiseApi.Data.Models.Empresa", "IdEmpresaNavigation")
                         .WithMany("OfertaLaborals")
                         .HasForeignKey("IdEmpresa")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__OfertaLab__idEmp__0B91BA14");
 
-                    b.HasOne("SiseApi.Models.ModalidadTrabajo", "IdModalidadTrabajoNavigation")
+                    b.HasOne("SiseApi.Data.Models.ModalidadTrabajo", "IdModalidadTrabajoNavigation")
                         .WithMany("OfertaLaborals")
                         .HasForeignKey("IdModalidadTrabajo")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__OfertaLab__idMod__0C85DE4D");
 
-                    b.HasOne("SiseApi.Models.TipoContrato", "IdTipoContratoNavigation")
+                    b.HasOne("SiseApi.Data.Models.TipoContrato", "IdTipoContratoNavigation")
                         .WithMany("OfertaLaborals")
                         .HasForeignKey("IdTipoContrato")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK__OfertaLab__idTip__0D7A0286");
 
                     b.Navigation("IdEgresadoGanadorNavigation");
 
@@ -1048,59 +1073,48 @@ namespace SiseApi.Migrations
                     b.Navigation("IdTipoContratoNavigation");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.Persona", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.Representante", b =>
                 {
-                    b.HasOne("SiseApi.Models.ApplicationUser", "Usuario")
-                        .WithOne("Persona")
-                        .HasForeignKey("SiseApi.Models.Persona", "IdUsuario");
-
-                    b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("SiseApi.Models.Representante", b =>
-                {
-                    b.HasOne("SiseApi.Models.Empresa", "IdEmpresaNavigation")
+                    b.HasOne("SiseApi.Data.Models.Empresa", "Empresa")
                         .WithMany("Representantes")
                         .HasForeignKey("IdEmpresa")
                         .IsRequired()
                         .HasConstraintName("FK_Representante_Empresa");
 
-                    b.HasOne("SiseApi.Models.Persona", "IdPersonaNavigation")
+                    b.HasOne("SiseApi.Data.Models.Persona", "Persona")
                         .WithMany("Representantes")
                         .HasForeignKey("IdPersona")
                         .IsRequired()
                         .HasConstraintName("FK_Representante_Persona");
 
-                    b.HasOne("SiseApi.Models.ApplicationUser", "Usuario")
+                    b.HasOne("SiseApi.Data.Models.ApplicationUser", "Usuario")
                         .WithMany("Representantes")
                         .HasForeignKey("IdUsuario")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Representante_Usuario");
 
-                    b.Navigation("IdEmpresaNavigation");
+                    b.Navigation("Empresa");
 
-                    b.Navigation("IdPersonaNavigation");
+                    b.Navigation("Persona");
 
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.ApplicationUser", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Auditorias");
 
                     b.Navigation("Egresados");
 
-                    b.Navigation("Persona");
-
                     b.Navigation("Representantes");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.Carrera", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.Carrera", b =>
                 {
                     b.Navigation("Egresados");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.Egresado", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.Egresado", b =>
                 {
                     b.Navigation("ExperienciaLaborals");
 
@@ -1109,41 +1123,41 @@ namespace SiseApi.Migrations
                     b.Navigation("OfertaLaborals");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.Empresa", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.Empresa", b =>
                 {
                     b.Navigation("OfertaLaborals");
 
                     b.Navigation("Representantes");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.Escuela", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.Escuela", b =>
                 {
                     b.Navigation("Carreras");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.Facultad", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.Facultad", b =>
                 {
                     b.Navigation("Escuelas");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.ModalidadTrabajo", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.ModalidadTrabajo", b =>
                 {
                     b.Navigation("OfertaLaborals");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.Persona", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.Persona", b =>
                 {
                     b.Navigation("Egresados");
 
                     b.Navigation("Representantes");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.TipoContrato", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.TipoContrato", b =>
                 {
                     b.Navigation("OfertaLaborals");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.TipoFormacion", b =>
+            modelBuilder.Entity("SiseApi.Data.Models.TipoFormacion", b =>
                 {
                     b.Navigation("FormacionComplementaria");
                 });

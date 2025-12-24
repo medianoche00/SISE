@@ -1,5 +1,22 @@
 ﻿[
-  { "NombreTipo": "Tiempo Completo", "Estado": true },
-  { "NombreTipo": "Medio Tiempo", "Estado": true },
-  { "NombreTipo": "Prácticas Profesionales", "Estado": true }
+  {
+    "NombreTipo": "Tiempo Completo",
+    "Estado": true
+  },
+  {
+    "NombreTipo": "Medio Tiempo",
+    "Estado": true
+  },
+  {
+    "NombreTipo": "Prácticas Pre-Profesionales",
+    "Estado": true
+  },
+  {
+    "NombreTipo": "Prácticas Profesionales",
+    "Estado": true
+  },
+  {
+    "NombreTipo": "Por Proyecto",
+    "Estado": true
+  }
 ]

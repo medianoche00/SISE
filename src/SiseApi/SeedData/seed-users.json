@@ -1,0 +1,23 @@
+﻿[
+  {
+    "UserName": "admin",
+    "Email": "admin@university.edu.pe",
+    "Password": "AdminPassword123!",
+    "PhoneNumber": "999000111",
+    "Role": "Administrador"
+  },
+  {
+    "UserName": "juan.perez",
+    "Email": "juan.perez@gmail.com",
+    "Password": "UserPassword123!",
+    "PhoneNumber": "987654321",
+    "Role": "Egresado"
+  },
+  {
+    "UserName": "tech.solutions",
+    "Email": "contacto@techsolutions.com",
+    "Password": "EmpresaPassword123!",
+    "PhoneNumber": "012345678",
+    "Role": "Empresa"
+  }
+]

@@ -11,11 +11,11 @@
     <Content Remove="SeedData\seed-empresa.json" />
     <Content Remove="SeedData\seed-escuela.json" />
     <Content Remove="SeedData\seed-facultad.json" />
-    <Content Remove="SeedData\seed-modalidad.json" />
-    <Content Remove="SeedData\seed-rol.json" />
+    <Content Remove="SeedData\seed-modalidadtrabajo.json" />
+    <Content Remove="SeedData\seed-roles.json" />
     <Content Remove="SeedData\seed-tipocontrato.json" />
     <Content Remove="SeedData\seed-tipoformacion.json" />
-    <Content Remove="SeedData\seed-usuario.json" />
+    <Content Remove="SeedData\seed-users.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,14 +23,15 @@
     <None Include="SeedData\seed-empresa.json" />
     <None Include="SeedData\seed-escuela.json" />
     <None Include="SeedData\seed-facultad.json" />
-    <None Include="SeedData\seed-modalidad.json" />
-    <None Include="SeedData\seed-rol.json" />
+    <None Include="SeedData\seed-modalidadtrabajo.json" />
+    <None Include="SeedData\seed-roles.json" />
     <None Include="SeedData\seed-tipocontrato.json" />
     <None Include="SeedData\seed-tipoformacion.json" />
-    <None Include="SeedData\seed-usuario.json" />
+    <None Include="SeedData\seed-users.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.1" />

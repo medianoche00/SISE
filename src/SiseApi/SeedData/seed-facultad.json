@@ -1,4 +1,14 @@
 ﻿[
-  { "NombreFacultad": "Ingeniería", "Estado": true },
-  { "NombreFacultad": "Ciencias Empresariales", "Estado": true }
+  {
+    "NombreFacultad": "Facultad de Ingeniería",
+    "Estado": true
+  },
+  {
+    "NombreFacultad": "Facultad de Ciencias de la Salud",
+    "Estado": true
+  },
+  {
+    "NombreFacultad": "Facultad de Ciencias Económicas",
+    "Estado": true
+  }
 ]

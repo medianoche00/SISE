@@ -1,6 +1,26 @@
 ﻿[
-  { "NombreTipoFormacion": "Curso de Especialización", "Estado": true },
-  { "NombreTipoFormacion": "Diplomado", "Estado": true },
-  { "NombreTipoFormacion": "Taller Práctico", "Estado": true },
-  { "NombreTipoFormacion": "Seminario", "Estado": true }
+  {
+    "NombreTipoFormacion": "Curso",
+    "Estado": true
+  },
+  {
+    "NombreTipoFormacion": "Diplomado",
+    "Estado": true
+  },
+  {
+    "NombreTipoFormacion": "Certificación Internacional",
+    "Estado": true
+  },
+  {
+    "NombreTipoFormacion": "Maestría",
+    "Estado": true
+  },
+  {
+    "NombreTipoFormacion": "Doctorado",
+    "Estado": true
+  },
+  {
+    "NombreTipoFormacion": "Taller",
+    "Estado": true
+  }
 ]

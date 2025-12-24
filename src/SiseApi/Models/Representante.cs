@@ -39,5 +39,5 @@ public partial class Representante
 
     [ForeignKey("IdUsuario")]
     [InverseProperty("Representantes")]
-    public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
+    public virtual ApplicationUser Usuario { get; set; } = null!;
 }

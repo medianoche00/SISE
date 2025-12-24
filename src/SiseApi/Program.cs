@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SiseApi.Data;
+using SiseApi.Models;
 using SiseApi.Seed;
 //using SiseApi.Data;
 
@@ -14,6 +16,23 @@ builder.Services.AddOpenApi();
 // Registrar DBContext con la cadena de conexión
 builder.Services.AddDbContext<SiseDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Especificar clases personalizadas con int
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+{
+    // Configuración de reglas de contraseña
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequiredLength = 6;
+
+    // Configuración de bloqueo de usuarios
+    options.Lockout.MaxFailedAccessAttempts = 5;
+
+    // Validación de usuario
+    options.User.RequireUniqueEmail = true;
+})
+    .AddEntityFrameworkStores<SiseDbContext>() // Conecta Identity con tu DBContext
+    .AddDefaultTokenProviders(); // Necesario para generar tokens de reset de clave, email, etc.
 
 // Registrar seeder
 builder.Services.AddScoped<IDbSeeder, DbSeeder>();
@@ -46,6 +65,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Activar autenticación
+app.UseAuthentication();
 
 app.UseAuthorization();
 

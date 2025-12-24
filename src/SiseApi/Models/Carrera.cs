@@ -23,7 +23,7 @@ public partial class Carrera
     [Column("estado")]
     public bool Estado { get; set; }
 
-    [InverseProperty("IdCarreraNavigation")]
+    [InverseProperty("Carrera")]
     public virtual ICollection<Egresado> Egresados { get; set; } = new List<Egresado>();
 
     [ForeignKey("IdEscuela")]

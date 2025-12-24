@@ -1,7 +1,7 @@
 [
   {
     "ContainingType": "SiseApi.Controllers.TodosUsuariosController",
-    "Method": "GetAll",
+    "Method": "Get",
     "RelativePath": "TodosUsuarios",
     "HttpMethod": "GET",
     "IsController": true,

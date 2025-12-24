@@ -18,8 +18,8 @@ namespace SiseApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var usuarios = _db.Usuarios
-                .Select(u => new { u.IdUsuario, u.Nomusuario, u.IdRol, u.Estado })
+            var usuarios = _db.Users
+                .Select(u => new { u.Id, u.UserName })
                 .ToList();
 
             return Ok(usuarios);

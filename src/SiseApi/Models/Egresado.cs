@@ -40,15 +40,15 @@ public partial class Egresado
 
     [ForeignKey("IdCarrera")]
     [InverseProperty("Egresados")]
-    public virtual Carrera IdCarreraNavigation { get; set; } = null!;
+    public virtual Carrera Carrera { get; set; } = null!;
 
     [ForeignKey("IdPersona")]
     [InverseProperty("Egresados")]
-    public virtual Persona IdPersonaNavigation { get; set; } = null!;
+    public virtual Persona Persona { get; set; } = null!;
 
     [ForeignKey("IdUsuario")]
     [InverseProperty("Egresados")]
-    public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
+    public virtual ApplicationUser? Usuario { get; set; } = null!;
 
     [InverseProperty("IdEgresadoGanadorNavigation")]
     public virtual ICollection<OfertaLaboral> OfertaLaborals { get; set; } = new List<OfertaLaboral>();

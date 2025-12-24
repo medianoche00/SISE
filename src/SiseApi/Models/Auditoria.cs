@@ -37,6 +37,6 @@ public partial class Auditoria
     public DateTime FechaHora { get; set; }
 
     [ForeignKey("IdUsuario")]
-    [InverseProperty("Auditoria")]
-    public virtual Usuario? IdUsuarioNavigation { get; set; }
+    [InverseProperty("Auditorias")]
+    public virtual ApplicationUser? Usuario { get; set; }
 }

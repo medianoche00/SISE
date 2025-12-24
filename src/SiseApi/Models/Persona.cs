@@ -42,9 +42,17 @@ public partial class Persona
     [Column("estado")]
     public bool Estado { get; set; }
 
-    [InverseProperty("IdPersonaNavigation")]
+    [InverseProperty("Persona")]
     public virtual ICollection<Egresado> Egresados { get; set; } = new List<Egresado>();
 
     [InverseProperty("IdPersonaNavigation")]
     public virtual ICollection<Representante> Representantes { get; set; } = new List<Representante>();
+
+    [Column("idUsuario")] // Clave foránea hacia la tabla AspNetUsers
+    public int? IdUsuario { get; set; }
+
+    [ForeignKey("IdUsuario")]
+    //[InverseProperty("Id")]
+    public virtual ApplicationUser Usuario { get; set; } = null;
+
 }

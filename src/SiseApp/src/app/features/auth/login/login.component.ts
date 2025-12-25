@@ -1,17 +1,19 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../../../core/services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'], // Asegúrate de enlazar el SCSS
 })
 export class LoginComponent {
   form: FormGroup;
   loading = false;
   returnUrl = '/';
+  hidePassword = true; // Nueva propiedad para el toggle de contraseña
 
   constructor(
     private fb: FormBuilder,
@@ -21,8 +23,9 @@ export class LoginComponent {
     private snack: MatSnackBar
   ) {
     this.form = this.fb.group({
-      userNameOrEmail: ['', [Validators.required]],
-      password: ['', [Validators.required]]
+      userNameOrEmail: ['', [Validators.required]], // Sugerencia: validar email si aplica
+      password: ['', [Validators.required]],
+      rememberMe: [false] // Agregado para el checkbox
     });
 
     const q = this.route.snapshot.queryParamMap.get('returnUrl');
@@ -33,10 +36,11 @@ export class LoginComponent {
     if (this.form.invalid) return;
     this.loading = true;
     const { userNameOrEmail, password } = this.form.value;
+    
     this.auth.login(userNameOrEmail, password).subscribe({
       next: () => {
         this.loading = false;
-        this.snack.open('Inicio de sesión correcto', 'Cerrar', { duration: 2000 });
+        this.snack.open('Bienvenido', 'Cerrar', { duration: 2000 });
         this.router.navigateByUrl(this.returnUrl);
       },
       error: (err) => {

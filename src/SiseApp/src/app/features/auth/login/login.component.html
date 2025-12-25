@@ -1,24 +1,81 @@
-<form [formGroup]="form" (ngSubmit)="submit()" class="login-form">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Iniciar sesión</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Usuario o correo</mat-label>
-        <input matInput formControlName="userNameOrEmail"/>
-        <mat-error *ngIf="form.controls['userNameOrEmail'].hasError('required')">Campo requerido</mat-error>
-      </mat-form-field>
+<div class="login-wrapper">
+  
+  <div class="info-panel">
+    <div class="content-center">
+      <div class="logo-circle">
+        <mat-icon class="university-icon">account_balance</mat-icon>
+      </div>
+      
+      <h1>Universidad Nacional de Piura</h1>
+      <h2>Sistema de Seguimiento al Egresado</h2>
+      <p class="slogan">Conectando talento con oportunidades</p>
 
-      <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Contraseña</mat-label>
-        <input matInput type="password" formControlName="password" />
-        <mat-error *ngIf="form.controls['password'].hasError('required')">Campo requerido</mat-error>
-      </mat-form-field>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-flat-button color="primary" type="submit" [disabled]="loading">Entrar</button>
-      <mat-progress-spinner *ngIf="loading" mode="indeterminate" diameter="24"></mat-progress-spinner>
-    </mat-card-actions>
-  </mat-card>
-</form>
+      <div class="features-list">
+        <div class="feature-item">
+          <mat-icon>work</mat-icon>
+          <span>Accede a ofertas laborales exclusivas</span>
+        </div>
+        <div class="feature-item">
+          <mat-icon>groups</mat-icon>
+          <span>Conecta con la red de egresados UNP</span>
+        </div>
+        <div class="feature-item">
+          <mat-icon>trending_up</mat-icon>
+          <span>Impulsa tu desarrollo profesional</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-panel">
+    <mat-card class="login-card">
+      
+      <div class="card-header-content">
+        <div class="user-icon-circle">
+          <mat-icon>school</mat-icon>
+        </div>
+        <h3>Iniciar Sesión</h3>
+        <p class="subtitle">Ingresa tus credenciales para acceder</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        
+        <div class="input-group">
+          <label>Correo Electrónico</label>
+          <mat-form-field appearance="outline" class="full-width custom-field">
+            <mat-icon matPrefix class="input-icon">email</mat-icon>
+            <input matInput formControlName="userNameOrEmail" placeholder="ejemplo@unp.edu.pe"/>
+            <mat-error *ngIf="form.get('userNameOrEmail')?.hasError('required')">Requerido</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="input-group">
+          <label>Contraseña</label>
+          <mat-form-field appearance="outline" class="full-width custom-field">
+            <mat-icon matPrefix class="input-icon">lock</mat-icon>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="********" />
+            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="form.get('password')?.hasError('required')">Requerido</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <mat-checkbox formControlName="rememberMe" color="primary">Recordarme</mat-checkbox>
+          <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <button mat-flat-button color="primary" class="submit-btn" type="submit" [disabled]="loading">
+          <span *ngIf="!loading">Ingresar al Sistema</span>
+          <mat-progress-spinner *ngIf="loading" mode="indeterminate" diameter="20" color="accent"></mat-progress-spinner>
+        </button>
+
+        <div class="footer-help">
+          ¿Problemas para ingresar? <a href="#">Contactar soporte</a>
+        </div>
+
+      </form>
+    </mat-card>
+  </div>
+</div>

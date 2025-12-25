@@ -5,6 +5,7 @@ using SiseApi.Data.Models;
 using SiseApi.Seed;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Globalization;
 
 // Asegúrate de importar los namespaces de tus Modelos y tu Contexto
 // using TuProyecto.Models;
@@ -38,6 +39,9 @@ public class DbSeeder : IDbSeeder
             PropertyNameCaseInsensitive = true,
             ReferenceHandler = ReferenceHandler.IgnoreCycles
         };
+
+        // Añadir conversor para DateOnly (formato ISO yyyy-MM-dd)
+        _jsonOptions.Converters.Add(new DateOnlyJsonConverter());
     }
 
     public async Task SeedAsync(CancellationToken cancellationToken = default)
@@ -54,6 +58,7 @@ public class DbSeeder : IDbSeeder
             // 2. Tablas con Dependencias de Nivel 1
             await SeedEscuelasAsync(); // Depende de Facultad
             await SeedEmpresasAsync();
+            await SeedOfertasAsync(); // Depende de Empresas, ModalidadTrabajo, TipoContrato
             await SeedPersonasAsync();
 
             // 3. Tablas con Dependencias de Nivel 2
@@ -223,6 +228,45 @@ public class DbSeeder : IDbSeeder
         await _context.SaveChangesAsync();
     }
 
+    private async Task SeedOfertasAsync()
+    {
+        if (await _context.OfertasLaborales.AnyAsync()) return;
+
+        var data = await LoadJsonData<OfertaLaboral>("seed-ofertas.json");
+        if (data == null) return;
+
+        foreach (var item in data)
+        {
+            // Evitar duplicados: título + empresa + fechaPublicacion
+            if (!await _context.OfertasLaborales.AnyAsync(o =>
+                o.Titulo == item.Titulo && o.IdEmpresa == item.IdEmpresa && o.FechaPublicacion == item.FechaPublicacion))
+            {
+                // Asegurar referencias mínimas: si la empresa no existe, saltar el registro
+                if (!await _context.Empresas.AnyAsync(e => e.IdEmpresa == item.IdEmpresa))
+                {
+                    _logger.LogWarning($"Omitida oferta '{item.Titulo}': empresa id {item.IdEmpresa} no encontrada.");
+                    continue;
+                }
+
+                // Opcional: validar que idTipoContrato e idModalidadTrabajo existan
+                if (!await _context.TiposContratos.AnyAsync(t => t.IdTipoContrato == item.IdTipoContrato))
+                {
+                    _logger.LogWarning($"Omitida oferta '{item.Titulo}': tipo contrato id {item.IdTipoContrato} no encontrado.");
+                    continue;
+                }
+                if (!await _context.ModalidadesTrabajos.AnyAsync(m => m.IdModalidadTrabajo == item.IdModalidadTrabajo))
+                {
+                    _logger.LogWarning($"Omitida oferta '{item.Titulo}': modalidad trabajo id {item.IdModalidadTrabajo} no encontrado.");
+                    continue;
+                }
+
+                _context.OfertasLaborales.Add(item);
+            }
+        }
+
+        await _context.SaveChangesAsync();
+    }
+
     private async Task SeedUsersAsync()
     {
         // Nota: El JSON de usuarios debe incluir una propiedad "Password" para poder crearlos,
@@ -278,5 +322,25 @@ public class DbSeeder : IDbSeeder
         public string Password { get; set; } = null!; // Importante para el CreateAsync
         public string? PhoneNumber { get; set; }
         public string? Role { get; set; } // Nombre del rol a asignar
+    }
+
+    // Conversor simple para DateOnly en formato ISO yyyy-MM-dd
+    private class DateOnlyJsonConverter : JsonConverter<DateOnly>
+    {
+        private const string Format = "yyyy-MM-dd";
+        public override DateOnly Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var s = reader.GetString() ?? throw new JsonException("Expected string for DateOnly");
+            if (DateOnly.TryParseExact(s, Format, CultureInfo.InvariantCulture, DateTimeStyles.None, out var d))
+                return d;
+            if (DateOnly.TryParse(s, CultureInfo.InvariantCulture, DateTimeStyles.None, out d))
+                return d;
+            throw new JsonException($"No se pudo parsear la fecha DateOnly: {s}");
+        }
+
+        public override void Write(Utf8JsonWriter writer, DateOnly value, JsonSerializerOptions options)
+        {
+            writer.WriteStringValue(value.ToString(Format, CultureInfo.InvariantCulture));
+        }
     }
 }

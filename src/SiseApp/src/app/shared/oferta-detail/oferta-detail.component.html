@@ -1,0 +1,71 @@
+<h2 mat-dialog-title class="dialog-title">
+  {{ data.oferta.titulo }}
+</h2>
+
+<mat-dialog-content>
+  <div class="modal-layout">
+    
+    <div class="section-puesto">
+      <div class="info-grid">
+        <div><strong>Publicado:</strong> {{ data.oferta.fechaPublicacion | date:'dd/MM/yyyy' }}</div>
+        <div><strong>Cierre:</strong> {{ data.oferta.fechaCierre | date:'dd/MM/yyyy' }}</div>
+        <div><strong>Sueldo:</strong> S/ {{ data.oferta.sueldo | number:'1.2-2' }}</div>
+        <div><strong>Modalidad:</strong> {{ data.oferta.idModalidadTrabajoNavigation?.nombreModalidad }}</div>
+        <div><strong>Contrato:</strong> {{ data.oferta.idTipoContratoNavigation?.nombreTipo }}</div>
+      </div>
+
+      <h3 class="section-header">Descripción</h3>
+      <p>{{ data.oferta.descripcion }}</p>
+
+      <h3 class="section-header">Requisitos</h3>
+      <p>{{ data.oferta.requisitos }}</p>
+    </div>
+
+    <mat-divider class="divider-vertical"></mat-divider>
+
+    <div class="section-empresa">
+      <h3 class="company-header">Sobre la Empresa</h3>
+      
+      <p class="company-name">{{ data.oferta.idEmpresaNavigation?.razonSocial }}</p>
+      
+      <div class="company-details">
+        <p *ngIf="data.oferta.idEmpresaNavigation?.ruc">
+          <strong>RUC:</strong> {{ data.oferta.idEmpresaNavigation?.ruc }}
+        </p>
+        
+        <p class="company-desc">
+          {{ data.oferta.idEmpresaNavigation?.descripcion }}
+        </p>
+        
+        <div class="contact-box">
+          <div *ngIf="data.oferta.idEmpresaNavigation?.direccion">
+            <mat-icon>place</mat-icon> {{ data.oferta.idEmpresaNavigation?.direccion }}
+          </div>
+          <div *ngIf="data.oferta.idEmpresaNavigation?.correo">
+            <mat-icon>email</mat-icon> {{ data.oferta.idEmpresaNavigation?.correo }}
+          </div>
+          <div *ngIf="data.oferta.idEmpresaNavigation?.telefono">
+            <mat-icon>phone</mat-icon> {{ data.oferta.idEmpresaNavigation?.telefono }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cerrar()">Cerrar</button>
+  
+  <button *ngIf="data.modo === 'POSTULAR'" 
+          mat-raised-button color="primary" 
+          (click)="ejecutarAccionPrincipal()">
+    POSTULAR
+  </button>
+  
+  <button *ngIf="data.modo === 'CANCELAR_POSTULACION'" 
+          mat-flat-button color="warn" 
+          (click)="ejecutarAccionPrincipal()">
+    RETIRAR POSTULACIÓN
+  </button>
+</mat-dialog-actions>

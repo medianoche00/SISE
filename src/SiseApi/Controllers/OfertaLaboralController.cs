@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SiseApi.Data;
 using SiseApi.Data.Models;
+using SiseApi.Models;
 
 namespace SiseApi.Controllers
 {
@@ -95,12 +97,18 @@ namespace SiseApi.Controllers
 
         // GET: api/OfertaLaboral/mis-postulaciones/10
         [HttpGet("mis-postulaciones/{idEgresado:int}")]
-        public async Task<ActionResult<IEnumerable<OfertaLaboral>>> GetByEgresado(int idEgresado)
+        public async Task<ActionResult<IEnumerable<OfertaLaboral>>> GetByEgresado(int idUsuario)
         {
-            // Opción A: Si tienes un DbSet<Postulacion>
-            // Buscamos en la tabla intermedia y "saltamos" hacia la oferta
+            var egresado = await _context.Egresados
+                .FirstOrDefaultAsync(x => x.IdUsuario == idUsuario);
+
+            if (egresado == null)
+            {
+                return BadRequest("El usuario no existe o no es un egresado.");
+            }
+
             var ofertasPostuladas = await _context.Postulaciones
-                .Where(p => p.IdEgresado == idEgresado) // Filtro por usuario
+                .Where(p => p.IdEgresado == egresado.IdEgresado) // Filtro por usuario
                 .Include(p => p.OfertaLaboral)          // Cargo la oferta
                     .ThenInclude(o => o.IdEmpresaNavigation) // Cargar empresa de la oferta (opcional)
                 .Select(p => p.OfertaLaboral)           // Selecciono solo el objeto Oferta para devolver
@@ -130,7 +138,103 @@ namespace SiseApi.Controllers
                          .ToListAsync();
         }
 
-        //metodo para postular
+        // POST: api/OfertaLaboral/postular
+        [HttpPost("postular")]
+        public async Task<ActionResult> Postular([FromBody] PostulacionRequest request)
+        {
+            // Validar que la oferta exista y esté activa
+            var oferta = await _context.OfertasLaborales
+                .FirstOrDefaultAsync(x => x.IdOferta == request.IdOferta && x.Estado == true);
 
+            if (oferta == null)
+            {
+                return BadRequest("La oferta no existe o no está activa.");
+            }
+
+            // Validar que el usuario exista y sea un egresado
+            var egresado = await _context.Egresados
+                .FirstOrDefaultAsync(x => x.IdUsuario == request.IdUsuario);
+
+            if (egresado == null)
+            { 
+                return BadRequest("El usuario no existe o no es un egresado.");
+            }
+
+            // Validar que la fecha de cierre no haya pasado
+            // Convertimos DateOnly a DateTime para comparar o usamos DateOnly.FromDateTime
+            if (oferta.FechaCierre < DateOnly.FromDateTime(DateTime.Now))
+            {
+                return BadRequest("La oferta ha finalizado, ya no se aceptan postulaciones.");
+            }
+
+            // Validar si el usuario YA se postuló previamente
+            bool yaPostulado = await _context.Postulaciones
+                .Where(p => p.Estado != "CANCELADO") // no se cuentan postulaciones canceladas
+                .AnyAsync(p => p.IdOferta == request.IdOferta && p.IdEgresado == egresado.IdEgresado);
+
+            if (yaPostulado)
+            {
+                return BadRequest("Ya te has postulado a esta oferta anteriormente.");
+            }
+
+            // Crear la entidad Postulacion
+            var nuevaPostulacion = new Postulacion
+            {
+                IdOferta = request.IdOferta,
+                IdEgresado = egresado.IdUsuario,
+                FechaPostulacion = DateTime.Now,
+                Estado = "Pendiente", // Estado inicial
+                IdRepresentanteEvaluador = null,
+                FechaEvaluacion = null,
+                Comentarios = null
+            };
+
+            try
+            {
+                _context.Postulaciones.Add(nuevaPostulacion);
+                await _context.SaveChangesAsync();
+
+                // Retornamos Ok con un mensaje o el objeto creado
+                return Ok(new { message = "Postulación realizada con éxito", idPostulacion = nuevaPostulacion.IdPostulacion });
+            }
+            catch (DbUpdateException)
+            {
+                // En caso de que falle la concurrencia y se intente duplicar al mismo milisegundo
+                return StatusCode(500, "Error al procesar la postulación.");
+            }
+        }
+
+        [HttpDelete("cancelar-postulacion/{idOferta:int}/{idUsuario:int}")]
+        public async Task<ActionResult> CancelarPostulacion(int idOferta, int idUsuario)
+        {
+            var egresado = await _context.Egresados
+                .FirstOrDefaultAsync(e => e.IdUsuario == idUsuario);
+
+            if (egresado == null)
+            {
+                return NotFound("No se encontró al egresado.");
+            }
+
+            var postulacion = await _context.Postulaciones
+                .FirstOrDefaultAsync(p => p.IdOferta == idOferta && p.IdEgresado == egresado.IdEgresado);
+
+            if (postulacion == null)
+            {
+                return NotFound("No se encontró la postulación.");
+            }
+
+            postulacion.Estado = "CANCELADO";
+            _context.Postulaciones.Update(postulacion);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+    }
+
+    public class PostulacionRequest
+    {
+        public int IdOferta { get; set; }
+        public int IdUsuario { get; set; }
     }
 }

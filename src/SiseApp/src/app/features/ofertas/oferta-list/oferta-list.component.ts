@@ -4,6 +4,8 @@ import { OfertaDetailComponent } from '../../../shared/oferta-detail/oferta-deta
 import { OfertaService } from '../../../core/services/oferta.service';
 import { OfertaLaboral } from '../../../core/models/oferta.model';
 import { OnInit } from '@angular/core';
+import { AuthService } from '../../../core/services/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-oferta-list',
@@ -18,10 +20,13 @@ export class OfertaListComponent implements OnInit {
   textoBusqueda: string = '';
   filtroModalidad: string = '';
   ordenamiento: string = 'recientes';
+  
 
   constructor(
     private ofertaService: OfertaService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private authService: AuthService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -67,9 +72,49 @@ export class OfertaListComponent implements OnInit {
   }
 
   verDetalle(oferta: OfertaLaboral) {
-    this.dialog.open(OfertaDetailComponent, {
+    const dialogRef = this.dialog.open(OfertaDetailComponent, {
       width: '700px',
       data: { oferta, modo: 'POSTULAR' } 
+    });
+    
+    dialogRef.afterClosed().subscribe(confirmado => {
+      // 'confirmado' será true solo si dio clic en el botón POSTULAR del modal
+      if (confirmado) {
+        this.realizarPostulacion(oferta.idOferta);
+      }
+    });
+  }
+
+  realizarPostulacion(idOferta: number) {
+    // 1. Obtener el ID del usuario logueado
+    const usuarioId = this.authService.getUserId(); 
+    
+    if (!usuarioId) {
+      this.mostrarMensaje('Debes iniciar sesión para postular', 'error');
+      return;
+    }
+
+    // 2. Llamar al servicio
+    this.ofertaService.postularOferta(idOferta, usuarioId).subscribe({
+      next: (response) => {
+        // ÉXITO (200 OK)
+        this.mostrarMensaje('¡Postulación enviada con éxito!', 'success');
+      },
+      error: (err) => {
+        // ERROR (400 BadRequest o 500)
+        // El backend devuelve el mensaje de error en 'err.error'
+        const mensajeError = err.error || 'Ocurrió un error al postular.';
+        this.mostrarMensaje(mensajeError, 'error');
+      }
+    });
+  }
+
+  // Helper para mostrar mensajes tipo "Toast"
+  mostrarMensaje(mensaje: string, tipo: 'success' | 'error') {
+    this.snackBar.open(mensaje, 'CERRAR', {
+      duration: 4000,
+      panelClass: tipo === 'error' ? ['mat-toolbar', 'mat-warn'] : ['mat-toolbar', 'mat-primary'],
+      verticalPosition: 'top' // Para que salga arriba
     });
   }
 }

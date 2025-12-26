@@ -137,6 +137,27 @@
   },
   {
     "ContainingType": "SiseApi.Controllers.OfertaLaboralController",
+    "Method": "CancelarPostulacion",
+    "RelativePath": "api/OfertaLaboral/cancelar-postulacion/{idOferta}/{idUsuario}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idOferta",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "idUsuario",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SiseApi.Controllers.OfertaLaboralController",
     "Method": "GetByEmpresa",
     "RelativePath": "api/OfertaLaboral/empresa/{idEmpresa}",
     "HttpMethod": "GET",
@@ -170,8 +191,13 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "idEgresado",
+        "Name": "idUsuario",
         "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "idEgresado",
+        "Type": "",
         "IsRequired": true
       }
     ],
@@ -186,5 +212,21 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "SiseApi.Controllers.OfertaLaboralController",
+    "Method": "Postular",
+    "RelativePath": "api/OfertaLaboral/postular",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "SiseApi.Controllers.PostulacionRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

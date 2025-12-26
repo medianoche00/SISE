@@ -22,6 +22,7 @@ import { MatIcon } from '@angular/material/icon';
 import { OfertaDetailComponent } from './shared/oferta-detail/oferta-detail.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MisOfertasComponent } from './features/mis-ofertas/mis-ofertas.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     HeaderComponent,
     SidebarComponent,
     OfertaDetailComponent,
+    MisOfertasComponent,
   ],
   imports: [
     BrowserModule,

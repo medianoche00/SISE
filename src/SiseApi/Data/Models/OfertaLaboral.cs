@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using SiseApi.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace SiseApi.Data.Models;
 
@@ -66,4 +67,7 @@ public partial class OfertaLaboral
     [ForeignKey("IdTipoContrato")]
     [InverseProperty("OfertaLaborals")]
     public virtual TipoContrato IdTipoContratoNavigation { get; set; } = null!;
+
+    [InverseProperty("OfertaLaboral")]
+    public virtual ICollection<Postulacion> Postulaciones { get; set; } = new List<Postulacion>();
 }

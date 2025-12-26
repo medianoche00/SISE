@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using SiseApi.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace SiseApi.Data.Models;
 
@@ -41,4 +42,7 @@ public class Representante
     [ForeignKey("IdUsuario")]
     [InverseProperty("Representantes")]
     public virtual ApplicationUser Usuario { get; set; } = null!;
+
+    [InverseProperty("RepresentanteEvaluador")]
+    public virtual ICollection<Postulacion> PostulacionesEvaluadas { get; set; } = new List<Postulacion>();
 }

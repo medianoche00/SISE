@@ -19,6 +19,9 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component'; // Para e
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIcon } from '@angular/material/icon';
+import { OfertaDetailComponent } from './shared/oferta-detail/oferta-detail.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -26,7 +29,8 @@ import { MatIcon } from '@angular/material/icon';
     MainLayoutComponent,
     AuthLayoutComponent,
     HeaderComponent,
-    SidebarComponent
+    SidebarComponent,
+    OfertaDetailComponent,
   ],
   imports: [
     BrowserModule,
@@ -42,6 +46,8 @@ import { MatIcon } from '@angular/material/icon';
     MatListModule,
     MatSidenavModule,
     MatIcon,
+    MatChipsModule,
+    MatDialogModule,
     RouterModule
   ],
   providers: [

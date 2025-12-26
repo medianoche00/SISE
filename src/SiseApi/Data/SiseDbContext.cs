@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SiseApi.Data.Models;
+using SiseApi.Models;
 
 namespace SiseApi.Data
 {
@@ -28,6 +29,7 @@ namespace SiseApi.Data
         public virtual DbSet<TipoContrato> TiposContratos { get; set; }
         public virtual DbSet<TipoFormacion> TiposFormacions { get; set; }
         public virtual DbSet<VwOfertasDisponible> VwOfertasDisponibles { get; set; }
+        public virtual DbSet<Postulacion> Postulaciones { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -197,6 +199,36 @@ namespace SiseApi.Data
             {
                 entity.HasNoKey();
                 entity.ToView("vwOfertasDisponibles");
+            });
+
+            modelBuilder.Entity<Postulacion>(entity =>
+            {
+                entity.HasKey(e => e.IdPostulacion);
+
+                // Estado por defecto desde BD
+                entity.Property(e => e.Estado).HasDefaultValue("Pendiente");
+                entity.Property(e => e.FechaPostulacion).HasDefaultValueSql("(getdate())");
+
+                // Relación con Egresado
+                entity.HasOne(d => d.Egresado)
+                    .WithMany(p => p.Postulaciones)
+                    .HasForeignKey(d => d.IdEgresado)
+                    .OnDelete(DeleteBehavior.ClientSetNull) // Evita borrado en cascada peligroso
+                    .HasConstraintName("FK_Postulacion_Egresado");
+
+                // Relación con Oferta
+                entity.HasOne(d => d.OfertaLaboral)
+                    .WithMany(p => p.Postulaciones)
+                    .HasForeignKey(d => d.IdOferta)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Postulacion_Oferta");
+
+                // Relación con Representante (Evaluador)
+                entity.HasOne(d => d.RepresentanteEvaluador)
+                    .WithMany(p => p.PostulacionesEvaluadas)
+                    .HasForeignKey(d => d.IdRepresentanteEvaluador)
+                    .OnDelete(DeleteBehavior.ClientSetNull) // Si se borra el repre, no se borra la postulación (queda el histórico)
+                    .HasConstraintName("FK_Postulacion_Representante");
             });
         }
     }

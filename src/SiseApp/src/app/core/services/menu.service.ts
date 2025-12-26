@@ -18,7 +18,7 @@ export class MenuService {
           {
             label: 'Ofertas Laborales',
             icon: 'work',
-            route: '/dashboard/jobs',
+            route: '/ofertas',
           }, //! -------------------QUITAR LUEGO------------------------
           { label: 'Usuarios', icon: 'people', route: '/dashboard/users' },
           {

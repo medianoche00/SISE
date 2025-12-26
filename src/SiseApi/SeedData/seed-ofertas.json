@@ -1,0 +1,30 @@
+[
+  {
+    "IdEmpresa": 1,
+    "Titulo": "Desarrollador .NET Junior",
+    "Descripcion": "Oportunidad para desarrollador junior con experiencia en C# y EF Core.",
+    "Requisitos": "C# 10+, .NET 7+, SQL, trabajo en equipo",
+    "Ubicacion": "Lima|, Perú",
+    "IdTipoContrato": 1,
+    "Sueldo": 2500.00,
+    "IdModalidadTrabajo": 1,
+    "FechaPublicacion": "2025-12-01",
+    "FechaCierre": "2026-01-01",
+    "IdEgresadoGanador": null,
+    "Estado": true
+  },
+  {
+    "IdEmpresa": 2,
+    "Titulo": "Analista de QA",
+    "Descripcion": "QA manual y automatización con Selenium y Playwright.",
+    "Requisitos": "Testing, pipelines CI/CD, automatización",
+    "Ubicacion": "Remoto",
+    "IdTipoContrato": 2,
+    "Sueldo": 1800.00,
+    "IdModalidadTrabajo": 2,
+    "FechaPublicacion": "2025-11-15",
+    "FechaCierre": "2026-02-15",
+    "IdEgresadoGanador": null,
+    "Estado": true
+  }
+]

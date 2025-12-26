@@ -25,20 +25,20 @@ namespace SiseApi.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            // Buscar por email o por username
+            // Buscar usuario
             ApplicationUser? user = await _userManager.FindByEmailAsync(dto.UserNameOrEmail)
-                                     ?? await _userManager.FindByNameAsync(dto.UserNameOrEmail);
+                                    ?? await _userManager.FindByNameAsync(dto.UserNameOrEmail);
 
             if (user == null) return Unauthorized(new { message = "Usuario o contraseña incorrectos." });
 
             // Verificar contraseña
             var valid = await _userManager.CheckPasswordAsync(user, dto.Password);
+            
             if (!valid) return Unauthorized(new { message = "Usuario o contraseña incorrectos." });
 
-            // Opcional: comprobar lockout, email confirmado, etc.
-            // if (!await _userManager.IsEmailConfirmedAsync(user)) { ... }
-
             var token = await _tokenService.CreateTokenAsync(user);
+
+            // 4. Devolver respuesta con Token y Roles
             return Ok(token);
         }
     }

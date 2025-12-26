@@ -1,5 +1,6 @@
 ﻿[
   { "Name": "Administrador" },
   { "Name": "Egresado" },
-  { "Name": "Empresa" }
+  { "Name": "Representante" },
+  { "Name": "Administrativo"}
 ]

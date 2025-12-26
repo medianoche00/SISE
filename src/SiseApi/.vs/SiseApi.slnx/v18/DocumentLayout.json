@@ -5,6 +5,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\seeddata\\seed-users.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:seeddata\\seed-users.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\seeddata\\seed-roles.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:seeddata\\seed-roles.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -28,9 +32,22 @@
               "RelativeDocumentMoniker": "SeedData\\seed-users.json",
               "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\SeedData\\seed-users.json",
               "RelativeToolTip": "SeedData\\seed-users.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAlAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAADAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-12-24T16:28:05.796Z",
+              "WhenOpened": "2025-12-25T23:11:22.096Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "seed-roles.json",
+              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\SeedData\\seed-roles.json",
+              "RelativeDocumentMoniker": "SeedData\\seed-roles.json",
+              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\SeedData\\seed-roles.json",
+              "RelativeToolTip": "SeedData\\seed-roles.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-25T23:11:15.297Z",
               "EditorCaption": ""
             }
           ]

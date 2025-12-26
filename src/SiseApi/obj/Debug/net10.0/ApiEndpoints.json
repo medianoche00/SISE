@@ -16,6 +16,106 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "SiseApi.Controllers.OfertaLaboralController",
+    "Method": "Get",
+    "RelativePath": "api/OfertaLaboral",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[SiseApi.Data.Models.OfertaLaboral, SiseApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SiseApi.Controllers.OfertaLaboralController",
+    "Method": "Post",
+    "RelativePath": "api/OfertaLaboral",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ofertaLaboral",
+        "Type": "SiseApi.Data.Models.OfertaLaboral",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SiseApi.Controllers.OfertaLaboralController",
+    "Method": "Get",
+    "RelativePath": "api/OfertaLaboral/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SiseApi.Data.Models.OfertaLaboral",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "EndpointName": "GetOfertaLaboral"
+  },
+  {
+    "ContainingType": "SiseApi.Controllers.OfertaLaboralController",
+    "Method": "Put",
+    "RelativePath": "api/OfertaLaboral/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "ofertaLaboral",
+        "Type": "SiseApi.Data.Models.OfertaLaboral",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SiseApi.Controllers.OfertaLaboralController",
+    "Method": "Delete",
+    "RelativePath": "api/OfertaLaboral/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SiseApi.Controllers.TodosUsuariosController",
     "Method": "Get",
     "RelativePath": "TodosUsuarios",

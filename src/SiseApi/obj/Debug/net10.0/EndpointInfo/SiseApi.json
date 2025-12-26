@@ -45,6 +45,180 @@
         }
       }
     },
+    "/api/OfertaLaboral": {
+      "get": {
+        "tags": [
+          "OfertaLaboral"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OfertaLaboral"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OfertaLaboral"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OfertaLaboral"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "OfertaLaboral"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OfertaLaboral"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OfertaLaboral"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OfertaLaboral"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/OfertaLaboral/{id}": {
+      "get": {
+        "tags": [
+          "OfertaLaboral"
+        ],
+        "operationId": "GetOfertaLaboral",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OfertaLaboral"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OfertaLaboral"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OfertaLaboral"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "OfertaLaboral"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OfertaLaboral"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OfertaLaboral"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OfertaLaboral"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "OfertaLaboral"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/TodosUsuarios": {
       "get": {
         "tags": [
@@ -99,6 +273,548 @@
   },
   "components": {
     "schemas": {
+      "ApplicationUser": {
+        "type": "object",
+        "properties": {
+          "auditorias": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Auditoria"
+            }
+          },
+          "egresados": {
+            "$ref": "#/components/schemas/OfertaLaboral/properties/idEgresadoGanadorNavigation/properties/persona/properties/egresados/items/properties/usuario/properties/auditorias/items/properties/usuario/properties/egresados"
+          },
+          "representantes": {
+            "$ref": "#/components/schemas/OfertaLaboral/properties/idEgresadoGanadorNavigation/properties/persona/properties/egresados/items/properties/usuario/properties/auditorias/items/properties/usuario/properties/representantes"
+          },
+          "id": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "userName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "normalizedUserName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "email": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "normalizedEmail": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "emailConfirmed": {
+            "type": "boolean"
+          },
+          "passwordHash": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "securityStamp": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "concurrencyStamp": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "phoneNumber": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "phoneNumberConfirmed": {
+            "type": "boolean"
+          },
+          "twoFactorEnabled": {
+            "type": "boolean"
+          },
+          "lockoutEnd": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "lockoutEnabled": {
+            "type": "boolean"
+          },
+          "accessFailedCount": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          }
+        }
+      },
+      "Auditoria": {
+        "type": "object",
+        "properties": {
+          "idAuditoria": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "idUsuario": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "tablaAfectada": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "columnaAfectada": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "accion": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string"
+          },
+          "valorAnterior": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "valorNuevo": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "fechaHora": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usuario": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/ApplicationUser"
+              }
+            ]
+          }
+        }
+      },
+      "Carrera": {
+        "type": "object",
+        "properties": {
+          "idCarrera": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "idEscuela": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "nombreCarrera": {
+            "maxLength": 150,
+            "minLength": 0,
+            "type": "string"
+          },
+          "estado": {
+            "type": "boolean"
+          },
+          "egresados": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Egresado"
+            }
+          },
+          "idEscuelaNavigation": {
+            "$ref": "#/components/schemas/Escuela"
+          }
+        }
+      },
+      "Egresado": {
+        "type": "object",
+        "properties": {
+          "idEgresado": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "idPersona": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "idUsuario": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "idCarrera": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "codigoUniversitario": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string"
+          },
+          "añoEgreso": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "estado": {
+            "type": "boolean"
+          },
+          "persona": {
+            "$ref": "#/components/schemas/Persona"
+          },
+          "usuario": {
+            "$ref": "#/components/schemas/ApplicationUser"
+          },
+          "carrera": {
+            "$ref": "#/components/schemas/Carrera"
+          },
+          "experienciaLaborals": {
+            "$ref": "#/components/schemas/OfertaLaboral/properties/idEgresadoGanadorNavigation/properties/persona/properties/egresados/items/properties/experienciaLaborals"
+          },
+          "formacionComplementaria": {
+            "$ref": "#/components/schemas/OfertaLaboral/properties/idEgresadoGanadorNavigation/properties/persona/properties/egresados/items/properties/experienciaLaborals/items/properties/idEgresadoNavigation/properties/formacionComplementaria"
+          },
+          "ofertaLaborals": {
+            "$ref": "#/components/schemas/OfertaLaboral/properties/idEgresadoGanadorNavigation/properties/persona/properties/egresados/items/properties/experienciaLaborals/items/properties/idEgresadoNavigation/properties/formacionComplementaria/items/properties/idEgresadoNavigation/properties/ofertaLaborals"
+          }
+        }
+      },
+      "Empresa": {
+        "type": "object",
+        "properties": {
+          "idEmpresa": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "ruc": {
+            "maxLength": 11,
+            "minLength": 0,
+            "type": "string"
+          },
+          "razonSocial": {
+            "maxLength": 150,
+            "minLength": 0,
+            "type": "string"
+          },
+          "direccion": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "telefono": {
+            "maxLength": 15,
+            "minLength": 0,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "correo": {
+            "maxLength": 150,
+            "minLength": 0,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "descripcion": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "estado": {
+            "type": "boolean"
+          },
+          "ofertaLaborals": {
+            "$ref": "#/components/schemas/OfertaLaboral/properties/idEgresadoGanadorNavigation/properties/persona/properties/egresados/items/properties/usuario/properties/auditorias/items/properties/usuario/properties/representantes/items/properties/empresa/properties/ofertaLaborals"
+          },
+          "representantes": {
+            "$ref": "#/components/schemas/OfertaLaboral/properties/idEgresadoGanadorNavigation/properties/persona/properties/egresados/items/properties/usuario/properties/auditorias/items/properties/usuario/properties/representantes/items/properties/empresa/properties/representantes"
+          }
+        }
+      },
+      "Escuela": {
+        "type": "object",
+        "properties": {
+          "idEscuela": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "idFacultad": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "nombreEscuela": {
+            "maxLength": 150,
+            "minLength": 0,
+            "type": "string"
+          },
+          "estado": {
+            "type": "boolean"
+          },
+          "carreras": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Carrera"
+            }
+          },
+          "idFacultadNavigation": {
+            "$ref": "#/components/schemas/Facultad"
+          }
+        }
+      },
+      "ExperienciaLaboral": {
+        "type": "object",
+        "properties": {
+          "idExperiencia": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "idEgresado": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "empresa": {
+            "maxLength": 150,
+            "minLength": 0,
+            "type": "string"
+          },
+          "idEmpresaRegistrada": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "cargo": {
+            "maxLength": 150,
+            "minLength": 0,
+            "type": "string"
+          },
+          "fechaInicio": {
+            "type": "string",
+            "format": "date"
+          },
+          "fechaFin": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date"
+          },
+          "descripcion": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "estado": {
+            "type": "boolean"
+          },
+          "idEgresadoNavigation": {
+            "$ref": "#/components/schemas/Egresado"
+          },
+          "empresaRegistrada": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Empresa"
+              }
+            ]
+          }
+        }
+      },
+      "Facultad": {
+        "type": "object",
+        "properties": {
+          "idFacultad": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "nombreFacultad": {
+            "maxLength": 150,
+            "minLength": 0,
+            "type": "string"
+          },
+          "estado": {
+            "type": "boolean"
+          },
+          "escuelas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Escuela"
+            }
+          }
+        }
+      },
+      "FormacionComplementaria": {
+        "type": "object",
+        "properties": {
+          "idFormacion": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "idEgresado": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "idTipoFormacion": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "nombreDelCurso": {
+            "maxLength": 150,
+            "minLength": 0,
+            "type": "string"
+          },
+          "institucion": {
+            "maxLength": 150,
+            "minLength": 0,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "fechaInicio": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date"
+          },
+          "fechaFin": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date"
+          },
+          "estado": {
+            "type": "boolean"
+          },
+          "idEgresadoNavigation": {
+            "$ref": "#/components/schemas/Egresado"
+          },
+          "idTipoFormacionNavigation": {
+            "$ref": "#/components/schemas/TipoFormacion"
+          }
+        }
+      },
       "LoginRequest": {
         "required": [
           "userNameOrEmail",
@@ -111,6 +827,315 @@
           },
           "password": {
             "type": "string"
+          }
+        }
+      },
+      "ModalidadTrabajo": {
+        "type": "object",
+        "properties": {
+          "idModalidadTrabajo": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "nombreModalidad": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "estado": {
+            "type": "boolean"
+          },
+          "ofertaLaborals": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OfertaLaboral"
+            }
+          }
+        }
+      },
+      "OfertaLaboral": {
+        "type": "object",
+        "properties": {
+          "idOferta": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "idEmpresa": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "titulo": {
+            "maxLength": 150,
+            "minLength": 0,
+            "type": "string"
+          },
+          "descripcion": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "requisitos": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "ubicacion": {
+            "maxLength": 150,
+            "minLength": 0,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "idTipoContrato": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "sueldo": {
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
+            "type": [
+              "null",
+              "number",
+              "string"
+            ],
+            "format": "double"
+          },
+          "idModalidadTrabajo": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "fechaPublicacion": {
+            "type": "string",
+            "format": "date"
+          },
+          "fechaCierre": {
+            "type": "string",
+            "format": "date"
+          },
+          "idEgresadoGanador": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "estado": {
+            "type": "boolean"
+          },
+          "idEgresadoGanadorNavigation": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Egresado"
+              }
+            ]
+          },
+          "idEmpresaNavigation": {
+            "$ref": "#/components/schemas/Empresa"
+          },
+          "idModalidadTrabajoNavigation": {
+            "$ref": "#/components/schemas/ModalidadTrabajo"
+          },
+          "idTipoContratoNavigation": {
+            "$ref": "#/components/schemas/TipoContrato"
+          }
+        }
+      },
+      "Persona": {
+        "type": "object",
+        "properties": {
+          "idPersona": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "nombres": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "apellidoPaterno": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "apellidoMaterno": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "documentoIdentidad": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string"
+          },
+          "telefono": {
+            "maxLength": 15,
+            "minLength": 0,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "correoPersonal": {
+            "maxLength": 150,
+            "minLength": 0,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "estado": {
+            "type": "boolean"
+          },
+          "egresados": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Egresado"
+            }
+          },
+          "representantes": {
+            "$ref": "#/components/schemas/OfertaLaboral/properties/idEgresadoGanadorNavigation/properties/persona/properties/egresados/items/properties/usuario/properties/auditorias/items/properties/usuario/properties/representantes/items/properties/persona/properties/representantes"
+          }
+        }
+      },
+      "Representante": {
+        "type": "object",
+        "properties": {
+          "idRepresentante": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "idEmpresa": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "idPersona": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "idUsuario": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "cargo": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "estado": {
+            "type": "boolean"
+          },
+          "empresa": {
+            "$ref": "#/components/schemas/Empresa"
+          },
+          "persona": {
+            "$ref": "#/components/schemas/Persona"
+          },
+          "usuario": {
+            "$ref": "#/components/schemas/ApplicationUser"
+          }
+        }
+      },
+      "TipoContrato": {
+        "type": "object",
+        "properties": {
+          "idTipoContrato": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "nombreTipo": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "estado": {
+            "type": "boolean"
+          },
+          "ofertaLaborals": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OfertaLaboral"
+            }
+          }
+        }
+      },
+      "TipoFormacion": {
+        "type": "object",
+        "properties": {
+          "idTipoFormacion": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "nombreTipoFormacion": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "estado": {
+            "type": "boolean"
+          },
+          "formacionComplementaria": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FormacionComplementaria"
+            }
           }
         }
       },
@@ -150,6 +1175,9 @@
   "tags": [
     {
       "name": "Auth"
+    },
+    {
+      "name": "OfertaLaboral"
     },
     {
       "name": "TodosUsuarios"

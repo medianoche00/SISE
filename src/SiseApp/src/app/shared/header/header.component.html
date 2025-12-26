@@ -1,56 +1,33 @@
-<mat-toolbar class="main-header">
-  
-  <div class="logo-section" routerLink="/dashboard">
-    <span class="brand-name">SISE</span>
-    </div>
-
-  <div class="search-pill">
-    <div class="search-input-group">
-      <mat-icon class="input-icon">work_outline</mat-icon>
-      <input type="text" placeholder="Cargo o categoría">
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="search-input-group">
-      <mat-icon class="input-icon">place</mat-icon>
-      <input type="text" placeholder="Lugar">
-    </div>
-
-    <button mat-icon-button color="primary" class="search-btn">
-      <mat-icon>search</mat-icon>
-    </button>
-  </div>
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="sidenav.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
 
   <span class="spacer"></span>
 
-  <div class="user-actions">
-    
-    <button mat-icon-button class="notification-btn">
-      <mat-icon matBadge="9" matBadgeColor="warn">notifications_none</mat-icon>
-    </button>
-
-    <div class="user-profile" [matMenuTriggerFor]="userMenu">
-      <span class="user-name">Cesar Santiago</span>
-      <mat-icon alt="Avatar" class="avatar">person</mat-icon>
-      <mat-icon class="dropdown-arrow">expand_more</mat-icon>
-    </div>
-
-    <mat-menu #userMenu="matMenu">
-      <button mat-menu-item>
-        <mat-icon>person</mat-icon>
-        <span>Mi Perfil</span>
-      </button>
-      <button mat-menu-item>
-        <mat-icon>settings</mat-icon>
-        <span>Configuración</span>
-      </button>
-      <button mat-menu-item (click)="logout()">
-        <mat-icon>logout</mat-icon>
-        <span>Cerrar Sesión</span>
-      </button>
-    </mat-menu>
-
+  <div class="logo-section" routerLink="/dashboard">
+    <span class="brand-name">SISE</span>
   </div>
 
+   <span class="spacer2"></span>
+
+  <button mat-icon-button>
+    <mat-icon>notifications</mat-icon>
+  </button>
+
+  <button mat-icon-button [matMenuTriggerFor]="userMenu">
+    <mat-icon>account_circle</mat-icon>
+  </button>
+
+  <mat-menu #userMenu="matMenu">
+    <div mat-subheader class="username-label">{{ username }}</div>
+    <button mat-menu-item>
+      <mat-icon>settings</mat-icon>
+      <span>Configurar Cuenta</span>
+    </button>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>exit_to_app</mat-icon>
+      <span>Cerrar Sesión</span>
+    </button>
+  </mat-menu>
 </mat-toolbar>

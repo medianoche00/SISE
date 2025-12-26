@@ -278,7 +278,7 @@ public class DbSeeder : IDbSeeder
 
         foreach (var userDto in usersData)
         {
-            if (await _userManager.FindByEmailAsync(userDto.Email!) == null)
+            if (await _userManager.FindByNameAsync(userDto.UserName!) == null)
             {
                 var user = new ApplicationUser
                 {

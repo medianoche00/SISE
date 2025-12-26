@@ -15,6 +15,7 @@ interface AuthResponse {
   expiresAt: string;
   userName?: string;
   userId?: number;
+  role: string;
 }
 
 @Injectable({
@@ -73,5 +74,17 @@ export class AuthService {
 
   private clearStoredAuth() {
     localStorage.removeItem(this.tokenKey);
+  }
+  
+  getRole(): string {
+    const auth = this.getStoredAuth();
+    if (!auth) return '';
+    return auth.role? auth.role : '';
+  }
+
+  getUsername(): string {
+    const auth = this.getStoredAuth();
+    if (!auth) return '';
+    return auth.userName? auth.userName : '';
   }
 }

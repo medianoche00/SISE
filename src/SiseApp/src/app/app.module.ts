@@ -14,14 +14,19 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatInputModule } from '@angular/material/input';
-import { RouterModule } from '@angular/router'; // Para el routerLink
+import { RouterModule } from '@angular/router';
+import { SidebarComponent } from './shared/sidebar/sidebar.component'; // Para el routerLink
+import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIcon } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainLayoutComponent,
     AuthLayoutComponent,
-    HeaderComponent
+    HeaderComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,
@@ -34,6 +39,9 @@ import { RouterModule } from '@angular/router'; // Para el routerLink
     MatMenuModule,
     MatBadgeModule,
     MatInputModule,
+    MatListModule,
+    MatSidenavModule,
+    MatIcon,
     RouterModule
   ],
   providers: [

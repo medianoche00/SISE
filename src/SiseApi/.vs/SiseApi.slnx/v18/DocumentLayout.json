@@ -3,16 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\controllers\\ofertalaboralcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:controllers\\ofertalaboralcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\seeddata\\seed-users.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:seeddata\\seed-users.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\data\\models\\ofertalaboral.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:data\\models\\ofertalaboral.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\seeddata\\seed-roles.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:seeddata\\seed-roles.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -30,41 +26,28 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAArwBIAAAA9AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-25T03:51:34.871Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "OfertaLaboral.cs",
-              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Data\\Models\\OfertaLaboral.cs",
-              "RelativeDocumentMoniker": "Data\\Models\\OfertaLaboral.cs",
-              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Data\\Models\\OfertaLaboral.cs",
-              "RelativeToolTip": "Data\\Models\\OfertaLaboral.cs",
-              "ViewState": "AgIAADIAAAAAAAAAAADwv0MAAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-25T02:47:31.952Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "OfertaLaboralController.cs",
-              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Controllers\\OfertaLaboralController.cs",
-              "RelativeDocumentMoniker": "Controllers\\OfertaLaboralController.cs",
-              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Controllers\\OfertaLaboralController.cs",
-              "RelativeToolTip": "Controllers\\OfertaLaboralController.cs",
-              "ViewState": "AgIAADYAAAAAAAAAAAAcwBoAAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-25T02:46:35.096Z",
+              "Title": "seed-users.json",
+              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\SeedData\\seed-users.json",
+              "RelativeDocumentMoniker": "SeedData\\seed-users.json",
+              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\SeedData\\seed-users.json",
+              "RelativeToolTip": "SeedData\\seed-users.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-25T23:11:22.096Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "seed-roles.json",
+              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\SeedData\\seed-roles.json",
+              "RelativeDocumentMoniker": "SeedData\\seed-roles.json",
+              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\SeedData\\seed-roles.json",
+              "RelativeToolTip": "SeedData\\seed-roles.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-25T23:11:15.297Z",
               "EditorCaption": ""
             }
           ]

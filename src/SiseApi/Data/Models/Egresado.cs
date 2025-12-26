@@ -1,9 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SiseApi.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace SiseApi.Data.Models;
 
@@ -57,7 +56,4 @@ public class Egresado
 
     [InverseProperty("IdEgresadoGanadorNavigation")]
     public virtual ICollection<OfertaLaboral> OfertaLaborals { get; set; } = new List<OfertaLaboral>();
-
-    [InverseProperty("Egresado")]
-    public virtual ICollection<Postulacion> Postulaciones { get; set; } = new List<Postulacion>();
 }

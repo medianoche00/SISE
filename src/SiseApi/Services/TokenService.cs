@@ -66,8 +66,7 @@ namespace SiseApi.Services
                 TokenType = "Bearer",
                 ExpiresAt = expires,
                 UserName = user.UserName,
-                UserId = user.Id,
-                Role = roles.FirstOrDefault() ?? string.Empty
+                UserId = user.Id
             };
         }
     }

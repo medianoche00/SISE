@@ -1,26 +1,19 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
 using SiseApi.Data;
-using SiseApi.Data.Models;
 using SiseApi.Seed;
 using SiseApi.Services;
 using System.Text;
-using System.Text.Json.Serialization;
+using SiseApi.Data.Models;
 //using SiseApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers().AddJsonOptions(x =>
-{
-    // Esta línea rompe el ciclo ignorando el objeto repetido
-    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-    x.JsonSerializerOptions.WriteIndented = true;
-});
-
+builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 

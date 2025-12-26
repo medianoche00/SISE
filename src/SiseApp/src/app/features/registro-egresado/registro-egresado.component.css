@@ -1,0 +1,66 @@
+.egresado-card {
+  max-width: 1100px; 
+  margin: 0 auto; 
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  background-color: #fff;
+}
+
+.card-header-simple {
+  border-bottom: 3px solid #ffca28;
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+  .card-header-simple h2 {
+    color: #0d47a1;
+    font-weight: 700;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-header-simple p {
+    color: #6c757d;
+    font-size: 1rem;
+    margin: 0;
+  }
+
+.section-title {
+  color: #0d47a1;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+}
+
+.experiencia-item {
+  background-color: #f8f9fa;
+  border-left: 5px solid #0d47a1; 
+  padding: 1.5rem 1rem 0.5rem 1rem; 
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 1.5rem;
+  transition: background-color 0.3s ease;
+}
+
+  .experiencia-item:hover {
+    background-color: #eef2f6; 
+  }
+
+.dense-field {
+  font-size: 0.95rem;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-icon[matSuffix] {
+  color: #aeb0b5;
+}
+
+button[type="submit"] {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}

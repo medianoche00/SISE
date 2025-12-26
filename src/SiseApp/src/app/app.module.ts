@@ -1,58 +1,54 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
-import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
-import { HeaderComponent } from './shared/header/header.component';
-import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AppRoutingModule } from './app-routing.module';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
-import { MatInputModule } from '@angular/material/input';
-import { RouterModule } from '@angular/router';
-import { SidebarComponent } from './shared/sidebar/sidebar.component'; // Para el routerLink
-import { MatListModule } from '@angular/material/list';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatIcon } from '@angular/material/icon';
-import { OfertaDetailComponent } from './shared/oferta-detail/oferta-detail.component';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';          
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';   
+import { MatSelectModule } from '@angular/material/select';     
+import { MatDividerModule } from '@angular/material/divider';  
+import { MatTooltipModule } from '@angular/material/tooltip';     
+import { AppComponent } from './app.component';
+import { RegistroEgresadoComponent } from './features/registro-egresado/registro-egresado.component';
+import { HeaderComponent } from './shared/header/header.component';
+import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
+import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MainLayoutComponent,
-    AuthLayoutComponent,
+    RegistroEgresadoComponent,
     HeaderComponent,
-    SidebarComponent,
-    OfertaDetailComponent,
+    AuthLayoutComponent,
+    MainLayoutComponent
   ],
   imports: [
     BrowserModule,
-    HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
     MatBadgeModule,
+    MatCardModule,
+    MatFormFieldModule,
     MatInputModule,
-    MatListModule,
-    MatSidenavModule,
-    MatIcon,
-    MatChipsModule,
-    MatDialogModule,
-    RouterModule
+    MatSelectModule,
+    MatDividerModule,
+    MatTooltipModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    provideHttpClient(withInterceptorsFromDi())
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

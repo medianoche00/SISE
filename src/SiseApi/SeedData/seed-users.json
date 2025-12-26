@@ -14,17 +14,10 @@
     "Role": "Egresado"
   },
   {
-    "UserName": "carlos.david",
-    "Email": "carlos@techsolutions.com",
+    "UserName": "tech.solutions",
+    "Email": "contacto@techsolutions.com",
     "Password": "EmpresaPassword123!",
     "PhoneNumber": "012345678",
-    "Role": "Representante"
-  },
-  {
-    "UserName": "maria.luna",
-    "Email": "maria@unp.com",
-    "Password": "AdministrativoPassword123!",
-    "PhoneNumber": "924573234",
-    "Role": "Administrativo"
+    "Role": "Empresa"
   }
 ]

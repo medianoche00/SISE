@@ -893,62 +893,6 @@ namespace SiseApi.Migrations
                     b.ToView("vwOfertasDisponibles", (string)null);
                 });
 
-            modelBuilder.Entity("SiseApi.Models.Postulacion", b =>
-                {
-                    b.Property<int>("IdPostulacion")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("idPostulacion");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPostulacion"));
-
-                    b.Property<string>("Comentarios")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)")
-                        .HasColumnName("comentarios");
-
-                    b.Property<string>("Estado")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasDefaultValue("Pendiente")
-                        .HasColumnName("estado");
-
-                    b.Property<DateTime?>("FechaEvaluacion")
-                        .HasColumnType("datetime")
-                        .HasColumnName("fechaEvaluacion");
-
-                    b.Property<DateTime>("FechaPostulacion")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasColumnName("fechaPostulacion")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<int>("IdEgresado")
-                        .HasColumnType("int")
-                        .HasColumnName("idEgresado");
-
-                    b.Property<int>("IdOferta")
-                        .HasColumnType("int")
-                        .HasColumnName("idOferta");
-
-                    b.Property<int?>("IdRepresentanteEvaluador")
-                        .HasColumnType("int")
-                        .HasColumnName("idRepresentanteEvaluador");
-
-                    b.HasKey("IdPostulacion");
-
-                    b.HasIndex("IdOferta");
-
-                    b.HasIndex("IdRepresentanteEvaluador");
-
-                    b.HasIndex("IdEgresado", "IdOferta")
-                        .IsUnique();
-
-                    b.ToTable("Postulacion");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("SiseApi.Data.Models.ApplicationRole", null)
@@ -1156,32 +1100,6 @@ namespace SiseApi.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("SiseApi.Models.Postulacion", b =>
-                {
-                    b.HasOne("SiseApi.Data.Models.Egresado", "Egresado")
-                        .WithMany("Postulaciones")
-                        .HasForeignKey("IdEgresado")
-                        .IsRequired()
-                        .HasConstraintName("FK_Postulacion_Egresado");
-
-                    b.HasOne("SiseApi.Data.Models.OfertaLaboral", "OfertaLaboral")
-                        .WithMany("Postulaciones")
-                        .HasForeignKey("IdOferta")
-                        .IsRequired()
-                        .HasConstraintName("FK_Postulacion_Oferta");
-
-                    b.HasOne("SiseApi.Data.Models.Representante", "RepresentanteEvaluador")
-                        .WithMany("PostulacionesEvaluadas")
-                        .HasForeignKey("IdRepresentanteEvaluador")
-                        .HasConstraintName("FK_Postulacion_Representante");
-
-                    b.Navigation("Egresado");
-
-                    b.Navigation("OfertaLaboral");
-
-                    b.Navigation("RepresentanteEvaluador");
-                });
-
             modelBuilder.Entity("SiseApi.Data.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Auditorias");
@@ -1203,8 +1121,6 @@ namespace SiseApi.Migrations
                     b.Navigation("FormacionComplementaria");
 
                     b.Navigation("OfertaLaborals");
-
-                    b.Navigation("Postulaciones");
                 });
 
             modelBuilder.Entity("SiseApi.Data.Models.Empresa", b =>
@@ -1229,21 +1145,11 @@ namespace SiseApi.Migrations
                     b.Navigation("OfertaLaborals");
                 });
 
-            modelBuilder.Entity("SiseApi.Data.Models.OfertaLaboral", b =>
-                {
-                    b.Navigation("Postulaciones");
-                });
-
             modelBuilder.Entity("SiseApi.Data.Models.Persona", b =>
                 {
                     b.Navigation("Egresados");
 
                     b.Navigation("Representantes");
-                });
-
-            modelBuilder.Entity("SiseApi.Data.Models.Representante", b =>
-                {
-                    b.Navigation("PostulacionesEvaluadas");
                 });
 
             modelBuilder.Entity("SiseApi.Data.Models.TipoContrato", b =>

@@ -1,0 +1,137 @@
+<div class="container-fluid fade-in-content main-container">
+
+  <mat-card class="shadow-sm border-0 section-header">
+    <mat-card-content class="header-content">
+      <div class="row align-items-center">
+        <div class="col-12">
+          <h2 class="text-primary fw-bold mb-1 d-flex align-items-center gap-2">
+            <mat-icon>person</mat-icon> Datos Personales y Académicos
+          </h2>
+          <p class="text-muted m-0">
+            Información de identificación y contacto.
+          </p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <form [formGroup]="datosForm" (ngSubmit)="guardarDatos()">
+
+    <mat-card class="shadow-sm border-0 form-card">
+      <mat-card-content class="p-4 p-md-5">
+
+        <div class="mb-4">
+          <h3 class="fw-bold text-dark border-start border-4 border-primary ps-3 mb-4">
+            Datos de Identificación
+          </h3>
+
+          <div class="row gy-4" formGroupName="datosPersonales">
+
+            <div class="col-md-4">
+              <mat-form-field appearance="outline" class="w-100 readonly-field">
+                <mat-label>Nombres</mat-label>
+                <input matInput formControlName="nombres" class="fw-bold text-dark">
+                <mat-icon matSuffix class="text-muted" matTooltip="Campo bloqueado">lock</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-4">
+              <mat-form-field appearance="outline" class="w-100 readonly-field">
+                <mat-label>Apellido Paterno</mat-label>
+                <input matInput formControlName="apellidoPaterno" class="fw-bold text-dark">
+                <mat-icon matSuffix class="text-muted">lock</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-4">
+              <mat-form-field appearance="outline" class="w-100 readonly-field">
+                <mat-label>Apellido Materno</mat-label>
+                <input matInput formControlName="apellidoMaterno" class="fw-bold text-dark">
+                <mat-icon matSuffix class="text-muted">lock</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-4">
+              <mat-form-field appearance="outline" class="w-100 readonly-field">
+                <mat-label>DNI / Documento</mat-label>
+                <input matInput formControlName="documentoIdentidad" class="fw-bold text-dark">
+                <mat-icon matSuffix class="text-muted">badge</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-4">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Teléfono / Celular</mat-label>
+                <input matInput formControlName="telefono" placeholder="999 999 999">
+                <mat-icon matSuffix color="primary">phone_iphone</mat-icon>
+                <mat-hint align="end">Editable</mat-hint>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-4">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Correo Personal</mat-label>
+                <input matInput formControlName="correoPersonal" placeholder="ejemplo@email.com">
+                <mat-icon matSuffix color="primary">email</mat-icon>
+                <mat-hint align="end">Editable</mat-hint>
+              </mat-form-field>
+            </div>
+
+          </div>
+        </div>
+
+        <mat-divider class="my-5"></mat-divider>
+
+        <div class="mb-4">
+          <h3 class="fw-bold text-dark border-start border-4 border-primary ps-3 mb-4">
+            Información Académica
+          </h3>
+
+          <div class="row gy-4" formGroupName="datosAcademicos">
+
+            <div class="col-md-3">
+              <mat-form-field appearance="outline" class="w-100 readonly-field">
+                <mat-label>Código Universitario</mat-label>
+                <input matInput formControlName="codigoUniversitario" class="fw-bold text-dark">
+                <mat-icon matSuffix class="text-muted">tag</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100 readonly-field">
+                <mat-label>Carrera Profesional</mat-label>
+                <mat-select formControlName="idCarrera" class="fw-bold text-dark">
+                  <mat-option value="">-- Seleccione --</mat-option>
+                  <mat-option *ngFor="let c of listaCarreras" [value]="c.idCarrera">{{c.nombreCarrera}}</mat-option>
+                </mat-select>
+                <mat-icon matSuffix class="text-muted">school</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-3">
+              <mat-form-field appearance="outline" class="w-100 readonly-field">
+                <mat-label>Año Egreso</mat-label>
+                <input matInput type="number" formControlName="añoEgreso" class="fw-bold text-dark">
+                <mat-icon matSuffix class="text-muted">calendar_today</mat-icon>
+              </mat-form-field>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end mt-5 pt-3 border-top">
+          <button mat-raised-button color="primary" type="submit" [disabled]="enviando" class="px-5 py-2 shadow action-button">
+            <mat-icon class="me-2">save</mat-icon> GUARDAR CAMBIOS
+          </button>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+  </form>
+
+  <div *ngIf="enviando" class="text-center mt-4">
+    <mat-progress-bar mode="indeterminate" class="w-50 mx-auto rounded"></mat-progress-bar>
+    <small class="text-muted d-block mt-2">Actualizando perfil...</small>
+  </div>
+
+</div>

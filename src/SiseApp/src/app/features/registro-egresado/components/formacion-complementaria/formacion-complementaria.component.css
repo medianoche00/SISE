@@ -1,0 +1,75 @@
+/* CONTENEDOR PRINCIPAL */
+.main-container {
+  padding: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* CABECERA */
+.section-header {
+  margin-bottom: 32px;
+}
+
+.header-content {
+  padding: 28px 32px;
+}
+
+/* LISTA */
+.training-list {
+  margin-top: 8px;
+}
+
+.training-wrapper {
+  margin-bottom: 24px;
+}
+
+/* TARJETA */
+.training-card {
+  transition: all 0.3s ease;
+  background-color: #ffffff;
+}
+
+  .training-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
+  }
+
+.training-content {
+  padding: 32px !important;
+}
+
+/* TEXTOS */
+.training-title {
+  font-size: 1.15rem;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+.training-subtitle {
+  font-size: 1.05rem;
+  margin-bottom: 12px;
+}
+
+/* ICONOS */
+.small-icon {
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
+}
+
+/* ANIMACIÓN */
+.fade-in-content {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

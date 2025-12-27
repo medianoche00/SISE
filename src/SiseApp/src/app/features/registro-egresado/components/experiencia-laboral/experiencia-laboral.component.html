@@ -1,0 +1,98 @@
+<div class="container-fluid fade-in-content main-container">
+
+  <!-- CABECERA -->
+  <mat-card class="shadow-sm border-0 section-header">
+    <mat-card-content class="header-content">
+
+      <div class="row align-items-center">
+
+        <!-- TITULO ALINEADO A LA IZQUIERDA -->
+        <div class="col-md-8">
+          <h2 class="text-primary fw-bold mb-1 d-flex align-items-center gap-2 justify-content-start">
+            <mat-icon>history_edu</mat-icon>
+            Historial Laboral
+          </h2>
+          <p class="text-muted m-0">
+            Gestiona tu trayectoria profesional.
+          </p>
+        </div>
+
+        <!-- BOTON -->
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+          <button mat-raised-button color="primary" (click)="agregarNueva()" class="px-4 py-2">
+            <mat-icon>add</mat-icon>
+            AGREGAR NUEVO
+          </button>
+        </div>
+
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+
+  <!-- LISTA DE EXPERIENCIAS -->
+  <div *ngIf="listaExperiencias.length > 0" class="experience-list">
+
+    <div *ngFor="let item of listaExperiencias; let i = index" class="experience-wrapper">
+
+      <mat-card class="experience-card border-start border-4 border-primary shadow-sm">
+        <mat-card-content class="experience-content">
+
+          <div class="row align-items-center">
+
+            <!-- INFO -->
+            <div class="col-md-9">
+              <h3 class="fw-bold text-dark text-uppercase experience-empresa">
+                {{ item.empresa }}
+              </h3>
+
+              <h4 class="text-primary fw-bold experience-cargo">
+                {{ item.cargo }}
+              </h4>
+
+              <div class="d-flex flex-wrap align-items-center gap-3 experience-fechas">
+
+                <span class="badge bg-light text-dark border p-2 fw-normal d-flex align-items-center">
+                  <mat-icon class="me-2 small-icon text-muted">calendar_today</mat-icon>
+                  Inicio: {{ item.fechaInicio | date:'dd/MM/yyyy' }}
+                </span>
+
+                <mat-icon class="text-muted small-icon d-none d-md-block">arrow_forward</mat-icon>
+
+                <span class="badge p-2 fw-normal d-flex align-items-center"
+                      [ngClass]="item.actualmente ? 'bg-success text-white' : 'bg-light text-dark border'">
+
+                  <mat-icon class="me-2 small-icon" *ngIf="item.actualmente">check</mat-icon>
+                  {{ item.actualmente ? 'Actualmente' : 'Fin: ' + (item.fechaFin | date:'dd/MM/yyyy') }}
+                </span>
+
+              </div>
+            </div>
+
+            <!-- ACCIONES -->
+            <div class="col-md-3 d-flex justify-content-md-end gap-2 mt-3 mt-md-0 pe-md-2">
+              <button mat-stroked-button color="primary" (click)="editar(i, item)">
+                <mat-icon>edit</mat-icon>
+                Editar
+              </button>
+
+              <button mat-icon-button color="warn" (click)="eliminar(i)" matTooltip="Eliminar registro">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+
+          </div>
+
+        </mat-card-content>
+      </mat-card>
+
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div *ngIf="cargando" class="text-center loading-container">
+    <mat-progress-bar mode="indeterminate" class="w-50 mx-auto rounded"></mat-progress-bar>
+    <small class="text-muted d-block mt-2">Guardando cambios...</small>
+  </div>
+
+</div>

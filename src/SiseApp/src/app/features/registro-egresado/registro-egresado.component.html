@@ -1,0 +1,161 @@
+<div class="container-fluid p-4">
+  <p> hola </p>
+  <mat-card class="egresado-card">
+
+    <div class="card-header-simple">
+      <h2>Mi Información Profesional</h2>
+      <p>Mantén tus datos actualizados para mejores oportunidades.</p>
+    </div>
+
+    <mat-card-content class="pt-4">
+      <form [formGroup]="egresadoForm" (ngSubmit)="onSubmit()">
+
+        <h3 class="section-title">Datos Personales</h3>
+
+        <div class="row" formGroupName="datosPersonales">
+          <div class="col-md-4 mb-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Nombres</mat-label>
+              <input title="nombre" matInput formControlName="nombres">
+              <mat-icon matSuffix>lock</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Apellido Paterno</mat-label>
+              <input title="apellidoPaterno" matInput formControlName="apellidoPaterno">
+              <mat-icon matSuffix>lock</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Apellido Materno</mat-label>
+              <input title="apellidoMaterno" matInput formControlName="apellidoMaterno">
+              <mat-icon matSuffix>lock</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>DNI / Documento</mat-label>
+              <input title="documentoIdentidad" matInput formControlName="documentoIdentidad">
+              <mat-icon matSuffix>lock</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Teléfono / Celular</mat-label>
+              <input matInput formControlName="telefono" placeholder="999 999 999">
+              <mat-icon matSuffix>phone</mat-icon>
+              <mat-error *ngIf="esInvalido('datosPersonales', 'telefono')">Teléfono inválido</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Correo Personal</mat-label>
+              <input matInput formControlName="correoPersonal" placeholder="ejemplo@email.com">
+              <mat-icon matSuffix>email</mat-icon>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <mat-divider class="my-4"></mat-divider>
+
+        <h3 class="section-title">Información Académica</h3>
+
+        <div class="row" formGroupName="datosAcademicos">
+          <div class="col-md-3 mb-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Código Universitario</mat-label>
+              <input title="codigoUniversitario" matInput formControlName="codigoUniversitario">
+              <mat-icon matSuffix>lock</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Carrera Profesional</mat-label>
+              <mat-select formControlName="idCarrera">
+                <mat-option value="">-- Seleccione --</mat-option>
+                <mat-option *ngFor="let c of listaCarreras" [value]="c.idCarrera">{{c.nombreCarrera}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Año Egreso</mat-label>
+              <input title="añoEgreso" matInput type="number" formControlName="añoEgreso">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <mat-divider class="my-4"></mat-divider>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h3 class="section-title mb-0">Experiencia Laboral</h3>
+          <button mat-stroked-button color="primary" type="button" (click)="agregarExperiencia()">
+            <mat-icon>add</mat-icon> Agregar Trabajo
+          </button>
+        </div>
+
+        <div formArrayName="experienciaLaboral">
+          <div *ngFor="let exp of experiencias.controls; let i = index" [formGroupName]="i" class="experiencia-item mb-3">
+
+            <div class="row align-items-center">
+              <div class="col-md-4">
+                <mat-form-field appearance="fill" class="w-100 dense-field">
+                  <mat-label>Empresa</mat-label>
+                  <input matInput formControlName="empresa" placeholder="Nombre empresa">
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-3">
+                <mat-form-field appearance="fill" class="w-100 dense-field">
+                  <mat-label>Cargo</mat-label>
+                  <input matInput formControlName="cargo" placeholder="Puesto ocupado">
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-2">
+                <mat-form-field appearance="fill" class="w-100 dense-field">
+                  <mat-label>Inicio</mat-label>
+                  <input title="fechaInicio" matInput type="date" formControlName="fechaInicio">
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-2">
+                <mat-form-field appearance="fill" class="w-100 dense-field">
+                  <mat-label>Fin</mat-label>
+                  <input title="fechaFin" matInput type="date" formControlName="fechaFin">
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-1 text-center">
+                <button mat-icon-button color="warn" type="button" (click)="eliminarExperiencia(i)" matTooltip="Eliminar">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <p *ngIf="experiencias.length === 0" class="text-muted fst-italic">
+            No has registrado experiencia laboral aún.
+          </p>
+        </div>
+
+        <div class="d-flex justify-content-end mt-4">
+          <button mat-raised-button color="primary" type="submit" class="px-5 py-2" [disabled]="enviando">
+            GUARDAR CAMBIOS
+          </button>
+        </div>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

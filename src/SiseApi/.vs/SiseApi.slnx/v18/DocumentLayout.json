@@ -3,24 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\controllers\\egresadoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:controllers\\egresadoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\controllers\\ofertalaboralcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:controllers\\ofertalaboralcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\data\\models\\ofertalaboral.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:data\\models\\ofertalaboral.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\data\\models\\postulacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:data\\models\\postulacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\services\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:services\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|c:\\users\\gokul\\onedrive\\documentos\\proyectos\\asp.net\\sise\\src\\siseapi\\models\\viewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{73E4819F-A5AE-8350-FDF0-CAD2393BE0EB}|SiseApi.csproj|solutionrelative:models\\viewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -38,68 +34,54 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "TokenService.cs",
-              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Services\\TokenService.cs",
-              "RelativeDocumentMoniker": "Services\\TokenService.cs",
-              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Services\\TokenService.cs",
-              "RelativeToolTip": "Services\\TokenService.cs",
-              "ViewState": "AgIAADYAAAAAAAAAAAAowEUAAAA9AAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "EgresadosController.cs",
+              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Controllers\\EgresadosController.cs",
+              "RelativeDocumentMoniker": "Controllers\\EgresadosController.cs",
+              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Controllers\\EgresadosController.cs",
+              "RelativeToolTip": "Controllers\\EgresadosController.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAgwB4AAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-26T20:09:21.852Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "AuthController.cs",
-              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
-              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "Controllers\\AuthController.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAAjwCYAAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-26T20:09:03.115Z",
+              "WhenOpened": "2025-12-27T02:18:20.313Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Postulacion.cs",
-              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Data\\Models\\Postulacion.cs",
-              "RelativeDocumentMoniker": "Data\\Models\\Postulacion.cs",
-              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Data\\Models\\Postulacion.cs",
-              "RelativeToolTip": "Data\\Models\\Postulacion.cs",
-              "ViewState": "AgIAACYAAAAAAAAAAAAuwDMAAAAvAAAAAAAAAA==",
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-26T19:24:37.894Z",
+              "WhenOpened": "2025-12-27T02:14:06.432Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "OfertaLaboral.cs",
-              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Data\\Models\\OfertaLaboral.cs",
-              "RelativeDocumentMoniker": "Data\\Models\\OfertaLaboral.cs",
-              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Data\\Models\\OfertaLaboral.cs",
-              "RelativeToolTip": "Data\\Models\\OfertaLaboral.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-26T19:17:27.135Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
               "Title": "OfertaLaboralController.cs",
               "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Controllers\\OfertaLaboralController.cs",
               "RelativeDocumentMoniker": "Controllers\\OfertaLaboralController.cs",
               "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Controllers\\OfertaLaboralController.cs",
               "RelativeToolTip": "Controllers\\OfertaLaboralController.cs",
-              "ViewState": "AgIAAF4AAAAAAAAAAAAWwGkAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAABgAAAAAAAAAAAAowA4AAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-26T00:16:19.511Z",
+              "WhenOpened": "2025-12-27T02:15:41.402Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Models\\ViewModel.cs",
+              "RelativeDocumentMoniker": "Models\\ViewModel.cs",
+              "ToolTip": "C:\\Users\\gokul\\OneDrive\\Documentos\\Proyectos\\ASP.NET\\Sise\\src\\SiseApi\\Models\\ViewModel.cs",
+              "RelativeToolTip": "Models\\ViewModel.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAowAsAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-27T00:51:13.62Z"
             }
           ]
         }

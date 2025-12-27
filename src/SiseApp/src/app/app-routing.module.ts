@@ -29,8 +29,8 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', loadChildren: () => import('./features/dashboard/dashboard.module').then(m => m.DashboardModule) },
-      { path: 'ofertas', 
-        loadChildren: () => import('./features/ofertas/ofertas.module').then(m => m.OfertasModule) },
+      { path: 'ofertas', loadChildren: () => import('./features/ofertas/ofertas.module').then(m => m.OfertasModule) },
+      {path: 'registro-egresado', loadChildren: () => import('./features/registro-egresado/registro-egresado.module').then(m => m.RegistroEgresadoModule)},
     ]
   },
 

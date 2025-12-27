@@ -1,3 +1,21 @@
+# Visual Studio
 .vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Compilación
 bin/
 obj/
+
+# Archivos temporales
+*.log
+*.cache
+*.pdb
+*.dbmdl
+*.exe
+
+# Publicación
+[Pp]ublishProfiles/
+

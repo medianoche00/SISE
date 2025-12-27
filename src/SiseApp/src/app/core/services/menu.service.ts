@@ -18,7 +18,7 @@ export class MenuService {
           {
             label: 'Ofertas Laborales',
             icon: 'work',
-            route: '/ofertas',
+            route: '/ofertasdisponibles',
           }, //! -------------------QUITAR LUEGO------------------------
           { label: 'Usuarios', icon: 'people', route: '/dashboard/users' },
           {
@@ -43,14 +43,13 @@ export class MenuService {
           {
             label: 'Ofertas Laborales',
             icon: 'work',
-            route: '/dashboard/jobs',
+            route: '/ofertasdisponibles',
           },
           {
             label: 'Mis Postulaciones',
             icon: 'assignment',
             route: '/dashboard/applications',
           },
-          
         ];
       case 'Representante':
         return [

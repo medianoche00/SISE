@@ -1,18 +1,38 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { OfertaDetailComponent } from '../../../shared/oferta-detail/oferta-detail.component';
-import { OfertaService } from '../../../core/services/oferta.service';
-import { OfertaLaboral } from '../../../core/models/oferta.model';
+import { OfertaService } from '../../core/services/oferta.service';
+import { OfertaLaboral } from '../../core/models/oferta.model';
 import { OnInit } from '@angular/core';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../core/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
+import { MatDivider } from '@angular/material/divider';
+import { OfertaDetailComponent } from '../../shared/oferta-detail/oferta-detail.component';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatOption } from '@angular/material/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
-  selector: 'app-oferta-list',
-  templateUrl: './oferta-list.component.html',
-  styleUrls: ['./oferta-list.component.css']
+  selector: 'app-ofertas-disponibles',
+  templateUrl: './ofertas-disponibles.component.html',
+  styleUrls: ['./ofertas-disponibles.component.css'],
+  standalone: true,
+  imports: [CommonModule,
+    FormsModule,
+    MatCardModule,
+    MatIconModule,
+    MatDivider,
+    MatFormField,
+    MatLabel,
+    MatOption,
+    MatSelectModule,
+    MatInputModule]
 })
-export class OfertaListComponent implements OnInit {
+export class OfertasDisponiblesComponent implements OnInit {
   ofertasOriginales: OfertaLaboral[] = [];
   ofertasFiltradas: OfertaLaboral[] = [];
 
@@ -21,7 +41,6 @@ export class OfertaListComponent implements OnInit {
   filtroModalidad: string = '';
   ordenamiento: string = 'recientes';
   
-
   constructor(
     private ofertaService: OfertaService,
     private dialog: MatDialog,

@@ -4,6 +4,8 @@ import { MainLayoutComponent } from './layouts/main-layout/main-layout.component
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { LoginGuard } from './core/guards/login.guard';
+import { DashboardComponent } from './features/dashboard/dashboard.component';
+import { OfertasDisponiblesComponent } from './features/ofertas-disponibles/ofertas-disponibles.component';
 
 const routes: Routes = [
   // 1. Rutas de Autenticación
@@ -28,9 +30,18 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', loadChildren: () => import('./features/dashboard/dashboard.module').then(m => m.DashboardModule) },
-      { path: 'ofertas', loadChildren: () => import('./features/ofertas/ofertas.module').then(m => m.OfertasModule) },
-      {path: 'registro-egresado', loadChildren: () => import('./features/registro-egresado/registro-egresado.module').then(m => m.RegistroEgresadoModule)},
+      {
+        path: 'dashboard', component: DashboardComponent
+        //loadChildren: () =>
+        //  import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent)
+      },
+      {
+        path: 'ofertasdisponibles', component: OfertasDisponiblesComponent
+      },
+      {
+        path: 'registro-egresado', loadChildren: () =>
+          import('./features/registro-egresado/registro-egresado.module').then(m => m.RegistroEgresadoModule)
+      },
     ]
   },
 

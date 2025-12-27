@@ -21,7 +21,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { OfertaDetailComponent } from './shared/oferta-detail/oferta-detail.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MisOfertasComponent } from './features/mis-ofertas/mis-ofertas.component';
+import { DashboardComponent } from './features/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -30,8 +30,7 @@ import { MisOfertasComponent } from './features/mis-ofertas/mis-ofertas.componen
     AuthLayoutComponent,
     HeaderComponent,
     SidebarComponent,
-    OfertaDetailComponent,
-    MisOfertasComponent,
+    //,
   ],
   imports: [
     BrowserModule,

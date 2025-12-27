@@ -1,6 +1,10 @@
-import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, Pipe } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { OfertaLaboral } from '../../core/models/oferta.model';
+import { MatDivider } from '@angular/material/divider';
+import { FormsModule } from '@angular/forms';
+import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
 
 export type ModoVista = 'POSTULAR' | 'CANCELAR_POSTULACION' | 'ADMIN';
 
@@ -13,7 +17,9 @@ export interface OfertaDetailData {
 @Component({
   selector: 'app-oferta-detail',
   templateUrl: './oferta-detail.component.html',
-  styleUrls: ['./oferta-detail.component.css']
+  styleUrls: ['./oferta-detail.component.css'],
+  standalone: true,
+  imports: [MatDialogModule, MatDivider, FormsModule, DatePipe, DecimalPipe, MatIcon, CommonModule]
 })
 export class OfertaDetailComponent {
   constructor(

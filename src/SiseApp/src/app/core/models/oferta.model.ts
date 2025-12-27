@@ -10,8 +10,7 @@ export interface Empresa {
   sitioWeb: string;
   logoUrl: string;
   estado: boolean;
-  fechaCreacion: string; // O Date
-  // ... otros campos si son necesarios
+  fechaCreacion: string;
 }
 
 export interface Modalidad {
@@ -32,11 +31,10 @@ export interface OfertaLaboral {
   requisitos: string;
   ubicacion: string;
   sueldo: number;
-  fechaPublicacion: string; // O Date
-  fechaCierre: string; // O Date
+  fechaPublicacion: string;
+  fechaCierre: string;
   idEmpresaNavigation?: Empresa;
   idModalidadTrabajoNavigation?: Modalidad;
   idTipoContratoNavigation?: TipoContrato;
   estado: boolean;
-  // ... agrega el resto si lo necesitas
 }

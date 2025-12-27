@@ -1,0 +1,68 @@
+.welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh; /* Ocupa casi toda la altura disponible */
+  text-align: center;
+  background-color: transparent;
+}
+
+.hero-text h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  font-weight: 300;
+  color: #555;
+}
+
+.hero-text h2 {
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.actions-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Espacio entre botones */
+  justify-content: center;
+  max-width: 800px;
+}
+
+/* ESTILO TONAL PERSONALIZADO */
+.tonal-btn {
+  /* Dimensiones grandes para que parezcan tarjetas de acción */
+  height: 120px; 
+  width: 160px;
+  
+  /* Flex para poner el icono arriba del texto */
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  justify-content: center;
+  
+  /* El color "Tonal" (Un color secundario suave) */
+  background-color: #e8def8; /* Ejemplo: Un violeta muy suave (Material 3 style) */
+  color: #1d192b; /* Texto oscuro para contraste */
+  
+  font-size: 1.1rem;
+  border-radius: 16px; /* Bordes más redondeados (Moderno) */
+  transition: transform 0.2s, box-shadow 0.2s;
+  line-height: 1.5;
+}
+
+/* Efecto Hover para dar feedback */
+.tonal-btn:hover {
+  transform: translateY(-5px); /* Se eleva un poco */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  background-color: #d0bcff; /* Un poco más oscuro al pasar el mouse */
+}
+
+/* Ajuste del icono dentro del botón */
+.btn-icon {
+  font-size: 40px; /* Icono grande */
+  height: 40px;
+  width: 40px;
+  margin-bottom: 10px;
+}

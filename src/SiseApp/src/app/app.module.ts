@@ -15,13 +15,13 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatInputModule } from '@angular/material/input';
 import { RouterModule } from '@angular/router';
-import { SidebarComponent } from './shared/sidebar/sidebar.component'; // Para el routerLink
+import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatIcon } from '@angular/material/icon';
 import { OfertaDetailComponent } from './shared/oferta-detail/oferta-detail.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MisOfertasComponent } from './features/mis-ofertas/mis-ofertas.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +31,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     HeaderComponent,
     SidebarComponent,
     OfertaDetailComponent,
+    MisOfertasComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,14 +46,13 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatInputModule,
     MatListModule,
     MatSidenavModule,
-    MatIcon,
     MatChipsModule,
     MatDialogModule,
-    RouterModule
+    RouterModule,
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

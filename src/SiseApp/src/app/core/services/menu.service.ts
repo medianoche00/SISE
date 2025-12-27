@@ -22,6 +22,11 @@ export class MenuService {
           }, //! -------------------QUITAR LUEGO------------------------
           { label: 'Usuarios', icon: 'people', route: '/dashboard/users' },
           {
+            label: 'Mi Perfil',
+            icon: 'person',
+            route: 'registro-egresado',
+          },
+          {
             label: 'Configuración',
             icon: 'settings',
             route: '/dashboard/settings',
@@ -30,7 +35,11 @@ export class MenuService {
       case 'Egresado':
         return [
           { label: 'Inicio', icon: 'home', route: '/dashboard' },
-          { label: 'Mi Perfil', icon: 'person', route: '/dashboard/profile' },
+          {
+            label: 'Mi Perfil',
+            icon: 'person',
+            route: 'registro-egresado',
+          },
           {
             label: 'Ofertas Laborales',
             icon: 'work',
@@ -41,6 +50,7 @@ export class MenuService {
             icon: 'assignment',
             route: '/dashboard/applications',
           },
+          
         ];
       case 'Representante':
         return [

@@ -1,1 +1,21 @@
-<p>mostrar acciones del usuario</p>
+<div class="welcome-container">
+  
+  <div class="hero-text">
+    <h1>Hola, {{ userName }}</h1> 
+    <h2>¿Qué deseas hacer hoy?</h2>
+  </div>
+
+  <div class="actions-grid">
+    <button 
+      mat-button="tonal"
+      class="tonal-btn"
+      *ngFor="let item of menuItems" 
+      [routerLink]="item.route">
+      
+      <mat-icon class="btn-icon">{{ item.icon }}</mat-icon>
+      {{ item.label }}
+      
+    </button>
+  </div>
+
+</div>

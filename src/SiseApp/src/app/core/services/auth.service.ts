@@ -87,4 +87,10 @@ export class AuthService {
     if (!auth) return '';
     return auth.userName? auth.userName : '';
   }
+
+  getUserId(): number | null {
+    const auth = this.getStoredAuth();
+    if (!auth) return null;
+    return auth.userId? auth.userId : null;
+  }
 }

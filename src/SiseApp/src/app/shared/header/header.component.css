@@ -1,3 +1,8 @@
+mat-toolbar {
+  background-color: #F4F3F6;
+  border-bottom: 4px solid #0d47a1;
+}
+
 .spacer {
   width: 10px; /* Empuja todo lo que sigue hacia la derecha */
 }

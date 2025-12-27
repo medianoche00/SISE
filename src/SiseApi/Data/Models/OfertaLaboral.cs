@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SiseApi.Models;
-using System;
-using System.Collections.Generic;
+﻿using SiseApi.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

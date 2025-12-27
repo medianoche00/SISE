@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms'; // AGREGADO: FormArray
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { EgresadoService } from '../../core/services/egresado.service';
 import { Carrera } from '../../core/models/egresado.model';
-import { MatCard } from "@angular/material/card";
 
 @Component({
   selector: 'app-registro-egresado',
   templateUrl: './registro-egresado.component.html',
-  styleUrls: ['./registro-egresado.component.css'],
-  //imports: [MatCard]
+  styleUrls: ['./registro-egresado.component.css']
 })
 export class RegistroEgresadoComponent implements OnInit {
 
@@ -36,11 +34,11 @@ export class RegistroEgresadoComponent implements OnInit {
         documentoIdentidad: [{ value: '12345678', disabled: true }, [Validators.required, Validators.minLength(8)]],
 
         telefono: ['', [Validators.required, Validators.pattern(/^[0-9]{9}$/)]],
-        correoPersonal: ['', [Validators.required, Validators.email]]
+        correoPersonal: ['', [Validators.required, Validators.email]],
       }),
       datosAcademicos: this.fb.group({
         idCarrera: ['', Validators.required],
-        codigoUniversitario: [{ value: '201802551', disabled: true }, Validators.required], // Bloqueado
+        codigoUniversitario: [{ value: '201802551', disabled: true }, Validators.required],
         añoEgreso: ['', [Validators.required, Validators.min(1990), Validators.max(2026)]]
       }),
       experienciaLaboral: this.fb.array([])
@@ -91,15 +89,15 @@ export class RegistroEgresadoComponent implements OnInit {
     const formValue = this.egresadoForm.getRawValue();
 
     const payload = {
-      ...formValue.datosPersonales,
-      ...formValue.datosAcademicos,
-      idCarrera: Number(formValue.datosAcademicos.idCarrera),
+      telefono: formValue.datosPersonales.telefono,
+      correoPersonal: formValue.datosPersonales.correoPersonal,
+      direccion: '', 
       experienciaLaboral: formValue.experienciaLaboral
     };
 
-    console.log('Enviando payload:', payload); 
+    console.log('Enviando payload limpio:', payload);
 
-    this.egresadoService.completarPerfil(payload).subscribe({
+    this.egresadoService.actualizarPerfil(payload).subscribe({
       next: (res: any) => {
         this.enviando = false;
         alert('¡Información actualizada con éxito!');

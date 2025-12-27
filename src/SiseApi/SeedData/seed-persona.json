@@ -25,5 +25,14 @@
     "Telefono": "998877665",
     "CorreoPersonal": "maria.rrhh@techsolutions.com",
     "Estado": true
+  },
+  {
+    "Nombres": "David Ochoa",
+    "ApellidoPaterno": "Gomez",
+    "ApellidoMaterno": "Cruz",
+    "DocumentoIdentidad": "45203042",
+    "Telefono": "998123564",
+    "CorreoPersonal": "rector.unp@university.edu.pe",
+    "Estado": true
   }
 ]

@@ -1,30 +1,39 @@
 ﻿[
-  {
-    "UserName": "admin",
-    "Email": "admin@university.edu.pe",
-    "Password": "AdminPassword123!",
-    "PhoneNumber": "999000111",
-    "Role": "Administrador"
-  },
-  {
-    "UserName": "juan.perez",
-    "Email": "juan.perez@gmail.com",
-    "Password": "UserPassword123!",
-    "PhoneNumber": "987654321",
-    "Role": "Egresado"
-  },
-  {
-    "UserName": "carlos.david",
-    "Email": "carlos@techsolutions.com",
-    "Password": "EmpresaPassword123!",
-    "PhoneNumber": "012345678",
-    "Role": "Representante"
-  },
-  {
-    "UserName": "maria.luna",
-    "Email": "maria@unp.com",
-    "Password": "AdministrativoPassword123!",
-    "PhoneNumber": "924573234",
-    "Role": "Administrativo"
-  }
+  [
+    {
+      "UserName": "admin",
+      "Email": "admin@sise.com",
+      "Password": "Password123!",
+      "Role": "Administrativo",
+      "Cargo": "Soporte TI",
+      "DocumentoIdentidad": "00000001"
+    },
+    {
+      "UserName": "juan.perez",
+      "Email": "juan@mail.com",
+      "Password": "Password123!",
+      "Role": "Egresado",
+      "DocumentoIdentidad": "45879632",
+      "CodigoUniversitario": "20201001",
+      "IdCarrera": 1,
+      "AnioEgreso": 2023
+    },
+    {
+      "UserName": "maria.gerente",
+      "Email": "maria@empresa.com",
+      "Password": "Password123!",
+      "Role": "Representante",
+      "DocumentoIdentidad": "10203040",
+      "RucEmpresa": "10203040",
+      "Cargo": "Gerente de RRHH"
+    },
+    {
+      "UserName": "rector",
+      "Email": "rector@sise.com",
+      "Password": "Password123!",
+      "Role": "Administrativo",
+      "Cargo": "Rector",
+      "DocumentoIdentidad": "45203042"
+    }
+  ]
 ]

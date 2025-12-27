@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SiseApi.Data;
@@ -12,9 +13,11 @@ namespace SiseApi.Controllers
     public class OfertaLaboralController : ControllerBase
     {
         private readonly SiseDbContext _context;
-        public OfertaLaboralController(SiseDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public OfertaLaboralController(SiseDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -43,9 +46,23 @@ namespace SiseApi.Controllers
         [HttpPost]
         public async Task<ActionResult> Post(OfertaLaboral ofertaLaboral)
         {
+            var usuarioActual = await _userManager.GetUserAsync(User);
+            if (usuarioActual == null) return Unauthorized();
+
+            var representante = await _context.Representantes
+                .FirstOrDefaultAsync(r => r.IdUsuario == usuarioActual.Id);
+            if (representante == null) return Forbid("Solo los representantes pueden crear ofertas.");
+
+            // FORZAR el ID de la empresa
+            ofertaLaboral.IdEmpresa = representante.IdEmpresa;
+
+            // Asegurar estado inicial
+            ofertaLaboral.Estado = true;
+
             _context.Add(ofertaLaboral);
             await _context.SaveChangesAsync();
-            return new CreatedAtRouteResult("GetOfertaLaboral", new { id = ofertaLaboral.IdOferta }, ofertaLaboral);
+
+            return CreatedAtRoute("GetOfertaLaboral", new { id = ofertaLaboral.IdOferta }, ofertaLaboral);
         }
 
         [HttpPut("{id:int}")]
@@ -63,11 +80,23 @@ namespace SiseApi.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
+            var usuarioActual = await _userManager.GetUserAsync(User);
+            if (usuarioActual == null) return Unauthorized();
+
+            var representante = await _context.Representantes
+                .FirstOrDefaultAsync(r => r.IdUsuario == usuarioActual.Id);
+            if (representante == null) return Forbid("Solo los representantes pueden eliminar ofertas.");
+
+            // Buscar la oferta
             var ofertaLaboral = await _context.OfertasLaborales.FindAsync(id);
-            if (ofertaLaboral == null)
+            if (ofertaLaboral == null) return NotFound();
+
+            // VERIFICACIÓN DE PROPIEDAD
+            if (ofertaLaboral.IdEmpresa != representante.IdEmpresa)
             {
-                return NotFound();
+                return Forbid("No tienes permiso para eliminar esta oferta.");
             }
+
             ofertaLaboral.Estado = false;
             await _context.SaveChangesAsync();
             return NoContent();
@@ -75,11 +104,10 @@ namespace SiseApi.Controllers
 
         /*--------------------- Otros -----------------------*/
 
-        // GET: api/OfertaLaboral/empresa/5
-        [HttpGet("empresa/{idEmpresa:int}")]
-        public async Task<ActionResult<IEnumerable<OfertaLaboral>>> GetByEmpresa(int idEmpresa)
+        // GET: api/OfertaLaboral/ofertas-empresa/5
+        [HttpGet("ofertas-empresa/{idEpresa:int}")]
+        public async Task<ActionResult<IEnumerable<OfertaLaboral>>> GetMisPublicaciones(int idEmpresa)
         {
-            //deberia usar procedimiento almacenado
             var ofertas = await _context.OfertasLaborales
                 .Where(o => o.Estado == true && o.IdEmpresa == idEmpresa)
                 .Include(o => o.IdModalidadTrabajoNavigation)
@@ -95,31 +123,25 @@ namespace SiseApi.Controllers
             return ofertas;
         }
 
-        // GET: api/OfertaLaboral/mis-postulaciones/10
-        [HttpGet("mis-postulaciones/{idEgresado:int}")]
-        public async Task<ActionResult<IEnumerable<OfertaLaboral>>> GetByEgresado(int idUsuario)
+        // GET: api/OfertaLaboral/mis-postulaciones
+        [HttpGet("mis-postulaciones")]
+        public async Task<ActionResult<IEnumerable<OfertaLaboral>>> GetMisPostulaciones()
         {
-            var egresado = await _context.Egresados
-                .FirstOrDefaultAsync(x => x.IdUsuario == idUsuario);
+            var usuarioActual = await _userManager.GetUserAsync(User);
+            if (usuarioActual == null) return Unauthorized();
 
-            if (egresado == null)
-            {
-                return BadRequest("El usuario no existe o no es un egresado.");
-            }
+            var egresado = await _context.Egresados
+                .FirstOrDefaultAsync(x => x.IdUsuario == usuarioActual.Id);
+
+            if (egresado == null) return BadRequest("No eres un egresado.");
 
             var ofertasPostuladas = await _context.Postulaciones
-                .Where(p => p.IdEgresado == egresado.IdEgresado) // Filtro por usuario
-                .Include(p => p.OfertaLaboral)          // Cargo la oferta
-                    .ThenInclude(o => o.IdEmpresaNavigation) // Cargar empresa de la oferta (opcional)
-                .Select(p => p.OfertaLaboral)           // Selecciono solo el objeto Oferta para devolver
-                .Where(o => o.Estado == true) // Asegurarse de que la oferta esté activa
+                .Where(p => p.IdEgresado == egresado.IdEgresado)
+                .Include(p => p.OfertaLaboral)
+                .Select(p => p.OfertaLaboral)
+                .Where(o => o.Estado == true) //solo ofertas activas
                 .AsNoTracking()
                 .ToListAsync();
-
-            if (!ofertasPostuladas.Any())
-            {
-                return NotFound("El usuario no ha postulado a ninguna oferta.");
-            }
 
             return ofertasPostuladas;
         }
@@ -142,26 +164,31 @@ namespace SiseApi.Controllers
         [HttpPost("postular")]
         public async Task<ActionResult> Postular([FromBody] PostulacionRequest request)
         {
-            // Validar que la oferta exista y esté activa
+            //verificar usuario
+            var usuarioActual = await _userManager.GetUserAsync(User);
+            if (usuarioActual == null)
+            {
+                return Unauthorized("Debes iniciar sesión para realizar esta acción.");
+            }
+
+            //verificar egresado
+            var egresado = await _context.Egresados
+                .FirstOrDefaultAsync(e => e.IdUsuario == usuarioActual.Id);
+            if (egresado == null)
+            {
+                return NotFound("El usuario actual no tiene un perfil de egresado.");
+            }
+
             var oferta = await _context.OfertasLaborales
                 .FirstOrDefaultAsync(x => x.IdOferta == request.IdOferta && x.Estado == true);
-
-            if (oferta == null)
+            
+            //verificar oferta
+            if (oferta == null || oferta.Estado == false)
             {
                 return BadRequest("La oferta no existe o no está activa.");
             }
 
-            // Validar que el usuario exista y sea un egresado
-            var egresado = await _context.Egresados
-                .FirstOrDefaultAsync(x => x.IdUsuario == request.IdUsuario);
-
-            if (egresado == null)
-            { 
-                return BadRequest("El usuario no existe o no es un egresado.");
-            }
-
             // Validar que la fecha de cierre no haya pasado
-            // Convertimos DateOnly a DateTime para comparar o usamos DateOnly.FromDateTime
             if (oferta.FechaCierre < DateOnly.FromDateTime(DateTime.Now))
             {
                 return BadRequest("La oferta ha finalizado, ya no se aceptan postulaciones.");
@@ -181,7 +208,7 @@ namespace SiseApi.Controllers
             var nuevaPostulacion = new Postulacion
             {
                 IdOferta = request.IdOferta,
-                IdEgresado = egresado.IdUsuario,
+                IdEgresado = egresado.IdEgresado,
                 FechaPostulacion = DateTime.Now,
                 Estado = "Pendiente", // Estado inicial
                 IdRepresentanteEvaluador = null,
@@ -194,33 +221,44 @@ namespace SiseApi.Controllers
                 _context.Postulaciones.Add(nuevaPostulacion);
                 await _context.SaveChangesAsync();
 
-                // Retornamos Ok con un mensaje o el objeto creado
-                return Ok(new { message = "Postulación realizada con éxito", idPostulacion = nuevaPostulacion.IdPostulacion });
+                return CreatedAtAction(nameof(Postular), new { id = nuevaPostulacion.IdPostulacion }, new { message = "Éxito" });
             }
             catch (DbUpdateException)
             {
-                // En caso de que falle la concurrencia y se intente duplicar al mismo milisegundo
                 return StatusCode(500, "Error al procesar la postulación.");
             }
         }
 
-        [HttpDelete("cancelar-postulacion/{idOferta:int}/{idUsuario:int}")]
-        public async Task<ActionResult> CancelarPostulacion(int idOferta, int idUsuario)
+        // DELETE: api/OfertaLaboral/cancelar-postulacion/5
+        [HttpDelete("cancelar-postulacion/{idOferta:int}")]
+        public async Task<ActionResult> CancelarPostulacion(int idOferta)
         {
-            var egresado = await _context.Egresados
-                .FirstOrDefaultAsync(e => e.IdUsuario == idUsuario);
-
-            if (egresado == null)
+            //verificar usuario
+            var usuarioActual = await _userManager.GetUserAsync(User);
+            if (usuarioActual == null)
             {
-                return NotFound("No se encontró al egresado.");
+                return Unauthorized("Debes iniciar sesión para realizar esta acción.");
             }
 
+            //verificar egresado
+            var egresado = await _context.Egresados
+                .FirstOrDefaultAsync(e => e.IdUsuario == usuarioActual.Id);
+            if (egresado == null)
+            {
+                return NotFound("El usuario actual no tiene un perfil de egresado.");
+            }
+
+            //validar postulacion
             var postulacion = await _context.Postulaciones
                 .FirstOrDefaultAsync(p => p.IdOferta == idOferta && p.IdEgresado == egresado.IdEgresado);
-
             if (postulacion == null)
             {
-                return NotFound("No se encontró la postulación.");
+                return NotFound("No se encontró una postulación activa para esta oferta.");
+            }
+
+            if (postulacion.Estado == "CANCELADO")
+            {
+                return BadRequest("La postulación ya fue cancelada anteriormente.");
             }
 
             postulacion.Estado = "CANCELADO";
@@ -235,6 +273,5 @@ namespace SiseApi.Controllers
     public class PostulacionRequest
     {
         public int IdOferta { get; set; }
-        public int IdUsuario { get; set; }
     }
 }

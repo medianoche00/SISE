@@ -4,7 +4,8 @@ import { OfertaLaboral } from '../../core/models/oferta.model';
 import { MatDivider } from '@angular/material/divider';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
-import { MatIcon } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 export type ModoVista = 'POSTULAR' | 'CANCELAR_POSTULACION' | 'ADMIN';
 
@@ -19,7 +20,7 @@ export interface OfertaDetailData {
   templateUrl: './oferta-detail.component.html',
   styleUrls: ['./oferta-detail.component.css'],
   standalone: true,
-  imports: [MatDialogModule, MatDivider, FormsModule, DatePipe, DecimalPipe, MatIcon, CommonModule]
+  imports: [MatDialogModule, MatDivider, FormsModule, DatePipe, DecimalPipe, MatIconModule, CommonModule, MatButtonModule]
 })
 export class OfertaDetailComponent {
   constructor(

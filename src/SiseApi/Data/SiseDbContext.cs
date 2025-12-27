@@ -30,6 +30,8 @@ namespace SiseApi.Data
         public virtual DbSet<TipoFormacion> TiposFormacions { get; set; }
         public virtual DbSet<VwOfertasDisponible> VwOfertasDisponibles { get; set; }
         public virtual DbSet<Postulacion> Postulaciones { get; set; }
+        public virtual DbSet<Administrativo> Administrativos { get; set; }
+        public virtual DbSet<CargoAdministrativo> CargosAdministrativos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +39,12 @@ namespace SiseApi.Data
             base.OnModelCreating(modelBuilder);
 
             // 2. Configuraciones de tablas
+            modelBuilder.Entity<CargoAdministrativo>(entity =>
+            {
+                entity.HasKey(e => e.IdCargo);
+                entity.Property(e => e.NombreCargo).IsRequired();
+            });
+
             modelBuilder.Entity<Auditoria>(entity =>
             {
                 entity.HasKey(e => e.IdAuditoria);
@@ -229,6 +237,30 @@ namespace SiseApi.Data
                     .HasForeignKey(d => d.IdRepresentanteEvaluador)
                     .OnDelete(DeleteBehavior.ClientSetNull) // Si se borra el repre, no se borra la postulación (queda el histórico)
                     .HasConstraintName("FK_Postulacion_Representante");
+            });
+
+            modelBuilder.Entity<Administrativo>(entity =>
+            {
+                entity.HasKey(e => e.IdAdministrativo);
+                entity.Property(e => e.Estado).HasDefaultValue(true);
+
+                // Relación con Carrera
+                entity.HasOne(d => d.CargoAdministrativo).WithMany(p => p.Administrativos)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Administrativo_Cargo");
+
+                // Relación con Persona
+                entity.HasOne(d => d.Persona).WithMany(p => p.Administrativos)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Administrativo_Persona");
+
+                // Relación con Usuario (Identity)
+                // Aquí es donde se une la cuenta de acceso con el perfil de egresado
+                entity.HasOne(d => d.Usuario)
+                    .WithMany(p => p.Administrativos)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Administrativo_Usuario");
             });
         }
     }

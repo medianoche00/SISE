@@ -49,4 +49,7 @@ public class Persona
 
     [InverseProperty("Persona")]
     public virtual ICollection<Representante> Representantes { get; set; } = new List<Representante>();
+
+    [InverseProperty("Persona")]
+    public virtual ICollection<Administrativo> Administrativos { get; set; } = new List<Administrativo>();
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs'; // of es para el mock data temporal
+import { Observable, of } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { OfertaLaboral } from '../models/oferta.model';
 
@@ -8,7 +8,6 @@ import { OfertaLaboral } from '../models/oferta.model';
   providedIn: 'root',
 })
 export class OfertaService {
-  // Ajusta tu URL base
   private apiUrl = `${environment.apiUrl}/OfertaLaboral/`;
 
   constructor(private http: HttpClient) {}
@@ -17,23 +16,22 @@ export class OfertaService {
     return this.http.get<OfertaLaboral[]>(this.apiUrl + 'activas');
   }
 
-  postularOferta(idOferta: number, idUsuario: number): Observable<any> {
+  postularOferta(idOferta: number): Observable<any> {
     const body = {
       IdOferta: idOferta,
-      IdUsuario: idUsuario,
     };
     return this.http.post(`${this.apiUrl}/postular`, body);
   }
 
-  getMisPostulaciones(idUsuario: number): Observable<OfertaLaboral[]> {
+  getMisPostulaciones(): Observable<OfertaLaboral[]> {
     return this.http.get<OfertaLaboral[]>(
-      `${this.apiUrl}/mis-postulaciones/${idUsuario}`
+      `${this.apiUrl}/mis-postulaciones`
     );
   }
 
-  cancelarPostulacion(idOferta: number, idUsuario: number): Observable<any> {
+  cancelarPostulacion(idOferta: number): Observable<any> {
     return this.http.delete(
-      `${this.apiUrl}/cancelar-postulacion/${idOferta}/${idUsuario}`
+      `${this.apiUrl}/cancelar-postulacion/${idOferta}`
     );
   }
 }

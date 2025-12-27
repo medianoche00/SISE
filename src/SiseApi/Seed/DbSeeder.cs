@@ -49,6 +49,7 @@ public class DbSeeder : IDbSeeder
         try
         {
             // 1. Tablas Maestras / Catálogos (Sin dependencias)
+            await SeedCargosAdministrativosAsync();
             await SeedRolesAsync();
             await SeedFacultadesAsync();
             await SeedModalidadTrabajoAsync();
@@ -96,6 +97,21 @@ public class DbSeeder : IDbSeeder
     }
 
     // --- MÉTODOS ESPECÍFICOS POR ENTIDAD ---
+
+    private async Task SeedCargosAdministrativosAsync()
+    {
+        var cargos = await LoadJsonData<CargoAdministrativo>("seed-cargos.json");
+        if (cargos == null) return;
+
+        foreach (var cargo in cargos)
+        {
+            if (!await _context.CargosAdministrativos.AnyAsync(c => c.NombreCargo == cargo.NombreCargo))
+            {
+                _context.CargosAdministrativos.Add(cargo);
+            }
+        }
+        await _context.SaveChangesAsync();
+    }
 
     private async Task SeedRolesAsync()
     {
@@ -286,7 +302,6 @@ public class DbSeeder : IDbSeeder
                     Email = userDto.Email,
                     EmailConfirmed = true,
                     PhoneNumber = userDto.PhoneNumber
-                    // Aquí podrías vincular IDs si fuera necesario, ej: Auditorias = ...
                 };
 
                 // Crear usuario con password
@@ -304,6 +319,22 @@ public class DbSeeder : IDbSeeder
                             await _userManager.AddToRoleAsync(user, userDto.Role);
                         }
                     }
+
+                    // Cargar datos en sus tablas de acuerdo al rol
+                    if (userDto.Role == "Egresado")
+                    {
+                        await CreateEgresadoProfile(user, userDto);
+                    }
+                    else if (userDto.Role == "Representante")
+                    {
+                        await CreateRepresentanteProfile(user, userDto);
+                    }
+                    else if (userDto.Role == "Administrativo") 
+                    {
+                        await CreateAdministrativoProfile(user, userDto);
+                    }
+
+
                 }
                 else
                 {
@@ -314,14 +345,117 @@ public class DbSeeder : IDbSeeder
         }
     }
 
+    private async Task CreateEgresadoProfile(ApplicationUser user, UserSeedDto dto)
+    {
+        // Buscar la persona por DNI (u otro documento)
+        var persona = await _context.Personas
+            .FirstOrDefaultAsync(p => p.DocumentoIdentidad == dto.DocumentoIdentidad);
+
+        if (persona == null)
+        {
+            _logger.LogWarning($"No se encontró Persona con Doc {dto.DocumentoIdentidad} para el usuario {user.UserName}");
+            return;
+        }
+
+        if (dto.CodigoUniversitario == null)
+        {
+            _logger.LogWarning($"El usuario {user.UserName} es un Egresado pero no tiene codigo universitario");
+            return;
+        }
+
+        var egresado = new Egresado
+        {
+            IdUsuario = user.Id, // Vinculamos al ID del usuario recién creado
+            IdPersona = persona.IdPersona, // Vinculamos a la persona existente
+            IdCarrera = dto.IdCarrera ?? 1, // Valor por defecto o error si es nulo
+            CodigoUniversitario = dto.CodigoUniversitario,
+            AñoEgreso = dto.AnioEgreso ?? DateTime.Now.Year,
+            Estado = true
+        };
+
+        _context.Egresados.Add(egresado);
+        await _context.SaveChangesAsync();
+        _logger.LogInformation($"Perfil Egresado creado para {user.UserName}");
+    }
+
+    private async Task CreateRepresentanteProfile(ApplicationUser user, UserSeedDto dto)
+    {
+        // 1. Buscar Persona
+        var persona = await _context.Personas
+            .FirstOrDefaultAsync(p => p.DocumentoIdentidad == dto.DocumentoIdentidad);
+
+        // 2. Buscar Empresa (usando un campo único como RUC, nombre, o asumiendo que el JSON trae el ID)
+        // Aquí asumo que la entidad Empresa tiene un campo RUC o similar.
+        var empresa = await _context.Empresas
+            .FirstOrDefaultAsync(e => e.Ruc == dto.RucEmpresa);
+
+        if (persona == null || empresa == null)
+        {
+            _logger.LogWarning($"Faltan datos (Persona o Empresa) para crear representante {user.UserName}");
+            return;
+        }
+
+        var representante = new Representante
+        {
+            IdUsuario = user.Id,
+            IdPersona = persona.IdPersona,
+            IdEmpresa = empresa.IdEmpresa, // ID de la empresa encontrada
+            Cargo = dto.CargoEmpresa,
+            Estado = true
+        };
+
+        _context.Representantes.Add(representante);
+        await _context.SaveChangesAsync();
+        _logger.LogInformation($"Perfil Representante creado para {user.UserName}");
+    }
+
+    private async Task CreateAdministrativoProfile(ApplicationUser user, UserSeedDto dto)
+    {
+        // 1. Buscar Persona
+        var persona = await _context.Personas
+            .FirstOrDefaultAsync(p => p.DocumentoIdentidad == dto.DocumentoIdentidad);
+
+        // 2. Buscar Cargo
+        var cargo = await _context.CargosAdministrativos
+            .FirstOrDefaultAsync(e => e.NombreCargo == dto.CargoAdministrativo);
+
+        if (persona == null || cargo == null)
+        {
+            _logger.LogWarning($"Faltan datos (Persona o Empresa) para crear representante {user.UserName}");
+            return;
+        }
+
+        var administrativo = new Administrativo
+        {
+            IdUsuario = user.Id,
+            IdPersona = persona.IdPersona,
+            IdCargoAdministrativo = cargo.IdCargo,
+            Estado = true
+        };
+
+        _context.Administrativos.Add(administrativo);
+        await _context.SaveChangesAsync();
+        _logger.LogInformation($"Perfil Administrativo creado para {user.UserName}");
+    }
+
     // DTO Interno para mapear el JSON de usuarios que incluye Password y Rol
     private class UserSeedDto
     {
         public string UserName { get; set; } = null!;
         public string Email { get; set; } = null!;
-        public string Password { get; set; } = null!; // Importante para el CreateAsync
+        public string Password { get; set; } = null!;
         public string? PhoneNumber { get; set; }
         public string? Role { get; set; } // Nombre del rol a asignar
+        public string? DocumentoIdentidad { get; set; }
+        // Datos específicos para Egresado
+        public string? CodigoUniversitario { get; set; }
+        public int? IdCarrera { get; set; }
+        public int? AnioEgreso { get; set; }
+        // Datos específicos para Representante
+        public string? RucEmpresa { get; set; }
+        public string? CargoEmpresa { get; set; }
+        // Datos específicos para Administrativo
+        public string? CargoAdministrativo { get; set; }
     }
 
     // Conversor simple para DateOnly en formato ISO yyyy-MM-dd

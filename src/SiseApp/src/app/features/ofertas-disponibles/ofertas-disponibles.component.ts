@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { OfertaService } from '../../core/services/oferta.service';
 import { OfertaLaboral } from '../../core/models/oferta.model';
 import { OnInit } from '@angular/core';
-import { AuthService } from '../../core/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import { MatDivider } from '@angular/material/divider';
@@ -15,13 +14,15 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-ofertas-disponibles',
   templateUrl: './ofertas-disponibles.component.html',
   styleUrls: ['./ofertas-disponibles.component.css'],
   standalone: true,
-  imports: [CommonModule,
+  imports: [
+    CommonModule,
     FormsModule,
     MatCardModule,
     MatIconModule,
@@ -30,7 +31,9 @@ import { MatSelectModule } from '@angular/material/select';
     MatLabel,
     MatOption,
     MatSelectModule,
-    MatInputModule]
+    MatInputModule,
+    MatButtonModule
+  ],
 })
 export class OfertasDisponiblesComponent implements OnInit {
   ofertasOriginales: OfertaLaboral[] = [];
@@ -40,11 +43,10 @@ export class OfertasDisponiblesComponent implements OnInit {
   textoBusqueda: string = '';
   filtroModalidad: string = '';
   ordenamiento: string = 'recientes';
-  
+
   constructor(
     private ofertaService: OfertaService,
     private dialog: MatDialog,
-    private authService: AuthService,
     private snackBar: MatSnackBar
   ) {}
 
@@ -53,7 +55,7 @@ export class OfertasDisponiblesComponent implements OnInit {
   }
 
   cargarOfertas() {
-    this.ofertaService.getOfertasActivas().subscribe(data => {
+    this.ofertaService.getOfertasActivas().subscribe((data) => {
       this.ofertasOriginales = data;
       this.aplicarFiltros(); // Aplicar filtros iniciales
     });
@@ -65,22 +67,29 @@ export class OfertasDisponiblesComponent implements OnInit {
     // 1. Filtro de Texto (Título o Empresa)
     if (this.textoBusqueda) {
       const texto = this.textoBusqueda.toLowerCase();
-      resultado = resultado.filter(o => 
-        o.titulo.toLowerCase().includes(texto) || 
-        o.idEmpresaNavigation?.razonSocial.toLowerCase().includes(texto)
+      resultado = resultado.filter(
+        (o) =>
+          o.titulo.toLowerCase().includes(texto) ||
+          o.idEmpresaNavigation?.razonSocial.toLowerCase().includes(texto)
       );
     }
 
     // 2. Filtro Modalidad (Ejemplo de select)
     if (this.filtroModalidad) {
-      resultado = resultado.filter(o => 
-        o.idModalidadTrabajoNavigation?.nombreModalidad === this.filtroModalidad
+      resultado = resultado.filter(
+        (o) =>
+          o.idModalidadTrabajoNavigation?.nombreModalidad ===
+          this.filtroModalidad
       );
     }
 
     // 3. Ordenamiento
     if (this.ordenamiento === 'recientes') {
-      resultado.sort((a, b) => new Date(b.fechaPublicacion).getTime() - new Date(a.fechaPublicacion).getTime());
+      resultado.sort(
+        (a, b) =>
+          new Date(b.fechaPublicacion).getTime() -
+          new Date(a.fechaPublicacion).getTime()
+      );
     } else if (this.ordenamiento === 'salario_desc') {
       resultado.sort((a, b) => b.sueldo - a.sueldo);
     } else if (this.ordenamiento === 'salario_asc') {
@@ -93,10 +102,10 @@ export class OfertasDisponiblesComponent implements OnInit {
   verDetalle(oferta: OfertaLaboral) {
     const dialogRef = this.dialog.open(OfertaDetailComponent, {
       width: '700px',
-      data: { oferta, modo: 'POSTULAR' } 
+      data: { oferta, modo: 'POSTULAR' },
     });
-    
-    dialogRef.afterClosed().subscribe(confirmado => {
+
+    dialogRef.afterClosed().subscribe((confirmado) => {
       // 'confirmado' será true solo si dio clic en el botón POSTULAR del modal
       if (confirmado) {
         this.realizarPostulacion(oferta.idOferta);
@@ -105,26 +114,17 @@ export class OfertasDisponiblesComponent implements OnInit {
   }
 
   realizarPostulacion(idOferta: number) {
-    // 1. Obtener el ID del usuario logueado
-    const usuarioId = this.authService.getUserId(); 
-    
-    if (!usuarioId) {
-      this.mostrarMensaje('Debes iniciar sesión para postular', 'error');
-      return;
-    }
-
-    // 2. Llamar al servicio
-    this.ofertaService.postularOferta(idOferta, usuarioId).subscribe({
+    // Llamar al servicio
+    this.ofertaService.postularOferta(idOferta).subscribe({
       next: (response) => {
         // ÉXITO (200 OK)
         this.mostrarMensaje('¡Postulación enviada con éxito!', 'success');
       },
       error: (err) => {
         // ERROR (400 BadRequest o 500)
-        // El backend devuelve el mensaje de error en 'err.error'
         const mensajeError = err.error || 'Ocurrió un error al postular.';
         this.mostrarMensaje(mensajeError, 'error');
-      }
+      },
     });
   }
 
@@ -132,8 +132,11 @@ export class OfertasDisponiblesComponent implements OnInit {
   mostrarMensaje(mensaje: string, tipo: 'success' | 'error') {
     this.snackBar.open(mensaje, 'CERRAR', {
       duration: 4000,
-      panelClass: tipo === 'error' ? ['mat-toolbar', 'mat-warn'] : ['mat-toolbar', 'mat-primary'],
-      verticalPosition: 'top' // Para que salga arriba
+      panelClass:
+        tipo === 'error'
+          ? ['mat-toolbar', 'mat-warn']
+          : ['mat-toolbar', 'mat-primary'],
+      verticalPosition: 'top', // Para que salga arriba
     });
   }
 }

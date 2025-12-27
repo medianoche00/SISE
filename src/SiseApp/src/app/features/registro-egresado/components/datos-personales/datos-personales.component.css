@@ -1,0 +1,49 @@
+
+.main-container {
+  padding: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-header {
+  margin-bottom: 32px;
+}
+
+.header-content {
+  padding: 28px 32px;
+}
+
+.form-card {
+  background-color: #ffffff;
+}
+
+.readonly-field {
+  opacity: 0.9;
+  pointer-events: none; 
+}
+
+h3 {
+  letter-spacing: 0.5px;
+}
+
+.action-button {
+  min-width: 200px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.fade-in-content {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -6,6 +6,7 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { LoginGuard } from './core/guards/login.guard';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { OfertasDisponiblesComponent } from './features/ofertas-disponibles/ofertas-disponibles.component';
+import { RegistroEgresadoComponent } from './features/registro-egresado/registro-egresado.component';
 
 const routes: Routes = [
   // 1. Rutas de Autenticación
@@ -30,18 +31,9 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      {
-        path: 'dashboard', component: DashboardComponent
-        //loadChildren: () =>
-        //  import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent)
-      },
-      {
-        path: 'ofertasdisponibles', component: OfertasDisponiblesComponent
-      },
-      {
-        path: 'registro-egresado', loadChildren: () =>
-          import('./features/registro-egresado/registro-egresado.module').then(m => m.RegistroEgresadoModule)
-      },
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'ofertasdisponibles', component: OfertasDisponiblesComponent },
+      { path: 'registro-egresado', component: RegistroEgresadoComponent },
     ]
   },
 

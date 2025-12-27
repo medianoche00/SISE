@@ -18,10 +18,8 @@ import { RouterModule } from '@angular/router';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { OfertaDetailComponent } from './shared/oferta-detail/oferta-detail.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
-import { DashboardComponent } from './features/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -29,8 +27,7 @@ import { DashboardComponent } from './features/dashboard/dashboard.component';
     MainLayoutComponent,
     AuthLayoutComponent,
     HeaderComponent,
-    SidebarComponent,
-    //,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,

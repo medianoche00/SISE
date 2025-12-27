@@ -1,17 +1,43 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms'; // AGREGADO: FormArray
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormArray,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms'; // AGREGADO: FormArray
 import { EgresadoService } from '../../core/services/egresado.service';
 import { Carrera } from '../../core/models/egresado.model';
-import { MatCard } from "@angular/material/card";
+import { MatCard, MatCardModule } from '@angular/material/card';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-registro-egresado',
   templateUrl: './registro-egresado.component.html',
   styleUrls: ['./registro-egresado.component.css'],
-  //imports: [MatCard]
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatInputModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatDividerModule,
+    //MatTooltipModule,
+  ],
 })
 export class RegistroEgresadoComponent implements OnInit {
-
   egresadoForm: FormGroup;
   listaCarreras: Carrera[] = [];
   enviando: boolean = false;
@@ -30,20 +56,38 @@ export class RegistroEgresadoComponent implements OnInit {
   initForm(): FormGroup {
     return this.fb.group({
       datosPersonales: this.fb.group({
-        nombres: [{ value: 'JUAN ALBERTO', disabled: true }, Validators.required],
-        apellidoPaterno: [{ value: 'PEREZ', disabled: true }, Validators.required],
-        apellidoMaterno: [{ value: 'GOMEZ', disabled: true }, Validators.required],
-        documentoIdentidad: [{ value: '12345678', disabled: true }, [Validators.required, Validators.minLength(8)]],
+        nombres: [
+          { value: 'JUAN ALBERTO', disabled: true },
+          Validators.required,
+        ],
+        apellidoPaterno: [
+          { value: 'PEREZ', disabled: true },
+          Validators.required,
+        ],
+        apellidoMaterno: [
+          { value: 'GOMEZ', disabled: true },
+          Validators.required,
+        ],
+        documentoIdentidad: [
+          { value: '12345678', disabled: true },
+          [Validators.required, Validators.minLength(8)],
+        ],
 
         telefono: ['', [Validators.required, Validators.pattern(/^[0-9]{9}$/)]],
-        correoPersonal: ['', [Validators.required, Validators.email]]
+        correoPersonal: ['', [Validators.required, Validators.email]],
       }),
       datosAcademicos: this.fb.group({
         idCarrera: ['', Validators.required],
-        codigoUniversitario: [{ value: '201802551', disabled: true }, Validators.required], // Bloqueado
-        añoEgreso: ['', [Validators.required, Validators.min(1990), Validators.max(2026)]]
+        codigoUniversitario: [
+          { value: '201802551', disabled: true },
+          Validators.required,
+        ], // Bloqueado
+        añoEgreso: [
+          '',
+          [Validators.required, Validators.min(1990), Validators.max(2026)],
+        ],
       }),
-      experienciaLaboral: this.fb.array([])
+      experienciaLaboral: this.fb.array([]),
     });
   }
 
@@ -57,7 +101,7 @@ export class RegistroEgresadoComponent implements OnInit {
       cargo: ['', Validators.required],
       fechaInicio: ['', Validators.required],
       fechaFin: [''],
-      actualmente: [false]
+      actualmente: [false],
     });
   }
 
@@ -76,7 +120,7 @@ export class RegistroEgresadoComponent implements OnInit {
       },
       error: (err: any) => {
         console.error('Error cargando carreras', err);
-      }
+      },
     });
   }
 
@@ -94,10 +138,10 @@ export class RegistroEgresadoComponent implements OnInit {
       ...formValue.datosPersonales,
       ...formValue.datosAcademicos,
       idCarrera: Number(formValue.datosAcademicos.idCarrera),
-      experienciaLaboral: formValue.experienciaLaboral
+      experienciaLaboral: formValue.experienciaLaboral,
     };
 
-    console.log('Enviando payload:', payload); 
+    console.log('Enviando payload:', payload);
 
     this.egresadoService.completarPerfil(payload).subscribe({
       next: (res: any) => {
@@ -109,7 +153,7 @@ export class RegistroEgresadoComponent implements OnInit {
         console.error(err);
         const mensaje = err.error?.message || 'Ocurrió un error inesperado';
         alert('Error: ' + mensaje);
-      }
+      },
     });
   }
 

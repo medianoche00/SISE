@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog'; 
-import { ExperienciaDialogComponent } from '../experiencia-dialog/experiencia-dialog.component'; 
-import { EgresadoService } from '../../../../core/services/egresado.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ExperienciaDialogComponent } from '../experiencia-dialog/experiencia-dialog.component';
+import { ExperienciaLaboral, ExperienciasService } from '../../../../core/services/experiencias.service';
 
 @Component({
   selector: 'app-experiencia-laboral',
@@ -9,73 +9,58 @@ import { EgresadoService } from '../../../../core/services/egresado.service';
   styleUrls: ['./experiencia-laboral.component.css']
 })
 export class ExperienciaLaboralComponent implements OnInit {
-
-  listaExperiencias: any[] = [];
-  cargando: boolean = false;
+  
+  experiencias: ExperienciaLaboral[] = [];
+  cargando: boolean = true;
 
   constructor(
-    private dialog: MatDialog,
-    private egresadoService: EgresadoService
-  ) { }
+    private experienciaService: ExperienciasService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
-    // TODO: Aquí deberías llamar al servicio para obtener las experiencias guardadas en BD
+    this.cargarExperiencias();
   }
 
-  agregarNueva() {
-    const dialogRef = this.dialog.open(ExperienciaDialogComponent, {
-      width: '700px', 
-      disableClose: true, 
-      data: null 
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.listaExperiencias.push(result);
-        this.guardarCambiosEnBackend();
-      }
-    });
-  }
-
-  editar(index: number, item: any) {
-    const dialogRef = this.dialog.open(ExperienciaDialogComponent, {
-      width: '700px',
-      disableClose: true,
-      data: item 
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.listaExperiencias[index] = result;
-        this.guardarCambiosEnBackend();
-      }
-    });
-  }
-
-  eliminar(index: number) {
-    if (confirm('¿Estás seguro de que deseas eliminar este registro de experiencia laboral?')) {
-      this.listaExperiencias.splice(index, 1);
-      this.guardarCambiosEnBackend();
-    }
-  }
-
-  guardarCambiosEnBackend() {
+  cargarExperiencias() {
     this.cargando = true;
-
-    const payload = {
-      experienciaLaboral: this.listaExperiencias
-    };
-
-    this.egresadoService.actualizarPerfil(payload).subscribe({
-      next: () => {
+    this.experienciaService.obtenerExperiencias().subscribe({
+      next: (data) => {
+        this.experiencias = data;
         this.cargando = false;
-        console.log('Sincronización exitosa');
       },
-      error: (err) => {
-        this.cargando = false;
-        console.error(err);
-        alert('Error al guardar los cambios en el servidor.');
+      error: () => this.cargando = false
+    });
+  }
+
+  abrirModal(experiencia?: ExperienciaLaboral) {
+    const dialogRef = this.dialog.open(ExperienciaDialogComponent, {
+      width: '600px',
+      data: experiencia || null // Si es null, el modal sabe que es "Crear"
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (experiencia) {
+          // MODO EDICIÓN
+          this.experienciaService.editarExperiencia(experiencia.idExperiencia!, result).subscribe(() => {
+            this.cargarExperiencias(); // Recargar lista
+          });
+        } else {
+          // MODO CREACIÓN
+          this.experienciaService.crearExperiencia(result).subscribe(() => {
+            this.cargarExperiencias(); // Recargar lista
+          });
+        }
       }
     });
+  }
+
+  eliminar(experiencia: ExperienciaLaboral) {
+    if (confirm(`¿Estás seguro de eliminar tu experiencia en ${experiencia.empresa}?`)) {
+      this.experienciaService.eliminarExperiencia(experiencia.idExperiencia!).subscribe(() => {
+        this.cargarExperiencias();
+      });
+    }
   }
 }

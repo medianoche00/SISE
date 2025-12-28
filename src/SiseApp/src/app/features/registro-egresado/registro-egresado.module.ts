@@ -20,7 +20,9 @@ import { ExperienciaLaboralComponent } from './components/experiencia-laboral/ex
 import { FormacionComplementariaComponent } from './components/formacion-complementaria/formacion-complementaria.component';
 import { ExperienciaDialogComponent } from './components/experiencia-dialog/experiencia-dialog.component';
 import { FormacionDialogComponent } from './components/formacion-dialog/formacion-dialog.component';
-import { MatProgressSpinnerModule, MatSpinner } from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,9 @@ import { MatProgressSpinnerModule, MatSpinner } from '@angular/material/progress
     MatFormFieldModule,
     MatDividerModule,
     MatTooltipModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatDatepickerModule,
+    RouterModule
   ],
 })
 export class RegistroEgresadoModule {}

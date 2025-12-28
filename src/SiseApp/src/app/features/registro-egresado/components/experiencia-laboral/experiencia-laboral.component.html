@@ -1,98 +1,77 @@
-<div class="container-fluid fade-in-content main-container">
+<div class="container-fluid main-container fade-in-content">
 
-  <!-- CABECERA -->
-  <mat-card class="shadow-sm border-0 section-header">
-    <mat-card-content class="header-content">
-
-      <div class="row align-items-center">
-
-        <!-- TITULO ALINEADO A LA IZQUIERDA -->
-        <div class="col-md-8">
-          <h2 class="text-primary fw-bold mb-1 d-flex align-items-center gap-2 justify-content-start">
-            <mat-icon>history_edu</mat-icon>
-            Historial Laboral
-          </h2>
-          <p class="text-muted m-0">
-            Gestiona tu trayectoria profesional.
-          </p>
-        </div>
-
-        <!-- BOTON -->
-        <div class="col-md-4 text-md-end mt-3 mt-md-0">
-          <button mat-raised-button color="primary" (click)="agregarNueva()" class="px-4 py-2">
-            <mat-icon>add</mat-icon>
-            AGREGAR NUEVO
-          </button>
-        </div>
-
+  <mat-card class="shadow-sm border-0 section-header mb-4">
+    <mat-card-content class="header-content d-flex justify-content-between align-items-center">
+      <div>
+        <h2 class="text-primary fw-bold mb-1 d-flex align-items-center gap-2">
+          <mat-icon>work_history</mat-icon> Experiencia Laboral
+        </h2>
+        <p class="text-muted m-0">Historial de empleos y cargos desempeñados.</p>
       </div>
-
+      <button mat-raised-button color="primary" (click)="abrirModal()" class="shadow-sm">
+        <mat-icon>add</mat-icon> AGREGAR
+      </button>
     </mat-card-content>
   </mat-card>
 
-  <!-- LISTA DE EXPERIENCIAS -->
-  <div *ngIf="listaExperiencias.length > 0" class="experience-list">
+  <div *ngIf="cargando" class="text-center py-5">
+    <mat-spinner diameter="40" class="mx-auto"></mat-spinner>
+  </div>
 
-    <div *ngFor="let item of listaExperiencias; let i = index" class="experience-wrapper">
+  <div *ngIf="!cargando && experiencias.length === 0" class="text-center py-5 text-muted">
+    <mat-icon class="display-3 text-secondary opacity-25">folder_off</mat-icon>
+    <p class="mt-3">No tienes experiencias registradas aún.</p>
+    <button mat-button color="primary" (click)="abrirModal()">Agregar mi primera experiencia</button>
+  </div>
 
-      <mat-card class="experience-card border-start border-4 border-primary shadow-sm">
-        <mat-card-content class="experience-content">
+  <div class="row gy-4" *ngIf="!cargando && experiencias.length > 0">
+    <div class="col-12" *ngFor="let exp of experiencias">
+      
+      <mat-card class="shadow-sm border-0 experience-card h-100">
+        <div class="card-body p-4 d-flex flex-column flex-md-row gap-3">
+          
+          <div class="d-flex flex-column align-items-center justify-content-start pt-1">
+            <div class="icon-box bg-light text-primary rounded-circle d-flex align-items-center justify-content-center" 
+                 style="width: 50px; height: 50px;">
+              <mat-icon>business_center</mat-icon>
+            </div>
+            <div class="vr h-100 mt-3 d-none d-md-block text-secondary opacity-25"></div>
+          </div>
 
-          <div class="row align-items-center">
-
-            <!-- INFO -->
-            <div class="col-md-9">
-              <h3 class="fw-bold text-dark text-uppercase experience-empresa">
-                {{ item.empresa }}
-              </h3>
-
-              <h4 class="text-primary fw-bold experience-cargo">
-                {{ item.cargo }}
-              </h4>
-
-              <div class="d-flex flex-wrap align-items-center gap-3 experience-fechas">
-
-                <span class="badge bg-light text-dark border p-2 fw-normal d-flex align-items-center">
-                  <mat-icon class="me-2 small-icon text-muted">calendar_today</mat-icon>
-                  Inicio: {{ item.fechaInicio | date:'dd/MM/yyyy' }}
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h3 class="fw-bold mb-1 text-dark">{{ exp.cargo }}</h3>
+                <h4 class="text-primary mb-2 fw-medium">{{ exp.empresa }}</h4>
+              </div>
+              
+              <div class="text-end">
+                <span class="badge bg-soft-primary text-primary border border-primary-subtle px-3 py-2 rounded-pill">
+                  {{ exp.fechaInicio | date:'MMM yyyy' }} - 
+                  <span *ngIf="exp.actualmente; else fechaFinBlock">Actualidad</span>
+                  <ng-template #fechaFinBlock>{{ exp.fechaFin | date:'MMM yyyy' }}</ng-template>
                 </span>
-
-                <mat-icon class="text-muted small-icon d-none d-md-block">arrow_forward</mat-icon>
-
-                <span class="badge p-2 fw-normal d-flex align-items-center"
-                      [ngClass]="item.actualmente ? 'bg-success text-white' : 'bg-light text-dark border'">
-
-                  <mat-icon class="me-2 small-icon" *ngIf="item.actualmente">check</mat-icon>
-                  {{ item.actualmente ? 'Actualmente' : 'Fin: ' + (item.fechaFin | date:'dd/MM/yyyy') }}
-                </span>
-
               </div>
             </div>
 
-            <!-- ACCIONES -->
-            <div class="col-md-3 d-flex justify-content-md-end gap-2 mt-3 mt-md-0 pe-md-2">
-              <button mat-stroked-button color="primary" (click)="editar(i, item)">
-                <mat-icon>edit</mat-icon>
-                Editar
-              </button>
-
-              <button mat-icon-button color="warn" (click)="eliminar(i)" matTooltip="Eliminar registro">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-
+            <p class="text-muted mt-3 mb-0" *ngIf="exp.descripcion">
+              {{ exp.descripcion }}
+            </p>
           </div>
 
-        </mat-card-content>
+          <div class="d-flex flex-row flex-md-column gap-2 justify-content-end align-items-center ms-md-3 border-start-md ps-md-3">
+            <button mat-icon-button color="primary" matTooltip="Editar" (click)="abrirModal(exp)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" matTooltip="Eliminar" (click)="eliminar(exp)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+
+        </div>
       </mat-card>
 
     </div>
-  </div>
-
-  <!-- LOADING -->
-  <div *ngIf="cargando" class="text-center loading-container">
-    <mat-progress-bar mode="indeterminate" class="w-50 mx-auto rounded"></mat-progress-bar>
-    <small class="text-muted d-block mt-2">Guardando cambios...</small>
   </div>
 
 </div>

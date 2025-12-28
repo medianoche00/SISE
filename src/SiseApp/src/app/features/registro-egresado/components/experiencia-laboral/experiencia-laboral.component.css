@@ -1,87 +1,27 @@
-/* CONTENEDOR PRINCIPAL */
-.main-container {
-  padding: 32px;
-  max-width: 1200px;
-  margin: 0 auto;
+/* Badge estilizado (Fondo suave con texto fuerte) */
+.bg-soft-primary {
+    background-color: #e3f2fd; /* Azul muy clarito */
 }
 
-/* SEPARACIÓN ENTRE HEADER Y PRIMER REGISTRO */
-.section-header {
-  margin-bottom: 32px;
-}
-
-/* CONTENIDO DEL HEADER */
-.header-content {
-  padding: 28px 32px;
-}
-
-/* LISTA DE EXPERIENCIAS */
-.experience-list {
-  margin-top: 8px;
-}
-
-/* CADA EXPERIENCIA */
-.experience-wrapper {
-  margin-bottom: 24px;
-}
-
-/* TARJETA */
+/* Tarjeta con efecto hover */
 .experience-card {
-  transition: all 0.3s ease;
-  background-color: #ffffff;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-left: 4px solid transparent;
 }
 
-  .experience-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
-  }
-
-/* CONTENIDO INTERNO */
-.experience-content {
-  padding: 32px !important;
+.experience-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08) !important;
+    border-left: 4px solid #3f51b5; /* Color primario al hover */
 }
 
-/* TEXTOS */
-.experience-empresa {
-  font-size: 1.15rem;
-  margin-bottom: 4px;
-  letter-spacing: 0.5px;
-}
-
-.experience-cargo {
-  font-size: 1.05rem;
-  margin-bottom: 16px;
-}
-
-.experience-fechas {
-  margin-top: 4px;
-}
-
-/* ICONOS PEQUEÑOS */
-.small-icon {
-  font-size: 16px;
-  height: 16px;
-  width: 16px;
-}
-
-/* LOADING */
-.loading-container {
-  margin-top: 40px;
-}
-
-/* ANIMACIÓN */
-.fade-in-content {
-  animation: fadeIn 0.5s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Responsividad para la línea vertical */
+@media (max-width: 768px) {
+    .border-start-md {
+        border-left: none !important;
+        border-top: 1px solid #eee;
+        padding-top: 1rem;
+        width: 100%;
+        justify-content: flex-end;
+    }
 }

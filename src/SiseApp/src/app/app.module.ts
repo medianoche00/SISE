@@ -20,7 +20,11 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
-import { RegistroEgresadoComponent } from './features/registro-egresado/registro-egresado.component';
+import {
+  MatNativeDateModule,
+  provideNativeDateAdapter,
+} from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { RegistroEgresadoModule } from './features/registro-egresado/registro-egresado.module';
 
 @NgModule({
@@ -48,10 +52,13 @@ import { RegistroEgresadoModule } from './features/registro-egresado/registro-eg
     MatChipsModule,
     MatDialogModule,
     RouterModule,
-    //RegistroEgresadoModule
+    MatDatepickerModule,
+    MatNativeDateModule,
+    RegistroEgresadoModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    //provideNativeDateAdapter(),
   ],
   bootstrap: [AppComponent],
 })

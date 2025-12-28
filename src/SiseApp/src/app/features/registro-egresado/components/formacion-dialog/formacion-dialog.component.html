@@ -1,0 +1,49 @@
+<h2 mat-dialog-title class="fw-bold text-primary">
+  <mat-icon class="me-2" style="vertical-align: middle;">school</mat-icon>
+  {{ esEdicion ? 'Editar' : 'Agregar' }} Formación
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="d-flex flex-column gap-3 pt-3">
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Institución Educativa</mat-label>
+      <input matInput formControlName="institucion" placeholder="Ej: Universidad, Platzi, Udemy...">
+      <mat-error>Requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Nombre del Curso / Diplomado</mat-label>
+      <input matInput formControlName="nombreFormacion" placeholder="Ej: Excel Avanzado">
+      <mat-error>Requerido</mat-error>
+    </mat-form-field>
+
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Inicio</mat-label>
+          <input title="fechaInicio" matInput type="date" formControlName="fechaInicio">
+        </mat-form-field>
+      </div>
+      <div class="col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Fin</mat-label>
+          <input title="fechaFin" matInput type="date" formControlName="fechaFin">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Horas Lectivas (Opcional)</mat-label>
+      <input matInput type="number" formControlName="horas" placeholder="Ej: 40">
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="gap-2 pb-4 pe-4">
+  <button mat-stroked-button color="warn" (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="guardar()">
+    {{ esEdicion ? 'Actualizar' : 'Guardar' }}
+  </button>
+</mat-dialog-actions>

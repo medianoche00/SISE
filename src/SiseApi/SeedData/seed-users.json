@@ -1,39 +1,37 @@
 ﻿[
-  [
-    {
-      "UserName": "admin",
-      "Email": "admin@sise.com",
-      "Password": "Password123!",
-      "Role": "Administrativo",
-      "Cargo": "Soporte TI",
-      "DocumentoIdentidad": "00000001"
-    },
-    {
-      "UserName": "juan.perez",
-      "Email": "juan@mail.com",
-      "Password": "Password123!",
-      "Role": "Egresado",
-      "DocumentoIdentidad": "45879632",
-      "CodigoUniversitario": "20201001",
-      "IdCarrera": 1,
-      "AnioEgreso": 2023
-    },
-    {
-      "UserName": "maria.gerente",
-      "Email": "maria@empresa.com",
-      "Password": "Password123!",
-      "Role": "Representante",
-      "DocumentoIdentidad": "10203040",
-      "RucEmpresa": "10203040",
-      "Cargo": "Gerente de RRHH"
-    },
-    {
-      "UserName": "rector",
-      "Email": "rector@sise.com",
-      "Password": "Password123!",
-      "Role": "Administrativo",
-      "Cargo": "Rector",
-      "DocumentoIdentidad": "45203042"
-    }
-  ]
+  {
+    "UserName": "admin",
+    "Email": "admin@sise.com",
+    "Password": "Password123!",
+    "Role": "Administrativo",
+    "Cargo": "Soporte TI",
+    "DocumentoIdentidad": "00000001"
+  },
+  {
+    "UserName": "juan.perez",
+    "Email": "juan@mail.com",
+    "Password": "Password123!",
+    "Role": "Egresado",
+    "DocumentoIdentidad": "45879632",
+    "CodigoUniversitario": "20201001",
+    "IdCarrera": 1,
+    "AnioEgreso": 2023
+  },
+  {
+    "UserName": "maria.gerente",
+    "Email": "maria@empresa.com",
+    "Password": "Password123!",
+    "Role": "Representante",
+    "DocumentoIdentidad": "10203040",
+    "RucEmpresa": "10203040",
+    "Cargo": "Gerente de RRHH"
+  },
+  {
+    "UserName": "rector",
+    "Email": "rector@sise.com",
+    "Password": "Password123!",
+    "Role": "Administrativo",
+    "Cargo": "Rector",
+    "DocumentoIdentidad": "45203042"
+  }
 ]

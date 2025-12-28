@@ -1,0 +1,87 @@
+/* CONTENEDOR PRINCIPAL */
+.main-container {
+  padding: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* SEPARACIÓN ENTRE HEADER Y PRIMER REGISTRO */
+.section-header {
+  margin-bottom: 32px;
+}
+
+/* CONTENIDO DEL HEADER */
+.header-content {
+  padding: 28px 32px;
+}
+
+/* LISTA DE EXPERIENCIAS */
+.experience-list {
+  margin-top: 8px;
+}
+
+/* CADA EXPERIENCIA */
+.experience-wrapper {
+  margin-bottom: 24px;
+}
+
+/* TARJETA */
+.experience-card {
+  transition: all 0.3s ease;
+  background-color: #ffffff;
+}
+
+  .experience-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
+  }
+
+/* CONTENIDO INTERNO */
+.experience-content {
+  padding: 32px !important;
+}
+
+/* TEXTOS */
+.experience-empresa {
+  font-size: 1.15rem;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+.experience-cargo {
+  font-size: 1.05rem;
+  margin-bottom: 16px;
+}
+
+.experience-fechas {
+  margin-top: 4px;
+}
+
+/* ICONOS PEQUEÑOS */
+.small-icon {
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
+}
+
+/* LOADING */
+.loading-container {
+  margin-top: 40px;
+}
+
+/* ANIMACIÓN */
+.fade-in-content {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

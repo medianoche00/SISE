@@ -20,6 +20,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
+import { RegistroEgresadoComponent } from './features/registro-egresado/registro-egresado.component';
+import { RegistroEgresadoModule } from './features/registro-egresado/registro-egresado.module';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MainLayoutComponent,
     AuthLayoutComponent,
     HeaderComponent,
-    SidebarComponent
+    SidebarComponent,
+    //RegistroEgresadoComponent
   ],
   imports: [
     BrowserModule,
@@ -45,6 +48,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatChipsModule,
     MatDialogModule,
     RouterModule,
+    //RegistroEgresadoModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

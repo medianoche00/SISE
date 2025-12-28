@@ -24,7 +24,7 @@ export class MenuService {
           {
             label: 'Mi Perfil',
             icon: 'person',
-            route: 'registro-egresado',
+            route: '/perfil',
           },
           {
             label: 'Configuración',
@@ -38,7 +38,7 @@ export class MenuService {
           {
             label: 'Mi Perfil',
             icon: 'person',
-            route: 'registro-egresado',
+            route: '/perfil',
           },
           {
             label: 'Ofertas Laborales',

@@ -7,24 +7,23 @@ import { LoginGuard } from './core/guards/login.guard';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { OfertasDisponiblesComponent } from './features/ofertas-disponibles/ofertas-disponibles.component';
 import { RegistroEgresadoComponent } from './features/registro-egresado/registro-egresado.component';
+import { DatosPersonalesComponent } from './features/registro-egresado/components/datos-personales/datos-personales.component';
+import { ExperienciaLaboralComponent } from './features/registro-egresado/components/experiencia-laboral/experiencia-laboral.component';
+import { FormacionComplementariaComponent } from './features/registro-egresado/components/formacion-complementaria/formacion-complementaria.component';
 
 const routes: Routes = [
-  // 1. Rutas de Autenticación
-  // CAMBIO CLAVE: Agregamos "path: 'auth'" para que la URL final sea /auth/login
-  // Esto coincide con lo que tu Guard y AuthService están pidiendo.
   {
     path: 'auth',
     component: AuthLayoutComponent,
     children: [
       {
         path: 'login',
-        loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule),
-        canActivate: [LoginGuard]
-       }
-    ]
+        loadChildren: () =>
+          import('./features/auth/auth.module').then((m) => m.AuthModule),
+        canActivate: [LoginGuard],
+      },
+    ],
   },
-
-  // 2. Rutas de la Aplicación (Dashboard)
   {
     path: '',
     component: MainLayoutComponent,
@@ -33,18 +32,23 @@ const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'ofertasdisponibles', component: OfertasDisponiblesComponent },
-      { path: 'registro-egresado', component: RegistroEgresadoComponent },
-    ]
+      {
+        path: 'perfil',
+        component: RegistroEgresadoComponent,
+        children: [
+          { path: '', redirectTo: 'datos', pathMatch: 'full' }, // Por defecto abre Datos
+          { path: 'datos', component: DatosPersonalesComponent },
+          { path: 'experiencia', component: ExperienciaLaboralComponent },
+          { path: 'formacion', component: FormacionComplementariaComponent },
+        ],
+      },
+    ],
   },
-
-  // 3. Comodín Seguro
-  // Si la ruta no existe, mandarlo a dashboard. 
-  // El AuthGuard se encargará de mandarlo a /auth/login si no tiene permiso.
-  { path: '**', redirectTo: 'dashboard' }
+  { path: '**', redirectTo: 'dashboard' },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'top' })],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule {}

@@ -10,7 +10,6 @@ namespace SiseApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class EgresadosController : ControllerBase
     {
         private readonly SiseDbContext _context;
@@ -32,6 +31,7 @@ namespace SiseApi.Controllers
 
             return Ok(carreras);
         }
+
 
         [HttpPost("actualizar-perfil")]
         public async Task<IActionResult> ActualizarPerfil([FromBody] ActualizarPerfilDto dto)

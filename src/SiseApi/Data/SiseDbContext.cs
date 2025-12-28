@@ -41,7 +41,7 @@ namespace SiseApi.Data
             // 2. Configuraciones de tablas
             modelBuilder.Entity<CargoAdministrativo>(entity =>
             {
-                entity.HasKey(e => e.IdCargo);
+                entity.HasKey(e => e.IdCargoAdministrativo);
                 entity.Property(e => e.NombreCargo).IsRequired();
             });
 
@@ -244,7 +244,7 @@ namespace SiseApi.Data
                 entity.HasKey(e => e.IdAdministrativo);
                 entity.Property(e => e.Estado).HasDefaultValue(true);
 
-                // Relación con Carrera
+                // Relación con Cargo
                 entity.HasOne(d => d.CargoAdministrativo).WithMany(p => p.Administrativos)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Administrativo_Cargo");

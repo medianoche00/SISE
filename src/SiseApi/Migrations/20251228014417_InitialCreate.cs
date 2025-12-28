@@ -53,6 +53,19 @@ namespace SiseApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CargoAdministrativo",
+                columns: table => new
+                {
+                    idCargoAdministrativo = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    nombreCargo = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CargoAdministrativo", x => x.idCargoAdministrativo);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Empresa",
                 columns: table => new
                 {
@@ -297,6 +310,37 @@ namespace SiseApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Administrativo",
+                columns: table => new
+                {
+                    idAdministrativo = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    idCargoAdministrativo = table.Column<int>(type: "int", maxLength: 50, nullable: false),
+                    idPersona = table.Column<int>(type: "int", nullable: false),
+                    idUsuario = table.Column<int>(type: "int", nullable: false),
+                    estado = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Administrativo", x => x.idAdministrativo);
+                    table.ForeignKey(
+                        name: "FK_Administrativo_Cargo",
+                        column: x => x.idCargoAdministrativo,
+                        principalTable: "CargoAdministrativo",
+                        principalColumn: "idCargoAdministrativo");
+                    table.ForeignKey(
+                        name: "FK_Administrativo_Persona",
+                        column: x => x.idPersona,
+                        principalTable: "Persona",
+                        principalColumn: "idPersona");
+                    table.ForeignKey(
+                        name: "FK_Administrativo_Usuario",
+                        column: x => x.idUsuario,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Representante",
                 columns: table => new
                 {
@@ -484,6 +528,56 @@ namespace SiseApi.Migrations
                         principalColumn: "idTipoContrato");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Postulacion",
+                columns: table => new
+                {
+                    idPostulacion = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    idEgresado = table.Column<int>(type: "int", nullable: false),
+                    idOferta = table.Column<int>(type: "int", nullable: false),
+                    idRepresentanteEvaluador = table.Column<int>(type: "int", nullable: true),
+                    fechaPostulacion = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())"),
+                    fechaEvaluacion = table.Column<DateTime>(type: "datetime", nullable: true),
+                    estado = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false, defaultValue: "Pendiente"),
+                    comentarios = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Postulacion", x => x.idPostulacion);
+                    table.ForeignKey(
+                        name: "FK_Postulacion_Egresado",
+                        column: x => x.idEgresado,
+                        principalTable: "Egresado",
+                        principalColumn: "idEgresado");
+                    table.ForeignKey(
+                        name: "FK_Postulacion_Oferta",
+                        column: x => x.idOferta,
+                        principalTable: "OfertaLaboral",
+                        principalColumn: "idOferta");
+                    table.ForeignKey(
+                        name: "FK_Postulacion_Representante",
+                        column: x => x.idRepresentanteEvaluador,
+                        principalTable: "Representante",
+                        principalColumn: "idRepresentante");
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Administrativo_idCargoAdministrativo",
+                table: "Administrativo",
+                column: "idCargoAdministrativo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Administrativo_idPersona",
+                table: "Administrativo",
+                column: "idPersona");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Administrativo_idUsuario",
+                table: "Administrativo",
+                column: "idUsuario",
+                unique: true);
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -619,6 +713,22 @@ namespace SiseApi.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Postulacion_idEgresado_idOferta",
+                table: "Postulacion",
+                columns: new[] { "idEgresado", "idOferta" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Postulacion_idOferta",
+                table: "Postulacion",
+                column: "idOferta");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Postulacion_idRepresentanteEvaluador",
+                table: "Postulacion",
+                column: "idRepresentanteEvaluador");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Representante_idEmpresa",
                 table: "Representante",
                 column: "idEmpresa");
@@ -645,6 +755,9 @@ namespace SiseApi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Administrativo");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
             migrationBuilder.DropTable(
@@ -669,16 +782,22 @@ namespace SiseApi.Migrations
                 name: "FormacionComplementaria");
 
             migrationBuilder.DropTable(
-                name: "OfertaLaboral");
+                name: "Postulacion");
 
             migrationBuilder.DropTable(
-                name: "Representante");
+                name: "CargoAdministrativo");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "TipoFormacion");
+
+            migrationBuilder.DropTable(
+                name: "OfertaLaboral");
+
+            migrationBuilder.DropTable(
+                name: "Representante");
 
             migrationBuilder.DropTable(
                 name: "Egresado");

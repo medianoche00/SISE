@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Carrera } from '../models/egresado.model';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EgresadoService {
 
-  private apiUrl = 'https://localhost:7000/api/egresados';
+  private apiUrl = `${environment.apiUrl}/Egresados`;
 
   constructor(private http: HttpClient) { }
 

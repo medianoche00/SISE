@@ -25,15 +25,15 @@ namespace SiseApi.Data.Models
         [Column("estado")]
         public bool Estado { get; set; }
 
-        [ForeignKey("idCargoAdministrativo")]
+        [ForeignKey("IdCargoAdministrativo")]
         [InverseProperty("Administrativos")]
         public CargoAdministrativo CargoAdministrativo { get; set; } = null!;
 
-        [ForeignKey("idPersona")]
+        [ForeignKey("IdPersona")]
         [InverseProperty("Administrativos")]
         public Persona Persona { get; set; } = null!;
 
-        [ForeignKey("idUsuario")]
+        [ForeignKey("IdUsuario")]
         [InverseProperty("Administrativos")]
         public ApplicationUser Usuario { get; set; } = null!;
 

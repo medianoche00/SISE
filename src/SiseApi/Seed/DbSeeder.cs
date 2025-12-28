@@ -3,9 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using SiseApi.Data;
 using SiseApi.Data.Models;
 using SiseApi.Seed;
+using System.Globalization;
+using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Globalization;
 
 // Asegúrate de importar los namespaces de tus Modelos y tu Contexto
 // using TuProyecto.Models;
@@ -102,7 +103,7 @@ public class DbSeeder : IDbSeeder
     {
         var cargos = await LoadJsonData<CargoAdministrativo>("seed-cargos.json");
         if (cargos == null) return;
-
+        
         foreach (var cargo in cargos)
         {
             if (!await _context.CargosAdministrativos.AnyAsync(c => c.NombreCargo == cargo.NombreCargo))
@@ -110,7 +111,7 @@ public class DbSeeder : IDbSeeder
                 _context.CargosAdministrativos.Add(cargo);
             }
         }
-        await _context.SaveChangesAsync();
+        _context.SaveChanges();
     }
 
     private async Task SeedRolesAsync()
@@ -329,7 +330,7 @@ public class DbSeeder : IDbSeeder
                     {
                         await CreateRepresentanteProfile(user, userDto);
                     }
-                    else if (userDto.Role == "Administrativo") 
+                    else if (userDto.Role == "Administrativo" || userDto.Role == "Administrador") 
                     {
                         await CreateAdministrativoProfile(user, userDto);
                     }
@@ -421,7 +422,7 @@ public class DbSeeder : IDbSeeder
 
         if (persona == null || cargo == null)
         {
-            _logger.LogWarning($"Faltan datos (Persona o Empresa) para crear representante {user.UserName}");
+            _logger.LogWarning($"Faltan datos (Persona o Cargo) para crear representante {user.UserName}");
             return;
         }
 
@@ -429,7 +430,7 @@ public class DbSeeder : IDbSeeder
         {
             IdUsuario = user.Id,
             IdPersona = persona.IdPersona,
-            IdCargoAdministrativo = cargo.IdCargo,
+            IdCargoAdministrativo = cargo.IdCargoAdministrativo,
             Estado = true
         };
 

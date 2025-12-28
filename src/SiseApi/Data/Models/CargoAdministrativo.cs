@@ -7,8 +7,8 @@ namespace SiseApi.Data.Models
     public class CargoAdministrativo
     {
         [Key]
-        [Column("idCargo")] 
-        public int IdCargo { get; set; }
+        [Column("idCargoAdministrativo")] 
+        public int IdCargoAdministrativo { get; set; }
 
         [Column("nombreCargo")][StringLength(100)]
         public string NombreCargo { get; set; } = null!;

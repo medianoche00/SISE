@@ -153,35 +153,16 @@ namespace SiseApi.Migrations
                         .HasColumnType("int")
                         .HasColumnName("idUsuario");
 
-                    b.Property<int>("idCargoAdministrativo")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idPersona")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idUsuario")
-                        .HasColumnType("int");
-
                     b.HasKey("IdAdministrativo");
+
+                    b.HasIndex("IdCargoAdministrativo");
+
+                    b.HasIndex("IdPersona");
 
                     b.HasIndex("IdUsuario")
                         .IsUnique();
 
-                    b.HasIndex("idCargoAdministrativo");
-
-                    b.HasIndex("idPersona");
-
-                    b.ToTable("Administrativo", t =>
-                        {
-                            t.Property("idCargoAdministrativo")
-                                .HasColumnName("idCargoAdministrativo1");
-
-                            t.Property("idPersona")
-                                .HasColumnName("idPersona1");
-
-                            t.Property("idUsuario")
-                                .HasColumnName("idUsuario1");
-                        });
+                    b.ToTable("Administrativo");
                 });
 
             modelBuilder.Entity("SiseApi.Data.Models.ApplicationRole", b =>
@@ -335,12 +316,12 @@ namespace SiseApi.Migrations
 
             modelBuilder.Entity("SiseApi.Data.Models.CargoAdministrativo", b =>
                 {
-                    b.Property<int>("IdCargo")
+                    b.Property<int>("IdCargoAdministrativo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("idCargo");
+                        .HasColumnName("idCargoAdministrativo");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCargo"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCargoAdministrativo"));
 
                     b.Property<string>("NombreCargo")
                         .IsRequired()
@@ -348,7 +329,7 @@ namespace SiseApi.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("nombreCargo");
 
-                    b.HasKey("IdCargo");
+                    b.HasKey("IdCargoAdministrativo");
 
                     b.ToTable("CargoAdministrativo");
                 });
@@ -1081,23 +1062,23 @@ namespace SiseApi.Migrations
 
             modelBuilder.Entity("SiseApi.Data.Models.Administrativo", b =>
                 {
-                    b.HasOne("SiseApi.Data.Models.ApplicationUser", "Usuario")
-                        .WithMany("Administrativos")
-                        .HasForeignKey("IdUsuario")
-                        .IsRequired()
-                        .HasConstraintName("FK_Administrativo_Usuario");
-
                     b.HasOne("SiseApi.Data.Models.CargoAdministrativo", "CargoAdministrativo")
                         .WithMany("Administrativos")
-                        .HasForeignKey("idCargoAdministrativo")
+                        .HasForeignKey("IdCargoAdministrativo")
                         .IsRequired()
                         .HasConstraintName("FK_Administrativo_Cargo");
 
                     b.HasOne("SiseApi.Data.Models.Persona", "Persona")
                         .WithMany("Administrativos")
-                        .HasForeignKey("idPersona")
+                        .HasForeignKey("IdPersona")
                         .IsRequired()
                         .HasConstraintName("FK_Administrativo_Persona");
+
+                    b.HasOne("SiseApi.Data.Models.ApplicationUser", "Usuario")
+                        .WithMany("Administrativos")
+                        .HasForeignKey("IdUsuario")
+                        .IsRequired()
+                        .HasConstraintName("FK_Administrativo_Usuario");
 
                     b.Navigation("CargoAdministrativo");
 

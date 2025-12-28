@@ -3,8 +3,8 @@
     "UserName": "admin",
     "Email": "admin@sise.com",
     "Password": "Password123!",
-    "Role": "Administrativo",
-    "Cargo": "Soporte TI",
+    "Role": "Administrador",
+    "CargoAdministrativo": "Soporte TI",
     "DocumentoIdentidad": "00000001"
   },
   {
@@ -24,14 +24,14 @@
     "Role": "Representante",
     "DocumentoIdentidad": "10203040",
     "RucEmpresa": "10203040",
-    "Cargo": "Gerente de RRHH"
+    "CargoEmpresa": "Gerente de RRHH"
   },
   {
     "UserName": "rector",
     "Email": "rector@sise.com",
     "Password": "Password123!",
     "Role": "Administrativo",
-    "Cargo": "Rector",
+    "CargoAdministrativo": "Rector",
     "DocumentoIdentidad": "45203042"
   }
 ]

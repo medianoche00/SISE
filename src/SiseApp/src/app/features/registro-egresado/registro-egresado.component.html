@@ -1,28 +1,22 @@
 <div class="container-fluid p-4">
-  <mat-card class="mb-4">
-    <mat-card-content class="p-3">
+  <div class="d-flex flex-wrap gap-3 align-items-center">
 
-      <div class="d-flex flex-wrap gap-3 align-items-center">
+    <h1 class="page-title">Mi Perfil</h1>
+    <section>
+      <button mat-raised-button color="primary" routerLink="datos" [routerLinkActiveOptions]="{exact: true}"
+        routerLinkActive="btn-activo">
+        <mat-icon>person</mat-icon> Datos Personales
+      </button>
 
-        <h3 class="m-0 text-primary me-3" style="font-weight: 700;">Mi Perfil:</h3>
+      <button mat-raised-button color="primary" routerLink="experiencia" routerLinkActive="btn-activo">
+        <mat-icon>work</mat-icon> Experiencia Laboral
+      </button>
 
-        <button mat-raised-button color="primary" routerLink="./" [routerLinkActiveOptions]="{exact: true}"
-          routerLinkActive="btn-activo">
-          <mat-icon>person</mat-icon> Datos Personales
-        </button>
-
-        <button mat-raised-button color="primary" routerLink="experiencia" routerLinkActive="btn-activo">
-          <mat-icon>work</mat-icon> Experiencia Laboral
-        </button>
-
-        <button mat-raised-button color="primary" routerLink="formacion" routerLinkActive="btn-activo">
-          <mat-icon>school</mat-icon> Formación Compl.
-        </button>
-
-      </div>
-    </mat-card-content>
-  </mat-card>
-
+      <button mat-raised-button color="primary" routerLink="formacion" routerLinkActive="btn-activo">
+        <mat-icon>school</mat-icon> Formación Compl.
+      </button>
+    </section>
+  </div>
   <div class="fade-in-content">
     <router-outlet></router-outlet>
   </div>

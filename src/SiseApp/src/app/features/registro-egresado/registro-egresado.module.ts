@@ -5,8 +5,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { RegistroEgresadoRoutingModule } from './registro-egresado-routing.module';
 import { RegistroEgresadoComponent } from './registro-egresado.component';
 
-
-
 // Angular Material
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatCardModule } from '@angular/material/card';
@@ -22,6 +20,7 @@ import { ExperienciaLaboralComponent } from './components/experiencia-laboral/ex
 import { FormacionComplementariaComponent } from './components/formacion-complementaria/formacion-complementaria.component';
 import { ExperienciaDialogComponent } from './components/experiencia-dialog/experiencia-dialog.component';
 import { FormacionDialogComponent } from './components/formacion-dialog/formacion-dialog.component';
+import { MatProgressSpinnerModule, MatSpinner } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -49,6 +48,7 @@ import { FormacionDialogComponent } from './components/formacion-dialog/formacio
     MatFormFieldModule,
     MatDividerModule,
     MatTooltipModule,
+    MatProgressSpinnerModule
   ],
 })
 export class RegistroEgresadoModule {}

@@ -20,4 +20,8 @@ export class EgresadoService {
   actualizarPerfil(datos: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/actualizar-perfil`, datos);
   }
+
+  obtenerMiPerfil() {
+  return this.http.get<any>(`${this.apiUrl}/mi-perfil-egresado`);
+}
 }

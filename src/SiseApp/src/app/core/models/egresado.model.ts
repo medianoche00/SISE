@@ -11,6 +11,7 @@ export interface RegistroEgresadoRequest {
   idCarrera: number;
   codigoUniversitario: string;
   añoEgreso: number;
+  carrera: string;
 }
 
 export interface Carrera {

@@ -52,8 +52,39 @@ export class ExperienciaDialogComponent implements OnInit {
 
   guardar() {
     if (this.form.invalid) return;
-    // Retornamos los valores al componente padre para que él llame al servicio
-    this.dialogRef.close(this.form.getRawValue());
+
+    const formValue = this.form.getRawValue();
+
+    // PREPARACIÓN DE DATOS (Mapeo manual para evitar errores)
+    const payload: ExperienciaLaboral = {
+      // Mantenemos el ID si existe (edición)
+      idExperiencia: this.data?.idExperiencia, 
+      
+      empresa: formValue.empresa,
+      cargo: formValue.cargo,
+      descripcion: formValue.descripcion,
+      actualmente: formValue.actualmente,
+
+      // CORRECCIÓN DE FECHAS
+      // 1. Convertimos la fecha de inicio a string ISO simple o Date
+      fechaInicio: formValue.fechaInicio, 
+      
+      // 2. Lógica crítica para Fecha Fin:
+      // Si "actualmente" es true O si el campo está vacío/null -> enviamos null explícito
+      fechaFin: (formValue.actualmente || !formValue.fechaFin) ? undefined : formValue.fechaFin
+    };
+
+    // Nota: Si tu backend es muy estricto con las fechas y sigue fallando,
+    // avísame para agregar una función que las convierta a texto "YYYY-MM-DD".
+    
+    // Al usar undefined en JSON.stringify, el campo desaparece o se envía como null 
+    // dependiendo de la configuración. Para asegurar que llegue null a .NET:
+    
+    if (payload.actualmente) {
+      payload.fechaFin = null as any; 
+    }
+
+    this.dialogRef.close(payload);
   }
 
   cerrar() {

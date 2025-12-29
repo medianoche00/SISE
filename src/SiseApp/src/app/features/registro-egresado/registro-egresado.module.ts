@@ -21,8 +21,10 @@ import { FormacionComplementariaComponent } from './components/formacion-complem
 import { ExperienciaDialogComponent } from './components/experiencia-dialog/experiencia-dialog.component';
 import { FormacionDialogComponent } from './components/formacion-dialog/formacion-dialog.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { RouterModule } from '@angular/router';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,7 @@ import { RouterModule } from '@angular/router';
     ExperienciaLaboralComponent,
     FormacionComplementariaComponent,
     ExperienciaDialogComponent,
-    FormacionDialogComponent
+    FormacionDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -52,7 +54,9 @@ import { RouterModule } from '@angular/router';
     MatTooltipModule,
     MatProgressSpinnerModule,
     MatDatepickerModule,
-    RouterModule
+    RouterModule,
+    MatCheckboxModule,
   ],
+  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'es-PE' }],
 })
 export class RegistroEgresadoModule {}

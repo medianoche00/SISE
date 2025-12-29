@@ -21,6 +21,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
 import {
+  MAT_DATE_LOCALE,
   MatNativeDateModule,
   provideNativeDateAdapter,
 } from '@angular/material/core';
@@ -57,8 +58,8 @@ import { RegistroEgresadoModule } from './features/registro-egresado/registro-eg
     RegistroEgresadoModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    //provideNativeDateAdapter(),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, //para inyectar el token en las peticiones HTTP
+    { provide: MAT_DATE_LOCALE, useValue: 'es-PE' }
   ],
   bootstrap: [AppComponent],
 })

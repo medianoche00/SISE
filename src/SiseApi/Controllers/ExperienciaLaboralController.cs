@@ -10,12 +10,12 @@ namespace SiseApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ExperienciasController : ControllerBase
+public class ExperienciaLaboralController : ControllerBase
 {
     private readonly SiseDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public ExperienciasController(SiseDbContext context, UserManager<ApplicationUser> userManager)
+    public ExperienciaLaboralController(SiseDbContext context, UserManager<ApplicationUser> userManager)
     {
         _context = context;
         _userManager = userManager;
@@ -65,9 +65,10 @@ public class ExperienciasController : ControllerBase
     public async Task<IActionResult> CrearExperiencia([FromBody] ExperienciaLaboralDto dto)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
-
+        Console.WriteLine("no badrequest");
         var idEgresado = await ObtenerIdEgresadoActual();
         if (idEgresado == null) return Unauthorized("No se encontró el perfil de egresado.");
+        Console.WriteLine("no unauthorized");
 
         var nuevaExperiencia = new ExperienciaLaboral
         {

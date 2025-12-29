@@ -1,21 +1,27 @@
 /* Estilo para los campos de solo lectura (Identificación) */
 .readonly-field ::ng-deep .mat-mdc-form-field-flex {
-    background-color: #f8f9fa !important; /* Gris muy claro */
-    border-radius: 4px;
+  background-color: #f8f9fa !important; /* Gris muy claro */
+  border-radius: 4px;
 }
 
 .readonly-field input {
-    color: #495057 !important; /* Texto gris oscuro, no negro total */
-    font-weight: 500;
+  color: #495057 !important; /* Texto gris oscuro, no negro total */
+  font-weight: 500;
 }
 
 /* Estilo para los campos editables (Contacto) */
 .bg-white ::ng-deep .mat-mdc-form-field-flex {
-    background-color: #ffffff !important;
+  background-color: #ffffff !important;
 }
 
 /* Títulos */
 h3 {
-    font-size: 1.25rem;
-    letter-spacing: 0.5px;
+  font-size: 1.25rem;
+  letter-spacing: 0.5px;
+}
+
+#info-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
 }

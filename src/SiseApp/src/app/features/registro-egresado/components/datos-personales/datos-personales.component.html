@@ -10,24 +10,24 @@
             Información de Identificación
           </h3>
           <p class="text-muted mb-4 small">
-            <mat-icon class="align-middle fs-6" style="font-size: 18px; width: 18px; height: 18px;">info</mat-icon>
+            <mat-icon id="info-icon" class="align-middle fs-6">info</mat-icon>
             Estos datos provienen de su registro académico y no pueden ser modificados.
           </p>
 
           <div class="row gy-3" formGroupName="datosPersonales">
 
-            <div class="col-md-4">
+            <div class="col-md-12">
               <mat-form-field appearance="outline" class="w-100 readonly-field">
                 <mat-label>Documento de Identidad</mat-label>
-                <input matInput formControlName="documentoIdentidad">
+                <input matInput formControlName="documentoIdentidad" aria-label="Documento de identidad">
                 <mat-icon matSuffix class="text-muted">badge</mat-icon>
               </mat-form-field>
             </div>
 
-            <div class="col-md-8">
+            <div class="col-md-12">
               <mat-form-field appearance="outline" class="w-100 readonly-field">
                 <mat-label>Nombres Completos</mat-label>
-                <input matInput formControlName="nombres">
+                <input matInput formControlName="nombres" aria-label="Nombres completos">
                 <mat-icon matSuffix class="text-muted">lock</mat-icon>
               </mat-form-field>
             </div>
@@ -35,7 +35,7 @@
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100 readonly-field">
                 <mat-label>Apellido Paterno</mat-label>
-                <input matInput formControlName="apellidoPaterno">
+                <input matInput formControlName="apellidoPaterno" aria-label="Apellido paterno">
                 <mat-icon matSuffix class="text-muted">lock</mat-icon>
               </mat-form-field>
             </div>
@@ -43,7 +43,7 @@
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100 readonly-field">
                 <mat-label>Apellido Materno</mat-label>
-                <input matInput formControlName="apellidoMaterno">
+                <input matInput formControlName="apellidoMaterno" aria-label="Apellido materno">
                 <mat-icon matSuffix class="text-muted">lock</mat-icon>
               </mat-form-field>
             </div>
@@ -51,25 +51,27 @@
 
           <div class="row gy-3 mt-2" formGroupName="datosAcademicos">
 
-            <div class="col-md-8">
+            <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100 readonly-field">
                 <mat-label>Carrera Profesional</mat-label>
-                <input matInput formControlName="carrera">
+                <input matInput formControlName="carrera" aria-label="Carrera profesional">
                 <mat-icon matSuffix class="text-muted">school</mat-icon>
               </mat-form-field>
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100 readonly-field">
                 <mat-label>Cód. Univ.</mat-label>
-                <input matInput formControlName="codigoUniversitario">
+                <input matInput formControlName="codigoUniversitario" aria-label="Código universitario">
+                <mat-icon matSuffix class="text-muted">school</mat-icon>
               </mat-form-field>
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100 readonly-field">
                 <mat-label>Año Egreso</mat-label>
-                <input matInput formControlName="añoEgreso">
+                <input matInput formControlName="añoEgreso" aria-label="Año de egreso">
+                <mat-icon matSuffix class="text-muted">school</mat-icon>
               </mat-form-field>
             </div>
 
@@ -91,7 +93,10 @@
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100 bg-white">
                 <mat-label>Correo Electrónico Personal</mat-label>
-                <input matInput formControlName="correoPersonal" placeholder="ejemplo@gmail.com" type="email">
+                <input matInput formControlName="correoPersonal" 
+                       placeholder="ejemplo@gmail.com" 
+                       type="email" 
+                       aria-label="Correo electrónico personal">
                 <mat-icon matSuffix color="primary">email</mat-icon>
                 <mat-error *ngIf="datosForm.get('datosPersonales.correoPersonal')?.hasError('email')">
                   Ingrese un correo válido
@@ -102,7 +107,10 @@
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100 bg-white">
                 <mat-label>Teléfono / Celular</mat-label>
-                <input matInput formControlName="telefono" placeholder="999 999 999" type="tel">
+                <input matInput formControlName="telefono" 
+                       placeholder="999 999 999" 
+                       type="tel" 
+                       aria-label="Teléfono o celular">
                 <mat-icon matSuffix color="primary">phone_iphone</mat-icon>
                 <mat-hint>Ingrese solo números</mat-hint>
                 <mat-error *ngIf="datosForm.get('datosPersonales.telefono')?.hasError('pattern')">

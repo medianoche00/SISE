@@ -1,27 +1,52 @@
-/* Badge estilizado (Fondo suave con texto fuerte) */
-.bg-soft-primary {
-    background-color: #e3f2fd; /* Azul muy clarito */
+/* Ajuste para que la tarjeta principal no sea tan ancha en pantallas grandes si no quieres */
+
+/* ESTILOS DE LA TARJETA DE EXPERIENCIA (ITEM) */
+.experience-item {
+    background-color: #fff;
+    border-color: #e0e0e0;
+    transition: all 0.2s ease-in-out;
+    cursor: default;
 }
 
-/* Tarjeta con efecto hover */
-.experience-card {
-    transition: transform 0.2s, box-shadow 0.2s;
-    border-left: 4px solid transparent;
+/* Efecto Hover: Sombra suave y borde ligeramente más oscuro */
+.experience-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: #bdbdbd;
+    transform: translateY(-1px); /* Efecto sutil de elevación */
 }
 
-.experience-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08) !important;
-    border-left: 4px solid #3f51b5; /* Color primario al hover */
+/* Ajustes para botones más compactos */
+.btn-sm-custom {
+    line-height: 30px;
+    height: 32px;
+    padding: 0 12px;
+    font-size: 13px;
 }
 
-/* Responsividad para la línea vertical */
-@media (max-width: 768px) {
-    .border-start-md {
-        border-left: none !important;
-        border-top: 1px solid #eee;
-        padding-top: 1rem;
-        width: 100%;
-        justify-content: flex-end;
-    }
+.icon-sm {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    margin-right: 4px;
+}
+
+/* Títulos */
+h3 {
+  font-size: 1.25rem;
+  letter-spacing: 0.5px;
+}
+
+mat-divider {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+#header-exp {
+    width: 100%;
+    row-gap: auto;
+}
+
+.spacer {
+    flex: 1 1 auto;
 }

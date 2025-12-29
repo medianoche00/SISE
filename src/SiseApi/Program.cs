@@ -13,7 +13,6 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers().AddJsonOptions(x =>
 {
     // Esta línea rompe el ciclo ignorando el objeto repetido
@@ -45,11 +44,10 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
     .AddEntityFrameworkStores<SiseDbContext>() // Conecta Identity con tu DBContext
     .AddDefaultTokenProviders(); // Necesario para generar tokens de reset de clave, email, etc.
 
-// Registrar seeder
 builder.Services.AddScoped<IDbSeeder, DbSeeder>();
-
-// Registrar token service
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUsuarioActualService, UsuarioActualService>();
 
 // Configurar autenticación JWT
 var key = builder.Configuration["Jwt:Key"];

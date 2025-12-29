@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using SiseApi.Data;
 using SiseApi.Data.Models;
 using SiseApi.Models;
+using SiseApi.Services;
 
 namespace SiseApi.Controllers;
 
@@ -14,33 +15,19 @@ public class ExperienciaLaboralController : ControllerBase
 {
     private readonly SiseDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IUsuarioActualService _usuarioActualService;
 
-    public ExperienciaLaboralController(SiseDbContext context, UserManager<ApplicationUser> userManager)
+    public ExperienciaLaboralController(SiseDbContext context, UserManager<ApplicationUser> userManager, IUsuarioActualService usuarioActualService)
     {
         _context = context;
         _userManager = userManager;
-    }
-
-    // HELPER: Obtener el ID del Egresado basado en el usuario logueado
-    private async Task<int?> ObtenerIdEgresadoActual()
-    {
-        var userIdClaim = User.FindFirst("uid")?.Value
-                       ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-
-        if (string.IsNullOrEmpty(userIdClaim)) return null;
-        int userId = int.Parse(userIdClaim);
-
-        var egresado = await _context.Egresados
-            .Select(e => new { e.IdEgresado, e.IdUsuario })
-            .FirstOrDefaultAsync(e => e.IdUsuario == userId);
-
-        return egresado?.IdEgresado;
+        _usuarioActualService = usuarioActualService;
     }
 
     [HttpGet]
     public async Task<ActionResult<List<ExperienciaLaboralDto>>> GetMisExperiencias()
     {
-        var idEgresado = await ObtenerIdEgresadoActual();
+        var idEgresado = await _usuarioActualService.GetIdEgresadoActualAsync();
         if (idEgresado == null) return Unauthorized("Usuario no es egresado.");
 
         var experiencias = await _context.ExperienciasLaborales
@@ -66,9 +53,9 @@ public class ExperienciaLaboralController : ControllerBase
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
         Console.WriteLine("no badrequest");
-        var idEgresado = await ObtenerIdEgresadoActual();
+
+        var idEgresado = await _usuarioActualService.GetIdEgresadoActualAsync();
         if (idEgresado == null) return Unauthorized("No se encontró el perfil de egresado.");
-        Console.WriteLine("no unauthorized");
 
         var nuevaExperiencia = new ExperienciaLaboral
         {
@@ -90,16 +77,14 @@ public class ExperienciaLaboralController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> EditarExperiencia(int id, [FromBody] ExperienciaLaboralDto dto)
     {
-        var idEgresado = await ObtenerIdEgresadoActual();
+        var idEgresado = await _usuarioActualService.GetIdEgresadoActualAsync();
         if (idEgresado == null) return Unauthorized();
 
-        // Buscamos la experiencia y validamos que pertenezca al usuario actual (Seguridad)
         var experiencia = await _context.ExperienciasLaborales
             .FirstOrDefaultAsync(e => e.IdExperiencia == id && e.IdEgresado == idEgresado);
 
         if (experiencia == null) return NotFound("Experiencia no encontrada o no te pertenece.");
 
-        // Actualizamos campos
         experiencia.Empresa = dto.Empresa;
         experiencia.Cargo = dto.Cargo;
         experiencia.Descripcion = dto.Descripcion;
@@ -114,7 +99,7 @@ public class ExperienciaLaboralController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> EliminarExperiencia(int id)
     {
-        var idEgresado = await ObtenerIdEgresadoActual();
+        var idEgresado = await _usuarioActualService.GetIdEgresadoActualAsync();
         if (idEgresado == null) return Unauthorized();
 
         var experiencia = await _context.ExperienciasLaborales
@@ -122,8 +107,7 @@ public class ExperienciaLaboralController : ControllerBase
 
         if (experiencia == null) return NotFound("Experiencia no encontrada.");
 
-        experiencia.Estado = false; 
-
+        experiencia.Estado = false;
         await _context.SaveChangesAsync();
 
         return Ok(new { message = "Experiencia eliminada." });

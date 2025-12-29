@@ -31,7 +31,7 @@ export class OfertaService {
 
   cancelarPostulacion(idOferta: number): Observable<any> {
     return this.http.delete(
-      `${this.apiUrl}/cancelar-postulacion/${idOferta}`
+      `${this.apiUrl}cancelar-postulacion/${idOferta}`
     );
   }
 }

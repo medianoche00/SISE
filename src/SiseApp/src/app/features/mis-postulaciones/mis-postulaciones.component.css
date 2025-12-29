@@ -1,0 +1,52 @@
+/* ESTILO SOLICITADO */
+.page-title {
+  margin-bottom: 20px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 24px;
+}
+
+/* Estilos generales del contenedor (igual a tu referencia) */
+.main-container {
+  max-width: 1200px; /* Opcional: para que no se estire demasiado */
+  margin: 0 auto;
+  padding-top: 20px;
+}
+
+h3 {
+  font-size: 1.25rem;
+  letter-spacing: 0.5px;
+}
+
+.form-card {
+  border-radius: 8px; /* Un poco de radio para suavizar */
+}
+
+/* Spacer para empujar elementos a los extremos */
+.spacer {
+  flex: 1 1 auto;
+}
+
+/* Estilos para los botones pequeños */
+.btn-sm-custom {
+  line-height: 32px;
+  padding: 0 12px;
+}
+
+.icon-sm {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  margin-right: 4px;
+}
+
+/* Hover effect suave para las tarjetas de la lista */
+.experience-item {
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.experience-item:hover {
+  background-color: #fcfcfc;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}

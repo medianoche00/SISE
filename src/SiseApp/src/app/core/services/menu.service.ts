@@ -48,7 +48,7 @@ export class MenuService {
           {
             label: 'Mis Postulaciones',
             icon: 'assignment',
-            route: '/dashboard/applications',
+            route: '/mis-postulaciones',
           },
         ];
       case 'Representante':

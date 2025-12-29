@@ -10,6 +10,7 @@ import { RegistroEgresadoComponent } from './features/registro-egresado/registro
 import { DatosPersonalesComponent } from './features/registro-egresado/components/datos-personales/datos-personales.component';
 import { ExperienciaLaboralComponent } from './features/registro-egresado/components/experiencia-laboral/experiencia-laboral.component';
 import { FormacionComplementariaComponent } from './features/registro-egresado/components/formacion-complementaria/formacion-complementaria.component';
+import { MisPostulacionesComponent } from './features/mis-postulaciones/mis-postulaciones.component';
 
 const routes: Routes = [
   {
@@ -32,6 +33,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'ofertasdisponibles', component: OfertasDisponiblesComponent },
+      { path: 'mis-postulaciones', component: MisPostulacionesComponent },
       {
         path: 'perfil',
         component: RegistroEgresadoComponent,

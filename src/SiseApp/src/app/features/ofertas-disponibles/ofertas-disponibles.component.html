@@ -37,7 +37,7 @@
       <mat-card-header>
         <mat-card-title>{{ oferta.titulo }}</mat-card-title>
         <mat-card-subtitle class="empresa-bold">
-          {{ oferta.idEmpresaNavigation?.razonSocial }}
+          {{ oferta.empresaRazonSocial }}
         </mat-card-subtitle>
       </mat-card-header>
 
@@ -49,7 +49,7 @@
             <mat-icon>place</mat-icon> {{ oferta.ubicacion }}
           </span>
           <span class="simple-chip">
-            <mat-icon>work</mat-icon> {{ oferta.idModalidadTrabajoNavigation?.nombreModalidad }}
+            <mat-icon>work</mat-icon> {{ oferta.modalidad }}
           </span>
           <span class="simple-chip salary">
             S/ {{ oferta.sueldo | number:'1.0-0' }}

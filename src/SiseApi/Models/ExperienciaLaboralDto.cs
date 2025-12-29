@@ -3,7 +3,7 @@ namespace SiseApi.Models
 {
     public class ExperienciaLaboralDto
     {
-        public int? IdExperiencia { get; set; } // Null al crear, con valor al editar
+        public int? IdExperiencia { get; set; }
 
         [Required(ErrorMessage = "El nombre de la empresa es obligatorio")]
         public string Empresa { get; set; }
@@ -12,9 +12,9 @@ namespace SiseApi.Models
         public string Cargo { get; set; }
 
         [Required]
-        public DateTime FechaInicio { get; set; }
+        public DateOnly FechaInicio { get; set; }
 
-        public DateTime? FechaFin { get; set; }
+        public DateOnly? FechaFin { get; set; }
 
         public bool Actualmente { get; set; }
 

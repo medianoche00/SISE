@@ -15,6 +15,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { PostularService } from '../../core/services/postular.service';
 
 @Component({
   selector: 'app-ofertas-disponibles',
@@ -46,6 +47,7 @@ export class OfertasDisponiblesComponent implements OnInit {
 
   constructor(
     private ofertaService: OfertaService,
+    private postularService: PostularService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {}
@@ -55,7 +57,7 @@ export class OfertasDisponiblesComponent implements OnInit {
   }
 
   cargarOfertas() {
-    this.ofertaService.getOfertasActivas().subscribe((data) => {
+    this.ofertaService.getOfertasDisponibles().subscribe((data) => {
       this.ofertasOriginales = data;
       this.aplicarFiltros(); // Aplicar filtros iniciales
     });
@@ -70,7 +72,7 @@ export class OfertasDisponiblesComponent implements OnInit {
       resultado = resultado.filter(
         (o) =>
           o.titulo.toLowerCase().includes(texto) ||
-          o.idEmpresaNavigation?.razonSocial.toLowerCase().includes(texto)
+          o.empresaRazonSocial?.toLowerCase().includes(texto)
       );
     }
 
@@ -78,8 +80,7 @@ export class OfertasDisponiblesComponent implements OnInit {
     if (this.filtroModalidad) {
       resultado = resultado.filter(
         (o) =>
-          o.idModalidadTrabajoNavigation?.nombreModalidad ===
-          this.filtroModalidad
+          o.modalidad === this.filtroModalidad
       );
     }
 
@@ -115,7 +116,7 @@ export class OfertasDisponiblesComponent implements OnInit {
 
   realizarPostulacion(idOferta: number) {
     // Llamar al servicio
-    this.ofertaService.postularOferta(idOferta).subscribe({
+    this.postularService.postularOferta(idOferta, '').subscribe({ //! agregar campo de carta de presentacion
       next: (response) => {
         // ÉXITO (200 OK)
         this.mostrarMensaje('¡Postulación enviada con éxito!', 'success');

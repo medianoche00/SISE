@@ -26,7 +26,7 @@ public class Egresado
     public int IdCarrera { get; set; }
 
     [Column("codigoUniversitario")]
-    [StringLength(20)] // Ampliado ligeramente por seguridad
+    [StringLength(20)]
     public string CodigoUniversitario { get; set; } = null!;
 
     [Column("añoEgreso")]

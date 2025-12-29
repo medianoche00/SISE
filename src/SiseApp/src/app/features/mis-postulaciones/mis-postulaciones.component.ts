@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { OfertaService } from '../../core/services/oferta.service';
-import { OfertaLaboral } from '../../core/models/oferta.model';
 import { OfertaDetailComponent } from '../../shared/oferta-detail/oferta-detail.component';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,6 +9,9 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
+import { PostularService } from '../../core/services/postular.service';
+import { Postulacion } from '../../core/models/postular.model';
+import { OfertaLaboral } from '../../core/models/oferta.model';
 
 @Component({
   selector: 'app-mis-postulaciones',
@@ -30,13 +31,13 @@ import { RouterModule } from '@angular/router';
   ],
 })
 export class MisPostulacionesComponent implements OnInit {
-  misOfertas: OfertaLaboral[] = [];
+  misPostulaciones: Postulacion[] = [];
   cargando: boolean = true;
 
   constructor(
-    private ofertaService: OfertaService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private postularService: PostularService
   ) {}
 
   ngOnInit(): void {
@@ -45,9 +46,9 @@ export class MisPostulacionesComponent implements OnInit {
 
   cargarPostulaciones() {
     this.cargando = true;
-    this.ofertaService.getMisPostulaciones().subscribe({
+    this.postularService.misPostulaciones().subscribe({
       next: (data) => {
-        this.misOfertas = data;
+        this.misPostulaciones = data;
         this.cargando = false;
       },
       error: (err) => {
@@ -87,7 +88,7 @@ export class MisPostulacionesComponent implements OnInit {
 
   // Lógica centralizada para llamar al servicio de eliminar
   private ejecutarRetiro(oferta: OfertaLaboral) {
-    this.ofertaService.cancelarPostulacion(oferta.idOferta).subscribe({
+    this.postularService.cancelarPostulacion(oferta.idOferta).subscribe({
       next: () => {
         this.mostrarMensaje('Postulación retirada correctamente.', 'success');
         this.cargarPostulaciones(); // Recargar la lista

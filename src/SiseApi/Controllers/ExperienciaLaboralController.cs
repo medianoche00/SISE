@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SiseApi.Data;
@@ -38,8 +37,8 @@ public class ExperienciaLaboralController : ControllerBase
                 IdExperiencia = e.IdExperiencia,
                 Empresa = e.Empresa,
                 Cargo = e.Cargo,
-                FechaInicio = e.FechaInicio.ToDateTime(TimeOnly.MinValue),
-                FechaFin = e.FechaFin.HasValue ? e.FechaFin.Value.ToDateTime(TimeOnly.MinValue) : null,
+                FechaInicio = e.FechaInicio,
+                FechaFin = e.FechaFin,
                 Actualmente = e.FechaFin == null,
                 Descripcion = e.Descripcion
             })
@@ -64,8 +63,8 @@ public class ExperienciaLaboralController : ControllerBase
             Cargo = dto.Cargo,
             Descripcion = dto.Descripcion,
             Estado = true,
-            FechaInicio = DateOnly.FromDateTime(dto.FechaInicio),
-            FechaFin = dto.Actualmente ? null : (dto.FechaFin.HasValue ? DateOnly.FromDateTime(dto.FechaFin.Value) : null)
+            FechaInicio = dto.FechaInicio,
+            FechaFin = dto.Actualmente ? null : dto.FechaFin
         };
 
         _context.ExperienciasLaborales.Add(nuevaExperiencia);
@@ -88,8 +87,8 @@ public class ExperienciaLaboralController : ControllerBase
         experiencia.Empresa = dto.Empresa;
         experiencia.Cargo = dto.Cargo;
         experiencia.Descripcion = dto.Descripcion;
-        experiencia.FechaInicio = DateOnly.FromDateTime(dto.FechaInicio);
-        experiencia.FechaFin = dto.Actualmente ? null : (dto.FechaFin.HasValue ? DateOnly.FromDateTime(dto.FechaFin.Value) : null);
+        experiencia.FechaInicio = dto.FechaInicio;
+        experiencia.FechaFin = dto.FechaFin;
 
         await _context.SaveChangesAsync();
 

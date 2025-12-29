@@ -1,4 +1,4 @@
-// src/app/core/models/oferta.model.ts
+
 export interface Empresa {
   idEmpresa: number;
   razonSocial: string;
@@ -25,7 +25,7 @@ export interface TipoContrato {
 
 export interface OfertaLaboral {
   idOferta: number;
-  idEmpresa: number;
+  //idEmpresa: number;
   titulo: string;
   descripcion: string;
   requisitos: string;
@@ -33,8 +33,12 @@ export interface OfertaLaboral {
   sueldo: number;
   fechaPublicacion: string;
   fechaCierre: string;
-  idEmpresaNavigation?: Empresa;
-  idModalidadTrabajoNavigation?: Modalidad;
-  idTipoContratoNavigation?: TipoContrato;
-  estado: boolean;
+  idEmpresa?: string;
+  modalidad?: string;
+  tipoContrato?: string;
+  //estado: boolean;
+  empresaRuc?: string;
+  empresaRazonSocial?: string;
+  empresaTelefono?: string;
+  empresaCorreo?: string;
 }

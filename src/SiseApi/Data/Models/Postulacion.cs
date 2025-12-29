@@ -34,9 +34,13 @@ public class Postulacion
     [StringLength(50)]
     public string Estado { get; set; } = "Pendiente"; // Valor por defecto
 
-    [Column("comentarios")] // Feedback del reclutador (Opcional)
+    [Column("comentarios")]
     [StringLength(500)]
     public string? Comentarios { get; set; }
+    
+    [Column("cartaPresentacion")]
+    [StringLength(500)]
+    public string? CartaPresentacion { get; set; }
 
     // --- NAVEGACIÓN ---
 

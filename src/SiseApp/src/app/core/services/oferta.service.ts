@@ -12,26 +12,7 @@ export class OfertaService {
 
   constructor(private http: HttpClient) {}
 
-  getOfertasActivas(): Observable<OfertaLaboral[]> {
-    return this.http.get<OfertaLaboral[]>(this.apiUrl + 'activas');
-  }
-
-  postularOferta(idOferta: number): Observable<any> {
-    const body = {
-      IdOferta: idOferta,
-    };
-    return this.http.post(`${this.apiUrl}/postular`, body);
-  }
-
-  getMisPostulaciones(): Observable<OfertaLaboral[]> {
-    return this.http.get<OfertaLaboral[]>(
-      `${this.apiUrl}/mis-postulaciones`
-    );
-  }
-
-  cancelarPostulacion(idOferta: number): Observable<any> {
-    return this.http.delete(
-      `${this.apiUrl}cancelar-postulacion/${idOferta}`
-    );
+  getOfertasDisponibles(): Observable<OfertaLaboral[]> {
+    return this.http.get<OfertaLaboral[]>(`${this.apiUrl}disponibles`);
   }
 }

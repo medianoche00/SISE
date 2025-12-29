@@ -10,8 +10,8 @@
         <div><strong>Publicado:</strong> {{ data.oferta.fechaPublicacion | date:'dd/MM/yyyy' }}</div>
         <div><strong>Cierre:</strong> {{ data.oferta.fechaCierre | date:'dd/MM/yyyy' }}</div>
         <div><strong>Sueldo:</strong> S/ {{ data.oferta.sueldo | number:'1.2-2' }}</div>
-        <div><strong>Modalidad:</strong> {{ data.oferta.idModalidadTrabajoNavigation?.nombreModalidad }}</div>
-        <div><strong>Contrato:</strong> {{ data.oferta.idTipoContratoNavigation?.nombreTipo }}</div>
+        <div><strong>Modalidad:</strong> {{ data.oferta.modalidad }}</div>
+        <div><strong>Contrato:</strong> {{ data.oferta.tipoContrato }}</div>
       </div>
 
       <h3 class="section-header">Descripción</h3>
@@ -26,26 +26,27 @@
     <div class="section-empresa">
       <h3 class="company-header">Sobre la Empresa</h3>
       
-      <p class="company-name">{{ data.oferta.idEmpresaNavigation?.razonSocial }}</p>
+      <p class="company-name">{{ data.oferta.empresaRazonSocial }}</p>
       
       <div class="company-details">
-        <p *ngIf="data.oferta.idEmpresaNavigation?.ruc">
-          <strong>RUC:</strong> {{ data.oferta.idEmpresaNavigation?.ruc }}
+        <p *ngIf="data.oferta.empresaRuc">
+          <strong>RUC:</strong> {{ data.oferta.empresaRuc }}
         </p>
         
         <p class="company-desc">
-          {{ data.oferta.idEmpresaNavigation?.descripcion }}
+          <!--{{ data.oferta.empresaDescripcion }} -->
+           Descripcion de la empresa no disponible.
         </p>
         
         <div class="contact-box">
-          <div *ngIf="data.oferta.idEmpresaNavigation?.direccion">
-            <mat-icon>place</mat-icon> {{ data.oferta.idEmpresaNavigation?.direccion }}
+          <!--<div *ngIf="data.oferta.empresaDireccion">
+            <mat-icon>place</mat-icon> {{ data.oferta.empresaDireccion }}
+          </div>-->
+          <div *ngIf="data.oferta.empresaCorreo">
+            <mat-icon>email</mat-icon> {{ data.oferta.empresaCorreo }}
           </div>
-          <div *ngIf="data.oferta.idEmpresaNavigation?.correo">
-            <mat-icon>email</mat-icon> {{ data.oferta.idEmpresaNavigation?.correo }}
-          </div>
-          <div *ngIf="data.oferta.idEmpresaNavigation?.telefono">
-            <mat-icon>phone</mat-icon> {{ data.oferta.idEmpresaNavigation?.telefono }}
+          <div *ngIf="data.oferta.empresaTelefono">
+            <mat-icon>phone</mat-icon> {{ data.oferta.empresaTelefono }}
           </div>
         </div>
       </div>

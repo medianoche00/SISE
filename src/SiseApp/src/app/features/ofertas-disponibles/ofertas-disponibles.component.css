@@ -1,98 +1,81 @@
-.container-ofertas {
-  padding: 20px;
+/* --- Layout General (Igual a Mi Perfil) --- */
+.main-container {
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .page-title {
-  margin-bottom: 20px;
   font-weight: 500;
   color: #333;
 }
 
-/* --- Estilos de la Barra de Filtros --- */
-.filter-bar {
-  display: flex;
-  gap: 15px;
-  background: white;
-  padding: 15px 20px;
-  border-radius: 8px;
-  margin-bottom: 30px;
-  align-items: center;
-  flex-wrap: wrap;
+/* --- Títulos de Sección (Estilo copiado exactamente) --- */
+h3 {
+  font-size: 1.25rem;
+  letter-spacing: 0.5px;
 }
 
-.search-field { width: 300px; }
-.select-field { width: 180px; }
-.spacer { flex: 1; }
-
-/* Eliminar el padding extra inferior de los inputs material para alinearlos mejor */
-::ng-deep .mat-mdc-form-field-subscript-wrapper { display: none; }
-
-/* --- Estilos del Grid (3 por fila) --- */
-.ofertas-grid {
-  display: grid;
-  /* Esto asegura 3 columnas si hay espacio, y baja a 2 o 1 en pantallas pequeñas */
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+/* --- Inputs y Formularios --- */
+/* Forzar fondo blanco en los inputs como en la pág 1 */
+.bg-white ::ng-deep .mat-mdc-form-field-flex {
+  background-color: #ffffff !important;
 }
 
-/* --- Estilos de la Tarjeta --- */
+/* Ajuste para eliminar padding inferior extra de Material */
+::ng-deep .mat-mdc-form-field-subscript-wrapper { 
+  display: none; 
+}
+
+/* --- Tarjetas de Oferta --- */
 .oferta-card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+  transition: transform 0.2s, box-shadow 0.2s;
+  background-color: white;
 }
 
-.empresa-bold {
-  font-weight: 700 !important; /* Negrita solicitada */
-  color: #444;
-  margin-top: 4px;
-  display: block;
+/* Efecto hover sutil para dar interactividad */
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
 }
 
-.descripcion {
-  margin: 15px 0;
-  color: #666;
-  font-size: 14px;
-  min-height: 40px;
+/* --- Botones Redondeados (Clave del estilo deseado) --- */
+.btn-rounded {
+  border-radius: 50px !important;
 }
 
-/* Chips Simples (Diseño custom) */
-.simple-chips-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.simple-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background-color: #f5f5f5;
-  color: #555;
-  padding: 4px 10px;
-  border-radius: 16px;
-  font-size: 12px;
-  font-weight: 500;
-  border: 1px solid #e0e0e0;
-}
-
-.simple-chip mat-icon {
+/* --- Estilos para Chips/Badges --- */
+.icon-xs {
   font-size: 14px;
   width: 14px;
   height: 14px;
+  vertical-align: middle;
 }
 
-.simple-chip.salary {
-  background-color: #e8f5e9; /* Verde claro para dinero */
-  color: #2e7d32;
-  border-color: #c8e6c9;
+/* Badge específico para dinero (verde suave) */
+.bg-success-subtle {
+  background-color: #e8f5e9 !important; /* Verde muy claro */
+}
+.text-success {
+  color: #2e7d32 !important; /* Verde oscuro */
+}
+.border-success-subtle {
+  border-color: #c8e6c9 !important;
 }
 
-.no-results {
-  text-align: center;
-  margin-top: 40px;
-  color: #777;
+/* --- Animaciones --- */
+.fade-in-content {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.text-light-gray {
+    color: #e0e0e0;
+}
+
+.spacer {
+    flex: 1 1 auto;
 }

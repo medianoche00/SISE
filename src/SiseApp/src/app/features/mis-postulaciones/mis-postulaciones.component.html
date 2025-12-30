@@ -52,7 +52,7 @@
                   <mat-icon class="icon-sm">visibility</mat-icon> Ver Detalles
                 </button>
 
-                <button mat-stroked-button color="warn" class="btn-sm-custom" (click)="retirarPostulacion(post.oferta)">
+                <button *ngIf="post.estado != 'Cancelado'" mat-stroked-button color="warn" class="btn-sm-custom" (click)="retirarPostulacion(post.oferta)">
                   <mat-icon class="icon-sm">cancel</mat-icon> Retirar
                 </button>
               </div>

@@ -43,6 +43,7 @@ export class OfertasDisponiblesComponent implements OnInit {
   // Variables para filtros
   textoBusqueda: string = '';
   filtroModalidad: string = '';
+  filtroTipoContrato: string = '';
   ordenamiento: string = 'recientes';
 
   constructor(
@@ -76,11 +77,19 @@ export class OfertasDisponiblesComponent implements OnInit {
       );
     }
 
-    // 2. Filtro Modalidad (Ejemplo de select)
+    // Filtro Modalidad
     if (this.filtroModalidad) {
       resultado = resultado.filter(
         (o) =>
           o.modalidad === this.filtroModalidad
+      );
+    }
+
+    // Filtro Tipo de Contrato
+    if (this.filtroTipoContrato) {
+      resultado = resultado.filter(
+        (o) =>
+          o.tipoContrato === this.filtroTipoContrato
       );
     }
 

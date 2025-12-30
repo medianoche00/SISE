@@ -1,74 +1,114 @@
-<div class="container-ofertas">
-  
-  <h1 class="page-title">Ofertas Laborales</h1>
+<div class="container-fluid p-4 main-container">
 
-  <div class="filter-bar mat-elevation-z1">
-    
-    <mat-form-field appearance="outline" class="search-field">
-      <mat-label>Buscar puesto o empresa</mat-label>
-      <input matInput [(ngModel)]="textoBusqueda" (keyup)="aplicarFiltros()" placeholder="Ej. Java, Google...">
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
+  <h1 class="page-title mb-4">Ofertas Laborales</h1>
 
-    <mat-form-field appearance="outline" class="select-field">
-      <mat-label>Modalidad</mat-label>
-      <mat-select [(ngModel)]="filtroModalidad" (selectionChange)="aplicarFiltros()">
-        <mat-option value="">Todas</mat-option>
-        <mat-option value="Presencial">Presencial</mat-option>
-        <mat-option value="Remoto">Remoto</mat-option>
-        <mat-option value="Hibrido">Híbrido</mat-option>
-      </mat-select>
-    </mat-form-field>
+  <mat-card>
+    <mat-card-content>
+      <!-- <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4"> -->
+          <div class="row g-3 align-items-center">
 
-    <span class="spacer"></span>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100 bg-white field-clean">
+                <mat-label>Buscar puesto o empresa</mat-label>
+                <input matInput [(ngModel)]="textoBusqueda" (keyup)="aplicarFiltros()"
+                  placeholder="Ej. Java, Google...">
+                <mat-icon matSuffix class="text-muted">search</mat-icon>
+              </mat-form-field>
+            </div>
 
-    <mat-form-field appearance="outline" class="select-field">
-      <mat-label>Ordenar por</mat-label>
-      <mat-select [(ngModel)]="ordenamiento" (selectionChange)="aplicarFiltros()">
-        <mat-option value="recientes">Más recientes</mat-option>
-        <mat-option value="salario_desc">Mayor Sueldo</mat-option>
-        <mat-option value="salario_asc">Menor Sueldo</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+            <div class="col-md-2">
+              <mat-form-field appearance="outline" class="w-100 bg-white field-clean">
+                <mat-label>Modalidad</mat-label>
+                <mat-select [(ngModel)]="filtroModalidad" (selectionChange)="aplicarFiltros()">
+                  <mat-option value="">Todas</mat-option>
+                  <mat-option value="Presencial">Presencial</mat-option>
+                  <mat-option value="Remoto">Remoto</mat-option>
+                  <mat-option value="Hibrido">Híbrido</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
 
-  <div class="ofertas-grid">
-    <mat-card *ngFor="let oferta of ofertasFiltradas" class="oferta-card">
-      <mat-card-header>
-        <mat-card-title>{{ oferta.titulo }}</mat-card-title>
-        <mat-card-subtitle class="empresa-bold">
-          {{ oferta.empresaRazonSocial }}
-        </mat-card-subtitle>
-      </mat-card-header>
+            <div class="col-md-2">
+              <mat-form-field appearance="outline" class="w-100 bg-white field-clean">
+                <mat-label>Tipo de Contrato</mat-label>
+                <mat-select [(ngModel)]="filtroTipoContrato" (selectionChange)="aplicarFiltros()">
+                  <mat-option value="">Todos</mat-option>
+                  <mat-option value="Medio Tiempo">Medio Tiempo</mat-option>
+                  <mat-option value="Tiempo Completo">Tiempo Completo</mat-option>
+                  <!--<mat-option value="Hibrido">Híbrido</mat-option>-->
+                </mat-select>
+              </mat-form-field>
+            </div>
 
-      <mat-card-content>
-        <p class="descripcion">{{ oferta.descripcion | slice:0:100 }}...</p>
-        
-        <div class="simple-chips-container">
-          <span class="simple-chip">
-            <mat-icon>place</mat-icon> {{ oferta.ubicacion }}
-          </span>
-          <span class="simple-chip">
-            <mat-icon>work</mat-icon> {{ oferta.modalidad }}
-          </span>
-          <span class="simple-chip salary">
-            S/ {{ oferta.sueldo | number:'1.0-0' }}
-          </span>
+            <div class="col-md-2">
+              <mat-form-field appearance="outline" class="w-100 bg-white field-clean">
+                <mat-label>Ordenar por</mat-label>
+                <mat-select [(ngModel)]="ordenamiento" (selectionChange)="aplicarFiltros()">
+                  <mat-option value="recientes">Más recientes</mat-option>
+                  <mat-option value="salario_desc">Mayor Sueldo</mat-option>
+                  <mat-option value="salario_asc">Menor Sueldo</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+          </div>
+        <!-- </div>
+      </div> -->
+
+      <mat-divider class="my-4"></mat-divider>
+
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4" *ngFor="let oferta of ofertasFiltradas">
+
+          <mat-card class="h-100 shadow-sm border-0 oferta-card hover-lift">
+
+            <mat-card-header class="pt-3">
+              <div mat-card-avatar
+                class="example-header-image d-flex align-items-center justify-content-center bg-light text-primary rounded-circle">
+                <mat-icon>business</mat-icon>
+              </div>
+              <mat-card-title class="fs-5 fw-bold">{{ oferta.titulo }}</mat-card-title>
+              <mat-card-subtitle class="text-primary fw-medium">
+                {{ oferta.empresaRazonSocial }}
+              </mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content class="mt-3">
+              <p class="text-muted small mb-3">
+                {{ oferta.descripcion | slice:0:100 }}...
+              </p>
+
+              <div class="d-flex flex-wrap gap-2">
+                <span class="badge rounded-pill bg-light text-dark border fw-normal d-flex align-items-center gap-1">
+                  <mat-icon class="icon-xs">place</mat-icon> {{ oferta.ubicacion }}
+                </span>
+                <span class="badge rounded-pill bg-light text-dark border fw-normal d-flex align-items-center gap-1">
+                  <mat-icon class="icon-xs">work</mat-icon> {{ oferta.modalidad }}
+                </span>
+                <span
+                  class="badge rounded-pill bg-success-subtle text-success border border-success-subtle fw-medium d-flex align-items-center gap-1">
+                  S/ {{ oferta.sueldo | number:'1.0-0' }}
+                </span>
+              </div>
+            </mat-card-content>
+
+            <span class="spacer"></span>
+
+            <mat-card-actions align="end" class="p-3">
+              <button mat-raised-button color="primary" class="btn-rounded px-4" (click)="verDetalle(oferta)">
+                VER DETALLES
+              </button>
+            </mat-card-actions>
+          </mat-card>
+
         </div>
-      </mat-card-content>
+      </div>
 
-      <mat-divider></mat-divider>
-      
-      <mat-card-actions align="end">
-        <button mat-button color="primary" (click)="verDetalle(oferta)">
-          VER DETALLES
-        </button>
-      </mat-card-actions>
-    </mat-card>
-  </div>
-
-  <div *ngIf="ofertasFiltradas.length === 0" class="no-results">
-    <p>No se encontraron ofertas con esos criterios.</p>
-  </div>
-
+      <div *ngIf="ofertasFiltradas.length === 0" class="text-center py-5 text-muted fade-in-content">
+        <mat-icon class="display-1 text-light-gray">search_off</mat-icon>
+        <p class="mt-3 fs-5">No se encontraron ofertas con esos criterios.</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>

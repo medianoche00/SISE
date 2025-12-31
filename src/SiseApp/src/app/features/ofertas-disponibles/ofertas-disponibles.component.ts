@@ -124,7 +124,6 @@ export class OfertasDisponiblesComponent implements OnInit {
   }
 
   realizarPostulacion(idOferta: number) {
-    // Llamar al servicio
     this.postularService.postularOferta(idOferta, '').subscribe({ //! agregar campo de carta de presentacion
       next: (response) => {
         // ÉXITO (200 OK)

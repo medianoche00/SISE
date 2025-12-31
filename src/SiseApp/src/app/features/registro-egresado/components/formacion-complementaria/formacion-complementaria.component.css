@@ -1,75 +1,53 @@
-/* CONTENEDOR PRINCIPAL */
-.main-container {
-  padding: 32px;
-  max-width: 1200px;
-  margin: 0 auto;
+/* Ajuste para que la tarjeta principal no sea tan ancha en pantallas grandes si no quieres */
+
+/* ESTILOS DE LA TARJETA DE EXPERIENCIA (ITEM) */
+.experience-item {
+  background-color: #fff;
+  border-color: #e0e0e0;
+  transition: all 0.2s ease-in-out;
+  cursor: default;
 }
 
-/* CABECERA */
-.section-header {
-  margin-bottom: 32px;
+/* Efecto Hover: Sombra suave y borde ligeramente más oscuro */
+.experience-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: #bdbdbd;
+  transform: translateY(-1px);
+  /* Efecto sutil de elevación */
 }
 
-.header-content {
-  padding: 28px 32px;
+/* Ajustes para botones más compactos */
+.btn-sm-custom {
+  line-height: 30px;
+  height: 32px;
+  padding: 0 12px;
+  font-size: 13px;
 }
 
-/* LISTA */
-.training-list {
-  margin-top: 8px;
+.icon-sm {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  margin-right: 4px;
 }
 
-.training-wrapper {
-  margin-bottom: 24px;
-}
-
-/* TARJETA */
-.training-card {
-  transition: all 0.3s ease;
-  background-color: #ffffff;
-}
-
-  .training-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
-  }
-
-.training-content {
-  padding: 32px !important;
-}
-
-/* TEXTOS */
-.training-title {
-  font-size: 1.15rem;
-  margin-bottom: 4px;
+/* Títulos */
+h3 {
+  font-size: 1.25rem;
   letter-spacing: 0.5px;
 }
 
-.training-subtitle {
-  font-size: 1.05rem;
-  margin-bottom: 12px;
+mat-divider {
+  margin-top: 16px;
+  margin-bottom: 16px;
 }
 
-/* ICONOS */
-.small-icon {
-  font-size: 16px;
-  height: 16px;
-  width: 16px;
+#header-exp {
+  width: 100%;
+  row-gap: auto;
 }
 
-/* ANIMACIÓN */
-.fade-in-content {
-  animation: fadeIn 0.5s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.spacer {
+  flex: 1 1 auto;
 }

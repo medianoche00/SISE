@@ -1,80 +1,118 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FormacionDialogComponent } from '../formacion-dialog/formacion-dialog.component'; // Importa tu modal
-import { EgresadoService } from '../../../../core/services/egresado.service';
+import {
+  FormacionComplementaria,
+  FormacionComplementariasService,
+} from '../../../../core/services/formaciones.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-formacion-complementaria',
   templateUrl: './formacion-complementaria.component.html',
-  styleUrls: ['./formacion-complementaria.component.css']
+  styleUrls: ['./formacion-complementaria.component.css'],
 })
 export class FormacionComplementariaComponent implements OnInit {
-
-  listaFormacion: any[] = [];
+  listaFormacion: FormacionComplementaria[] = [];
   cargando = false;
 
   constructor(
     private dialog: MatDialog,
-    private egresadoService: EgresadoService
-  ) { }
+    private formacionService: FormacionComplementariasService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
-    // Aquí cargarías los datos reales:
-    // this.egresadoService.obtenerPerfil().subscribe(...)
+    this.cargarFormaciones()
   }
 
-  agregarNueva() {
-    const dialogRef = this.dialog.open(FormacionDialogComponent, {
-      width: '600px',
-      disableClose: true,
-      data: null
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.listaFormacion.push(result);
-        this.guardarCambios();
-      }
-    });
-  }
-
-  editar(index: number, item: any) {
-    const dialogRef = this.dialog.open(FormacionDialogComponent, {
-      width: '600px',
-      disableClose: true,
-      data: item
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.listaFormacion[index] = result;
-        this.guardarCambios();
-      }
-    });
-  }
-
-  eliminar(index: number) {
-    if (confirm('¿Deseas eliminar este registro de formación?')) {
-      this.listaFormacion.splice(index, 1);
-      this.guardarCambios();
-    }
-  }
-
-  guardarCambios() {
+  cargarFormaciones() {
     this.cargando = true;
-    const payload = {
-      // Asegúrate que tu DTO en Backend se llame igual
-      formacionComplementaria: this.listaFormacion
-    };
-
-    this.egresadoService.actualizarPerfil(payload).subscribe({
-      next: () => {
+    this.formacionService.obtenerFormaciones().subscribe({
+      next: (data) => {
+        this.listaFormacion = data;
         this.cargando = false;
       },
       error: (err) => {
         this.cargando = false;
-        alert('Error al guardar formación');
+        const mensajeError =
+          err.error || 'Ocurrió un error al cargar las formaciones complementarias.';
+        this.mostrarMensaje(mensajeError, 'error');
+      },
+    });
+  }
+
+  abrirModal(formacion?: FormacionComplementaria) {
+    const dialogRef = this.dialog.open(FormacionDialogComponent, {
+      width: '600px',
+      data: formacion || null, // Si es null, el modal sabe que es "Crear"
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        if (formacion) {
+          // MODO EDICIÓN
+          this.formacionService
+            .editarFormacion(formacion.idFormacion!, result)
+            .subscribe({
+              next: (response) => {
+                // ÉXITO (200 OK)
+                this.mostrarMensaje(
+                  'Formación complementaria actualizada con éxito!',
+                  'success'
+                );
+              },
+              error: (err) => {
+                // ERROR (400 BadRequest o 500)
+                const mensajeError =
+                  err.error ||
+                  'Ocurrió un error al agregar la formación complementaria.';
+                this.mostrarMensaje(mensajeError, 'error');
+              },
+            });
+        } else {
+          // MODO CREACIÓN
+          this.formacionService.crearFormacion(result).subscribe({
+            next: (response) => {
+              // ÉXITO (200 OK)
+              this.mostrarMensaje(
+                'Formación complementaria agregada con éxito!',
+                'success'
+              );
+            },
+            error: (err) => {
+              // ERROR (400 BadRequest o 500)
+              const mensajeError =
+                err.error ||
+                'Ocurrió un error al agregar la formación complementaria.';
+              this.mostrarMensaje(mensajeError, 'error');
+            },
+          });
+        }
+        this.cargarFormaciones();
       }
+    });
+  }
+
+  eliminar(formacion: FormacionComplementaria) {
+      if (confirm(`¿Estás seguro de eliminar tu formación complementaria en ${formacion.institucion}?`)) {
+        this.formacionService
+          .eliminarFormacion(formacion.idFormacion!)
+          .subscribe(() => {
+            this.cargarFormaciones();
+          });
+      }
+    }
+
+  // Helper para mostrar mensajes tipo "Toast"
+  mostrarMensaje(mensaje: string, tipo: 'success' | 'error') {
+    this.snackBar.open(mensaje, 'CERRAR', {
+      duration: 4000,
+      panelClass:
+        tipo === 'error'
+          ? ['mat-toolbar', 'mat-warn']
+          : ['mat-toolbar', 'mat-primary'],
+      verticalPosition: 'top', // Para que salga arriba
     });
   }
 }

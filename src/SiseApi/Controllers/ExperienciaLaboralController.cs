@@ -13,13 +13,11 @@ namespace SiseApi.Controllers;
 public class ExperienciaLaboralController : ControllerBase
 {
     private readonly SiseDbContext _context;
-    private readonly UserManager<ApplicationUser> _userManager;
     private readonly IUsuarioActualService _usuarioActualService;
 
-    public ExperienciaLaboralController(SiseDbContext context, UserManager<ApplicationUser> userManager, IUsuarioActualService usuarioActualService)
+    public ExperienciaLaboralController(SiseDbContext context, IUsuarioActualService usuarioActualService)
     {
         _context = context;
-        _userManager = userManager;
         _usuarioActualService = usuarioActualService;
     }
 

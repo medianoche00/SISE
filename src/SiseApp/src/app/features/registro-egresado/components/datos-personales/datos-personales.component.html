@@ -1,4 +1,4 @@
-<div class="container-fluid main-container">
+<div class="main-container">
 
   <form [formGroup]="datosForm" (ngSubmit)="guardarDatos()">
 
@@ -93,9 +93,9 @@
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100 bg-white">
                 <mat-label>Correo Electrónico Personal</mat-label>
-                <input matInput formControlName="correoPersonal" 
-                       placeholder="ejemplo@gmail.com" 
-                       type="email" 
+                <input matInput formControlName="correoPersonal"
+                       placeholder="ejemplo@gmail.com"
+                       type="email"
                        aria-label="Correo electrónico personal">
                 <mat-icon matSuffix color="primary">email</mat-icon>
                 <mat-error *ngIf="datosForm.get('datosPersonales.correoPersonal')?.hasError('email')">
@@ -107,9 +107,9 @@
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100 bg-white">
                 <mat-label>Teléfono / Celular</mat-label>
-                <input matInput formControlName="telefono" 
-                       placeholder="999 999 999" 
-                       type="tel" 
+                <input matInput formControlName="telefono"
+                       placeholder="999 999 999"
+                       type="tel"
                        aria-label="Teléfono o celular">
                 <mat-icon matSuffix color="primary">phone_iphone</mat-icon>
                 <mat-hint>Ingrese solo números</mat-hint>

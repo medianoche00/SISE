@@ -1,17 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿//using System.ComponentModel.DataAnnotations;
 namespace SiseApi.Models
 {
     public class ExperienciaLaboralDto
     {
         public int? IdExperiencia { get; set; }
 
-        [Required(ErrorMessage = "El nombre de la empresa es obligatorio")]
+        //[Required(ErrorMessage = "El nombre de la empresa es obligatorio")]
         public string Empresa { get; set; }
 
-        [Required(ErrorMessage = "El cargo es obligatorio")]
+        //[Required(ErrorMessage = "El cargo es obligatorio")]
         public string Cargo { get; set; }
 
-        [Required]
+        //[Required]
         public DateOnly FechaInicio { get; set; }
 
         public DateOnly? FechaFin { get; set; }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SiseApi.Controllers;
 using SiseApi.Data;
 using SiseApi.Data.Models;
 using SiseApi.Seed;
@@ -15,9 +16,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(x =>
 {
-    // Esta línea rompe el ciclo ignorando el objeto repetido
+    // rompe el ciclo ignorando el objeto repetido
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     x.JsonSerializerOptions.WriteIndented = true;
+    // Agregar convertidor para DateOnly
+    x.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
 });
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

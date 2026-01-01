@@ -21,10 +21,10 @@
               <mat-form-field appearance="outline" class="w-100 bg-white field-clean">
                 <mat-label>Modalidad</mat-label>
                 <mat-select [(ngModel)]="filtroModalidad" (selectionChange)="aplicarFiltros()">
-                  <mat-option value="">Todas</mat-option>
-                  <mat-option value="Presencial">Presencial</mat-option>
-                  <mat-option value="Remoto">Remoto</mat-option>
-                  <mat-option value="Hibrido">Híbrido</mat-option>
+                  <mat-option  *ngFor="let modalidad of modalidades"
+                  value="{{modalidad.nombreModalidad === 'Todas' ? '' : modalidad.nombreModalidad}}">
+                    {{modalidad.nombreModalidad}}
+                  </mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -32,11 +32,11 @@
             <div class="col-md-2">
               <mat-form-field appearance="outline" class="w-100 bg-white field-clean">
                 <mat-label>Tipo de Contrato</mat-label>
-                <mat-select [(ngModel)]="filtroTipoContrato" (selectionChange)="aplicarFiltros()">
-                  <mat-option value="">Todos</mat-option>
-                  <mat-option value="Medio Tiempo">Medio Tiempo</mat-option>
-                  <mat-option value="Tiempo Completo">Tiempo Completo</mat-option>
-                  <!--<mat-option value="Hibrido">Híbrido</mat-option>-->
+                <mat-select  [(ngModel)]="filtroTipoContrato" (selectionChange)="aplicarFiltros()">
+                  <mat-option *ngFor="let tipoContrato of tiposContrato"
+                    value="{{tipoContrato.nombreTipo === 'Todos' ? '' : tipoContrato.nombreTipo}}">
+                    {{tipoContrato.nombreTipo}}
+                  </mat-option>
                 </mat-select>
               </mat-form-field>
             </div>

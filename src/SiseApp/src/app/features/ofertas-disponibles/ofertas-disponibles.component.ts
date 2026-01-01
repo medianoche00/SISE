@@ -16,6 +16,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { PostularService } from '../../core/services/postular.service';
+import { ModalidadTrabajo, ModalidadTrabajoService } from '../../core/services/modalidadtrabajo.service';
+import { TipoContrato, TipoContratoService } from '../../core/services/tipocontrato.service';
 
 @Component({
   selector: 'app-ofertas-disponibles',
@@ -40,6 +42,9 @@ export class OfertasDisponiblesComponent implements OnInit {
   ofertasOriginales: OfertaLaboral[] = [];
   ofertasFiltradas: OfertaLaboral[] = [];
 
+  modalidades: ModalidadTrabajo[] = [];
+  tiposContrato: TipoContrato[] = [];
+
   // Variables para filtros
   textoBusqueda: string = '';
   filtroModalidad: string = '';
@@ -49,18 +54,37 @@ export class OfertasDisponiblesComponent implements OnInit {
   constructor(
     private ofertaService: OfertaService,
     private postularService: PostularService,
+    private modalidadService: ModalidadTrabajoService,
+    private tipoContratoService: TipoContratoService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
     this.cargarOfertas();
+    this.cargarModalidades();
+    this.cargarTiposContrato();
   }
 
   cargarOfertas() {
     this.ofertaService.getOfertasDisponibles().subscribe((data) => {
       this.ofertasOriginales = data;
       this.aplicarFiltros(); // Aplicar filtros iniciales
+    });
+  }
+
+  cargarModalidades() {
+
+    this.modalidadService.getModalidades().subscribe((data) => {
+      this.modalidades = [{ idModalidad: -1, nombreModalidad: 'Todas' }];
+      this.modalidades.push(...data);
+    });
+  }
+
+  cargarTiposContrato() {
+    this.tipoContratoService.getTiposContrato().subscribe((data) => {
+      this.tiposContrato = [{ idTipoContrato: -1, nombreTipo: 'Todos' }];
+      this.tiposContrato.push(...data);
     });
   }
 

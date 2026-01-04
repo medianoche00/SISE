@@ -27,6 +27,7 @@ import {
 } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { RegistroEgresadoModule } from './features/registro-egresado/registro-egresado.module';
+import { DashboardReporteComponent } from './pages/dashboard-reporte/dashboard-reporte.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { RegistroEgresadoModule } from './features/registro-egresado/registro-eg
     AuthLayoutComponent,
     HeaderComponent,
     SidebarComponent,
+    DashboardReporteComponent,
     //RegistroEgresadoComponent
   ],
   imports: [

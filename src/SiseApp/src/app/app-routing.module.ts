@@ -12,6 +12,9 @@ import { ExperienciaLaboralComponent } from './features/registro-egresado/compon
 import { FormacionComplementariaComponent } from './features/registro-egresado/components/formacion-complementaria/formacion-complementaria.component';
 import { MisPostulacionesComponent } from './features/mis-postulaciones/mis-postulaciones.component';
 
+// --- NUEVO: Importamos el componente del reporte ---
+import { DashboardReporteComponent } from './pages/dashboard-reporte/dashboard-reporte.component';
+
 const routes: Routes = [
   {
     path: 'auth',
@@ -32,13 +35,17 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
+      
+      // --- NUEVO: Aquí agregamos la ruta para ver el reporte ---
+      { path: 'dashboard-reporte', component: DashboardReporteComponent },
+
       { path: 'ofertasdisponibles', component: OfertasDisponiblesComponent },
       { path: 'mis-postulaciones', component: MisPostulacionesComponent },
       {
         path: 'perfil',
         component: RegistroEgresadoComponent,
         children: [
-          { path: '', redirectTo: 'datos', pathMatch: 'full' }, // Por defecto abre Datos
+          { path: '', redirectTo: 'datos', pathMatch: 'full' },
           { path: 'datos', component: DatosPersonalesComponent },
           { path: 'experiencia', component: ExperienciaLaboralComponent },
           { path: 'formacion', component: FormacionComplementariaComponent },

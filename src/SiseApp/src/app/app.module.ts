@@ -34,7 +34,7 @@ import { RegistroEgresadoModule } from './features/registro-egresado/registro-eg
     MainLayoutComponent,
     AuthLayoutComponent,
     HeaderComponent,
-    SidebarComponent,
+    SidebarComponent
     //RegistroEgresadoComponent
   ],
   imports: [

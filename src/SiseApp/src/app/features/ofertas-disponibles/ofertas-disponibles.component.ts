@@ -18,6 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { PostularService } from '../../core/services/postular.service';
 import { ModalidadTrabajo, ModalidadTrabajoService } from '../../core/services/modalidadtrabajo.service';
 import { TipoContrato, TipoContratoService } from '../../core/services/tipocontrato.service';
+import { PostularDialogComponent } from '../../shared/postular-dialog/postular-dialog.component';
 
 @Component({
   selector: 'app-ofertas-disponibles',
@@ -148,16 +149,25 @@ export class OfertasDisponiblesComponent implements OnInit {
   }
 
   realizarPostulacion(idOferta: number) {
-    this.postularService.postularOferta(idOferta, '').subscribe({ //! agregar campo de carta de presentacion
-      next: (response) => {
-        // ÉXITO (200 OK)
-        this.mostrarMensaje('¡Postulación enviada con éxito!', 'success');
-      },
-      error: (err) => {
-        // ERROR (400 BadRequest o 500)
-        const mensajeError = err.error || 'Ocurrió un error al postular.';
-        this.mostrarMensaje(mensajeError, 'error');
-      },
+    const dialogRef = this.dialog.open(PostularDialogComponent, {
+      width: '700px',
+      //data: { modo: 'POSTULAR' },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.postularService.postularOferta(idOferta, result).subscribe({
+          next: (response) => {
+            // ÉXITO (200 OK)
+            this.mostrarMensaje('¡Postulación enviada con éxito!', 'success');
+          },
+          error: (err) => {
+            // ERROR (400 BadRequest o 500)
+            const mensajeError = err.error || 'Ocurrió un error al postular.';
+            this.mostrarMensaje(mensajeError, 'error');
+          },
+        });
+      }
     });
   }
 

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SiseApi.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InicialDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -540,7 +540,8 @@ namespace SiseApi.Migrations
                     fechaPostulacion = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())"),
                     fechaEvaluacion = table.Column<DateTime>(type: "datetime", nullable: true),
                     estado = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false, defaultValue: "Pendiente"),
-                    comentarios = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
+                    comentarios = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    cartaPresentacion = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {

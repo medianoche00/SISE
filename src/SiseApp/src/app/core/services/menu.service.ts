@@ -15,22 +15,7 @@ export class MenuService {
       case 'Administrador':
         return [
           { label: 'Inicio', icon: 'home', route: '/dashboard' },
-          {
-            label: 'Ofertas Laborales',
-            icon: 'work',
-            route: '/ofertasdisponibles',
-          }, //! -------------------QUITAR LUEGO------------------------
-          { label: 'Usuarios', icon: 'people', route: '/dashboard/users' },
-          {
-            label: 'Mi Perfil',
-            icon: 'person',
-            route: '/perfil',
-          },
-          {
-            label: 'Configuración',
-            icon: 'settings',
-            route: '/dashboard/settings',
-          },
+          { label: 'Gestión Usuarios', icon: 'people', route: '/admin/usuarios' },
         ];
       case 'Egresado':
         return [

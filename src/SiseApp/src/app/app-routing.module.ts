@@ -5,40 +5,39 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { AuthGuard } from './core/guards/auth.guard';
 import { LoginGuard } from './core/guards/login.guard';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
+import { DashboardReporteComponent } from './pages/dashboard-reporte/dashboard-reporte.component';
 import { OfertasDisponiblesComponent } from './features/ofertas-disponibles/ofertas-disponibles.component';
+import { MisPostulacionesComponent } from './features/mis-postulaciones/mis-postulaciones.component';
 import { RegistroEgresadoComponent } from './features/registro-egresado/registro-egresado.component';
 import { DatosPersonalesComponent } from './features/registro-egresado/components/datos-personales/datos-personales.component';
 import { ExperienciaLaboralComponent } from './features/registro-egresado/components/experiencia-laboral/experiencia-laboral.component';
 import { FormacionComplementariaComponent } from './features/registro-egresado/components/formacion-complementaria/formacion-complementaria.component';
-import { MisPostulacionesComponent } from './features/mis-postulaciones/mis-postulaciones.component';
-
-// --- NUEVO: Importamos el componente del reporte ---
-import { DashboardReporteComponent } from './pages/dashboard-reporte/dashboard-reporte.component';
+import { PersonasListComponent } from './features/personas/personas-list/personas-list.component';
+import { UsuariosListComponent } from './features/usuarios/usuarios-list/usuarios-list.component';
 
 const routes: Routes = [
   {
     path: 'auth',
     component: AuthLayoutComponent,
+    canActivate: [LoginGuard],
     children: [
       {
         path: 'login',
-        loadChildren: () =>
-          import('./features/auth/auth.module').then((m) => m.AuthModule),
-        canActivate: [LoginGuard],
+        loadChildren: () => import('./features/auth/auth.module').then((m) => m.AuthModule),
       },
     ],
   },
+
   {
     path: '',
     component: MainLayoutComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard], 
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
-      
-      // --- NUEVO: Aquí agregamos la ruta para ver el reporte ---
       { path: 'dashboard-reporte', component: DashboardReporteComponent },
-
+      { path: 'admin/personas', component: PersonasListComponent },
+      { path: 'admin/usuarios', component: UsuariosListComponent },
       { path: 'ofertasdisponibles', component: OfertasDisponiblesComponent },
       { path: 'mis-postulaciones', component: MisPostulacionesComponent },
       {
@@ -53,6 +52,7 @@ const routes: Routes = [
       },
     ],
   },
+
   { path: '**', redirectTo: 'dashboard' },
 ];
 
@@ -60,4 +60,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'top' })],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

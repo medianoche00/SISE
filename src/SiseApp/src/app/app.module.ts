@@ -20,6 +20,13 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
+import { FormsModule } from '@angular/forms';
+import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+
 import {
   MAT_DATE_LOCALE,
   MatNativeDateModule,
@@ -28,6 +35,8 @@ import {
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { RegistroEgresadoModule } from './features/registro-egresado/registro-egresado.module';
 import { DashboardReporteComponent } from './pages/dashboard-reporte/dashboard-reporte.component';
+import { PersonasListComponent } from './features/personas/personas-list/personas-list.component';
+import { UsuariosListComponent } from './features/usuarios/usuarios-list/usuarios-list.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +46,8 @@ import { DashboardReporteComponent } from './pages/dashboard-reporte/dashboard-r
     HeaderComponent,
     SidebarComponent,
     DashboardReporteComponent,
+    PersonasListComponent,
+    UsuariosListComponent
     //RegistroEgresadoComponent
   ],
   imports: [
@@ -57,7 +68,12 @@ import { DashboardReporteComponent } from './pages/dashboard-reporte/dashboard-r
     RouterModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    RegistroEgresadoModule
+    RegistroEgresadoModule,
+    FormsModule,
+    MatTableModule,
+    MatCardModule,
+    MatProgressBarModule,
+    MatTooltipModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, //para inyectar el token en las peticiones HTTP

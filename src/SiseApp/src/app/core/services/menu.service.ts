@@ -15,7 +15,16 @@ export class MenuService {
       case 'Administrador':
         return [
           { label: 'Inicio', icon: 'home', route: '/dashboard' },
-          { label: 'Gestión Usuarios', icon: 'people', route: '/admin/usuarios' },
+          {
+            label: 'Gestión Usuarios',
+            icon: 'supervised_user_circle',
+            route: '/admin/usuarios',
+          },
+          {
+            label: 'Gestión Personas',
+            icon: 'badge',
+            route: '/admin/personas',
+          },
         ];
       case 'Egresado':
         return [

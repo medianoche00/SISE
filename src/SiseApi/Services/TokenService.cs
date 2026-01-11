@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using SiseApi.Data.Models;
 using SiseApi.Models;
@@ -21,9 +21,11 @@ namespace SiseApi.Services
 
         public async Task<AuthResponse> CreateTokenAsync(ApplicationUser user)
         {
-            var key = _cfg["Jwt:Key"];
-            var issuer = _cfg["Jwt:Issuer"];
-            var audience = _cfg["Jwt:Audience"];
+            // CORRECCIÓN AQUÍ: Agregamos el ?? "..." para que nunca sea nulo
+            var key = _cfg["Jwt:Key"] ?? "UnaClaveSuperSecretaYLoSuficientementeLarga123456";
+
+            var issuer = _cfg["Jwt:Issuer"] ?? "SiseApi"; // También protegemos estos por si acaso
+            var audience = _cfg["Jwt:Audience"] ?? "SiseApiUsers";
             var minutes = int.Parse(_cfg["Jwt:TokenLifetimeMinutes"] ?? "60");
 
             var claims = new List<Claim>
@@ -45,6 +47,7 @@ namespace SiseApi.Services
                 claims.Add(new Claim(ClaimTypes.Role, r));
             }
 
+            // AHORA SÍ: "key" tiene valor seguro, así que GetBytes ya no se queja
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
             var creds = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 

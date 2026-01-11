@@ -80,7 +80,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAuthorization(); // añade policies luego si las necesitas
-
+builder.Services.AddScoped<ReportesService>();
 
 var app = builder.Build();
 

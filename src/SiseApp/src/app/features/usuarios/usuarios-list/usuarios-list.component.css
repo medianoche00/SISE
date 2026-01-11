@@ -1,0 +1,177 @@
+/* --- ESTILOS GENERALES --- */
+.main-container {
+  background-color: #f3f4f6;
+  min-height: 100vh;
+}
+
+.text-primary {
+  color: #2563eb !important;
+}
+/* Azul vibrante */
+.btn-primary {
+  background-color: #2563eb;
+  border: none;
+}
+
+  .btn-primary:hover {
+    background-color: #1d4ed8;
+  }
+
+/* --- MODAL CUSTOM (Curvas suaves) --- */
+.custom-modal {
+  border-radius: 24px; /* Curvatura fuerte como en la foto */
+  border: none;
+}
+
+/* Títulos de sección (CREDENCIALES..., INFORMACIÓN...) */
+.section-title {
+  color: #6b7280; /* Gris medio */
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Labels */
+.custom-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.3rem;
+}
+
+/* --- INPUTS QUE PARECEN UNA SOLA CAJA --- */
+/* Quitamos bordes internos para que input e icono se vean unidos */
+.custom-input-group .form-control {
+  border-right: none;
+  border-color: #e5e7eb;
+  border-radius: 8px 0 0 8px;
+  padding: 0.6rem 0.8rem;
+  box-shadow: none;
+}
+
+.custom-input-group .input-group-text,
+.custom-input-group .btn {
+  background-color: white;
+  border-left: none;
+  border-color: #e5e7eb;
+  border-radius: 0 8px 8px 0;
+  color: #9ca3af; /* Color gris de los iconos */
+}
+
+/* Inputs normales (sin grupo) */
+.custom-input {
+  border-color: #e5e7eb;
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+}
+
+/* Foco: Borde azul suave */
+.form-control:focus, .form-select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.custom-input-group .form-control:focus + .input-group-text {
+  border-color: #2563eb; /* Pinta el borde del icono también */
+}
+
+/* --- INFO BOX (Caja Azul Egresado) --- */
+.info-box {
+  background-color: #ecfeff; /* Cyan muy claro */
+  border: 1px solid #cffafe;
+}
+
+  .info-box .text-info {
+    color: #06b6d4 !important;
+  }
+
+/* --- BADGES Y TABLA --- */
+.bg-success-soft {
+  background-color: #dcfce7;
+  color: #166534 !important;
+}
+
+.bg-danger-soft {
+  background-color: #fee2e2;
+  color: #991b1b !important;
+}
+
+.card {
+  border-radius: 16px;
+}
+
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+  .btn-icon:hover {
+    background-color: #e5e7eb;
+  }
+
+/* 1. Fondo Oscuro (Backdrop) */
+.modal-backdrop {
+  z-index: 1040 !important; /* Detrás de la ventana */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* Semitransparente */
+}
+
+/* 2. Contenedor Principal del Modal */
+.modal {
+  z-index: 1055 !important; /* Encima del backdrop */
+  background: transparent; /* Evitar doble fondo */
+  overflow-x: hidden;
+  overflow-y: auto; /* Permitir scroll si es muy alto */
+  /* --- ESTA ES LA LÍNEA QUE TE FALTA --- */
+  /* Si tiene la clase 'show', forzamos que se vea */
+  display: block !important;
+}
+
+  /* 3. Animación de entrada (Opcional pero recomendado) */
+  .modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out;
+    transform: translate(0, -50px); /* Empieza un poco arriba */
+  }
+
+  .modal.show .modal-dialog {
+    transform: none; /* Baja a su posición normal */
+  }
+
+/* --- ESTILO BARRA DE BÚSQUEDA --- */
+.custom-search-bar {
+  background-color: #f8f9fa; /* Gris muy clarito */
+  border: 1px solid #e9ecef;
+  border-radius: 50rem !important; /* Forma de píldora (muy redondeada) */
+  padding: 0.2rem 0.5rem; /* Espacio interno */
+  display: flex;
+  align-items: center;
+}
+
+  /* El icono dentro de la barra */
+  .custom-search-bar .input-group-text {
+    background-color: transparent;
+    border: none;
+    color: #6c757d; /* Color gris del icono */
+    padding-right: 0; /* Pegarlo un poco al texto */
+  }
+
+  /* El campo de texto dentro de la barra */
+  .custom-search-bar .form-control {
+    background-color: transparent;
+    border: none;
+    box-shadow: none; /* Quita el brillo azul al hacer clic */
+    padding-left: 10px;
+  }
+
+  /* Efecto al hacer clic (Foco) */
+  .custom-search-bar:focus-within {
+    border-color: #2563eb; /* Borde azul cuando escribes */
+    background-color: #fff;
+  }

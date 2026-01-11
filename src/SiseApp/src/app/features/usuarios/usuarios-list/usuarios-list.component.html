@@ -1,0 +1,176 @@
+<div class="container-fluid p-4 main-container">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="text-primary fw-bold mb-0">Gestión de Usuarios</h2>
+      <p class="text-muted m-0">Administra accesos, roles y estados.</p>
+    </div>
+    <button class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm btn-nuevo" (click)="abrirModalCrear()">
+      + NUEVO USUARIO
+    </button>
+  </div>
+
+  <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="card-body p-0">
+
+      <div class="p-3 border-bottom search-container">
+        <div class="input-group bg-light rounded-pill px-3 py-2">
+          <span class="input-group-text bg-transparent border-0 pe-2">
+            <i class="bi bi-search text-muted"></i>
+          </span>
+          <input type="text"
+                 class="form-control bg-transparent border-0 shadow-none ps-0"
+                 (keyup)="filtrar($event)"
+                 placeholder="Buscar usuario por nombre, correo o rol..."
+                 autocomplete="off">
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table align-middle mb-0 custom-table">
+          <thead class="bg-light text-muted">
+            <tr class="text-uppercase small fw-bold">
+              <th class="ps-4 py-3">Usuario / Persona</th>
+              <th class="py-3">Cuenta (Email)</th>
+              <th class="py-3">Rol</th>
+              <th class="py-3">Estado</th>
+              <th class="text-end pe-4 py-3">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let element of dataSource.data" class="hover-row border-bottom">
+              <td class="ps-4 py-3">
+                <div class="d-flex flex-column">
+                  <span class="fw-bold text-dark">{{ element.nombreCompleto || element.nombreUsuario }}</span>
+                  <small class="text-muted" style="font-size: 0.75rem;">ID: {{ element.id }}</small>
+                </div>
+              </td>
+              <td class="text-secondary fw-medium">{{ element.nombreUsuario }}</td>
+              <td>
+                <span class="badge bg-light text-primary border border-primary px-3 py-2 rounded-pill">
+                  {{ element.rol }}
+                </span>
+              </td>
+              <td>
+                <span class="badge rounded-pill px-3 py-2"
+                      [ngClass]="element.activo ? 'bg-success-soft text-success' : 'bg-danger-soft text-danger'">
+                  {{ element.activo ? 'ACTIVO' : 'INACTIVO' }}
+                </span>
+              </td>
+              <td class="text-end pe-4">
+                <button class="btn btn-icon text-muted me-2" (click)="abrirModalEditar(element)" title="Editar">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+                <button class="btn btn-icon text-muted" (click)="cambiarEstado(element)" title="Cambiar Estado">
+                  <i class="bi" [ngClass]="element.activo ? 'bi-slash-circle' : 'bi-check-circle'"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div *ngIf="dataSource.data.length === 0 && !cargando" class="text-center py-5">
+          <i class="bi bi-person-slash display-4 text-muted opacity-25"></i>
+          <p class="text-muted mt-2">No se encontraron usuarios.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop fade show" *ngIf="mostrarModal"></div>
+
+<div class="modal fade show"
+     *ngIf="mostrarModal"
+     tabindex="-1"
+     role="dialog"
+     style="display: block;"
+     aria-modal="true">
+
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg custom-modal">
+
+      <div class="modal-header border-0 pb-0 pt-4 px-5">
+        <h5 class="modal-title fw-bold text-primary d-flex align-items-center fs-5">
+          <i class="bi bi-person-plus-fill me-2"></i> {{ esEdicion ? 'Editar Usuario' : 'Nuevo Usuario' }}
+        </h5>
+        <button type="button" class="btn-close" (click)="cerrarModal()"></button>
+      </div>
+
+      <div class="modal-body px-5 pt-3 pb-4">
+
+        <h6 class="section-title mt-2 mb-3">CREDENCIALES Y ROL</h6>
+
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <label class="form-label custom-label">Correo Electrónico (Usuario)<span class="text-danger">*</span></label>
+            <div class="input-group custom-input-group">
+              <input type="email" class="form-control" [(ngModel)]="nuevoUsuario.email" [disabled]="esEdicion">
+              <span class="input-group-text"><i class="bi bi-envelope-fill text-danger"></i></span>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label custom-label">Contraseña<span class="text-danger">*</span></label>
+            <div class="input-group custom-input-group">
+              <input [type]="mostrarPassword ? 'text' : 'password'" class="form-control" [(ngModel)]="nuevoUsuario.password" placeholder="••••••••">
+              <button class="btn input-group-text" type="button" (click)="mostrarPassword = !mostrarPassword">
+                <i class="bi" [ngClass]="mostrarPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label custom-label">Rol de Sistema<span class="text-danger">*</span></label>
+            <div class="input-group custom-input-group">
+              <select class="form-select" [(ngModel)]="nuevoUsuario.rol">
+                <option value="Estudiante">Estudiante</option>
+                <option value="Docente">Docente</option>
+                <option value="Administrativo">Administrativo</option>
+                <option value="Egresado">Egresado</option>
+              </select>
+              <span class="input-group-text bg-white"><i class="bi bi-person-gear"></i></span>
+            </div>
+          </div>
+        </div>
+
+        <h6 class="section-title mb-3">INFORMACIÓN PERSONAL</h6>
+
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="input-group custom-input-group">
+              <input type="text" class="form-control" placeholder="DNI*" [(ngModel)]="nuevoUsuario.dni">
+              <span class="input-group-text"><i class="bi bi-person-vcard-fill"></i></span>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <input type="text" class="form-control custom-input" placeholder="Nombres*" [(ngModel)]="nuevoUsuario.nombres">
+          </div>
+          <div class="col-md-6">
+            <input type="text" class="form-control custom-input" placeholder="Apellido Paterno*" [(ngModel)]="nuevoUsuario.apellidoPaterno">
+          </div>
+          <div class="col-md-6">
+            <input type="text" class="form-control custom-input" placeholder="Apellido Materno*" [(ngModel)]="nuevoUsuario.apellidoMaterno">
+          </div>
+        </div>
+
+        <div class="info-box mt-4 p-3 rounded-3 d-flex flex-column align-items-start" *ngIf="nuevoUsuario.rol === 'Egresado'">
+          <div class="d-flex align-items-center mb-2">
+            <i class="bi bi-info-circle-fill text-info me-2"></i>
+            <small class="text-dark fw-medium" style="font-size: 0.8rem;">Se creará un perfil de egresado pendiente de completar.</small>
+          </div>
+          <input type="text" class="form-control form-control-sm bg-white border-0 py-2"
+                 placeholder="ID Carrera (Temporal: Ingrese ID)" [(ngModel)]="nuevoUsuario.idCarrera">
+          <small class="text-muted mt-1" style="font-size: 0.7rem;">Ingresa 1 para Diseño, 2 para Sistemas, etc.</small>
+        </div>
+      </div>
+
+      <div class="modal-footer border-0 px-5 pb-5 pt-0 justify-content-center gap-3">
+        <button type="button" class="btn btn-outline-danger rounded-pill px-5 fw-bold" (click)="cerrarModal()">Cancelar</button>
+        <button type="button" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm d-flex align-items-center" (click)="guardarUsuario()">
+          <i class="bi bi-lock-fill me-2"></i> {{ esEdicion ? 'Actualizar' : 'Crear Usuario' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

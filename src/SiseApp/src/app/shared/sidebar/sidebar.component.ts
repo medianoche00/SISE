@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 import { MenuService, MenuItem } from '../../core/services/menu.service';
-import { MatNavList } from '@angular/material/list';
 import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
@@ -24,7 +23,7 @@ export class SidebarComponent implements OnInit {
     this.menuItems = this.menuService.getMenuByRole(this.role);
   }
   closeSidebar(item: MenuItem) {
-    if (/*item.closeSidenav && */this.sidenav) {
+    if (/*item.closeSidenav && */ this.sidenav) {
       this.sidenav.close();
     }
   }

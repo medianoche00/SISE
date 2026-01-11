@@ -4,7 +4,6 @@ import { RouterModule, Routes } from '@angular/router';
 // Layouts
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
-import { DashboardReporteComponent } from './pages/dashboard-reporte/dashboard-reporte.component';
 import { EstadisticasComponent } from './pages/estadisticas/estadisticas.component';
 import { ReportesComponent } from './pages/reportes/reportes.component';
 import { AuthGuard } from './core/guards/auth.guard';
@@ -20,19 +19,6 @@ import { PersonasListComponent } from './features/personas/personas-list/persona
 import { UsuariosListComponent } from './features/usuarios/usuarios-list/usuarios-list.component';
 
 const routes: Routes = [
-  // 1. RUTA PRINCIPAL (Usa MainLayout -> Mantiene Navbar y Sidebar)
-  {
-    path: '',
-    component: MainLayoutComponent,
-    children: [
-      { path: 'dashboard', component: DashboardReporteComponent },   // Menú de botones
-      { path: 'estadisticas', component: EstadisticasComponent },    // Gráficos y Tablas
-      { path: 'reportes', component: ReportesComponent },            // Lista de Empresas
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }       // Redirección automática
-    ]
-  },
-
-  // 2. RUTA DE AUTENTICACIÓN (Login - Opcional si ya lo tienes)
   {
     path: 'auth',
     component: AuthLayoutComponent,
@@ -40,7 +26,8 @@ const routes: Routes = [
     children: [
       {
         path: 'login',
-        loadChildren: () => import('./features/auth/auth.module').then((m) => m.AuthModule),
+        loadChildren: () =>
+          import('./features/auth/auth.module').then((m) => m.AuthModule),
       },
     ],
   },
@@ -52,7 +39,6 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'dashboard-reporte', component: DashboardReporteComponent },
       { path: 'admin/personas', component: PersonasListComponent },
       { path: 'admin/usuarios', component: UsuariosListComponent },
       { path: 'ofertasdisponibles', component: OfertasDisponiblesComponent },
@@ -67,6 +53,8 @@ const routes: Routes = [
           { path: 'formacion', component: FormacionComplementariaComponent },
         ],
       },
+      { path: 'stats', component: EstadisticasComponent },
+      { path: 'reports', component: ReportesComponent },
     ],
   },
 

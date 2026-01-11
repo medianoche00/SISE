@@ -1,22 +1,12 @@
-<mat-nav-list class="pt-2">
-  
-  <div mat-subheader class="text-uppercase small text-muted fw-bold ps-3 mt-3 mb-2">
-    Administrativo
-  </div>
+<mat-nav-list class="sidebar">
+  <div mat-subheader class="role-label">{{ role }}</div>
 
-  <a mat-list-item routerLink="/dashboard" routerLinkActive="bg-light text-primary" [routerLinkActiveOptions]="{exact: true}">
-    <mat-icon matListItemIcon class="text-secondary">home</mat-icon>
-    <span matListItemTitle>Inicio</span>
+  <a mat-list-item
+     *ngFor="let item of menuItems"
+     [routerLink]="item.route"
+     routerLinkActive="active-link"
+     (click)="closeSidebar(item)">
+    <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+    <span matListItemTitle>{{ item.label }}</span>
   </a>
-
-  <a mat-list-item routerLink="/estadisticas" routerLinkActive="bg-light text-primary">
-    <mat-icon matListItemIcon class="text-secondary">bar_chart</mat-icon>
-    <span matListItemTitle>Estadísticas</span>
-  </a>
-
-  <a mat-list-item routerLink="/reportes" routerLinkActive="bg-light text-primary">
-    <mat-icon matListItemIcon class="text-secondary">description</mat-icon>
-    <span matListItemTitle>Reportes</span>
-  </a>
-
 </mat-nav-list>

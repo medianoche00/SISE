@@ -13,7 +13,6 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 // Componentes Shared/Pages
 import { HeaderComponent } from './shared/header/header.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
-import { DashboardReporteComponent } from './pages/dashboard-reporte/dashboard-reporte.component';
 
 // Interceptores
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
@@ -54,11 +53,10 @@ import { UsuariosListComponent } from './features/usuarios/usuarios-list/usuario
     AuthLayoutComponent,
     HeaderComponent,
     SidebarComponent,
-    DashboardReporteComponent,
     EstadisticasComponent,
     ReportesComponent,
     PersonasListComponent,
-    UsuariosListComponent
+    UsuariosListComponent,
   ],
   imports: [
     BrowserModule,
@@ -87,6 +85,7 @@ import { UsuariosListComponent } from './features/usuarios/usuarios-list/usuario
     MatCardModule,
     MatProgressBarModule,
     MatTooltipModule,
+    MatToolbarModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

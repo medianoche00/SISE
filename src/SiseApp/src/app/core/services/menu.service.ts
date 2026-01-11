@@ -42,12 +42,12 @@ export class MenuService {
           {
             label: 'Publicar Oferta',
             icon: 'add_circle',
-            route: '/dashboard/post-job',
+            route: '/post-job',
           },
           {
             label: 'Candidatos',
             icon: 'group',
-            route: '/dashboard/candidates',
+            route: '/candidates',
           },
         ];
       case 'Administrativo':
@@ -56,12 +56,12 @@ export class MenuService {
           {
             label: 'Estadísticas',
             icon: 'bar_chart',
-            route: '/dashboard/stats',
+            route: '/stats',
           },
           {
             label: 'Reportes',
             icon: 'description',
-            route: '/dashboard/reports',
+            route: '/reports',
           },
         ];
       default:

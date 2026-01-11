@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Persona } from '../core/models/persona.interface'; // Importación corregida
-import { environment } from '../../environments/environment.development';
+import { Persona } from '../models/persona.interface'; // Importación corregida
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'

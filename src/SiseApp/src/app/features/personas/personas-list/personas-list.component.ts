@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 // Usamos rutas relativas (../../..) para llegar a la carpeta services y core
-import { PersonaService } from '../../../services/persona.service';
+import { PersonaService } from '../../../core/services/persona.service';
 import { Persona } from '../../../core/models/persona.interface';
 
 @Component({

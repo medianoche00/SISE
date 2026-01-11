@@ -17,8 +17,12 @@ import { ExperienciaLaboralComponent } from './features/registro-egresado/compon
 import { FormacionComplementariaComponent } from './features/registro-egresado/components/formacion-complementaria/formacion-complementaria.component';
 import { PersonasListComponent } from './features/personas/personas-list/personas-list.component';
 import { UsuariosListComponent } from './features/usuarios/usuarios-list/usuarios-list.component';
+import { RoleGuard } from './core/guards/role.guard';
 
 const routes: Routes = [
+  // ----------------------------------------------------------------
+  // RUTAS PÚBLICAS (Login, Auth)
+  // ----------------------------------------------------------------
   {
     path: 'auth',
     component: AuthLayoutComponent,
@@ -32,29 +36,81 @@ const routes: Routes = [
     ],
   },
 
+  // ----------------------------------------------------------------
+  // RUTAS PROTEGIDAS (Layout Principal)
+  // ----------------------------------------------------------------
   {
     path: '',
     component: MainLayoutComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard], // Primero verifica que esté logueado
     children: [
+      // > RUTA COMÚN (Accesible para todos los logueados)
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'admin/personas', component: PersonasListComponent },
-      { path: 'admin/usuarios', component: UsuariosListComponent },
-      { path: 'ofertasdisponibles', component: OfertasDisponiblesComponent },
-      { path: 'mis-postulaciones', component: MisPostulacionesComponent },
+
+      // ----------------------------------------------------------------
+      // > SECTOR ADMINISTRADOR (Admin y Administrativo)
+      // ----------------------------------------------------------------
       {
-        path: 'perfil',
-        component: RegistroEgresadoComponent,
+        path: 'admin',
+        canActivate: [RoleGuard], // Verifica el rol
+        data: { roles: ['Administrador'] },
         children: [
-          { path: '', redirectTo: 'datos', pathMatch: 'full' },
-          { path: 'datos', component: DatosPersonalesComponent },
-          { path: 'experiencia', component: ExperienciaLaboralComponent },
-          { path: 'formacion', component: FormacionComplementariaComponent },
+          { path: 'personas', component: PersonasListComponent },
+          { path: 'usuarios', component: UsuariosListComponent },
         ],
       },
-      { path: 'stats', component: EstadisticasComponent },
-      { path: 'reports', component: ReportesComponent },
+      {
+        path: 'administrativo',
+        canActivate: [RoleGuard], // Verifica el rol
+        data: { roles: ['Administrativo'] },
+        children: [
+          { path: 'stats', component: EstadisticasComponent },
+          { path: 'reports', component: ReportesComponent },
+        ],
+      },
+
+      // ----------------------------------------------------------------
+      // > SECTOR EGRESADO
+      // ----------------------------------------------------------------
+      {
+        path: 'egresado',
+        canActivate: [RoleGuard],
+        data: { roles: ['Egresado'] },
+        children: [
+          {
+            path: 'ofertas-disponibles',
+            component: OfertasDisponiblesComponent,
+          },
+          { path: 'mis-postulaciones', component: MisPostulacionesComponent },
+          {
+            path: 'perfil',
+            component: RegistroEgresadoComponent,
+            children: [
+              { path: '', redirectTo: 'datos', pathMatch: 'full' },
+              { path: 'datos', component: DatosPersonalesComponent },
+              { path: 'experiencia', component: ExperienciaLaboralComponent },
+              {
+                path: 'formacion',
+                component: FormacionComplementariaComponent,
+              },
+            ],
+          },
+        ],
+      },
+
+      // ----------------------------------------------------------------
+      // > SECTOR REPRESENTANTE (Ejemplo)
+      // ----------------------------------------------------------------
+      {
+        path: 'representante',
+        canActivate: [RoleGuard],
+        data: { roles: ['Representante'] },
+        children: [
+          // Aquí irían los componentes específicos del representante
+          // { path: 'validar-ofertas', component: ... }
+        ],
+      },
     ],
   },
 

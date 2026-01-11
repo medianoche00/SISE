@@ -23,17 +23,17 @@ export class MenuService {
           {
             label: 'Mi Perfil',
             icon: 'person',
-            route: '/perfil',
+            route: 'egresado/perfil',
           },
           {
             label: 'Ofertas Laborales',
             icon: 'work',
-            route: '/ofertasdisponibles',
+            route: 'egresado/ofertas-disponibles',
           },
           {
             label: 'Mis Postulaciones',
             icon: 'assignment',
-            route: '/mis-postulaciones',
+            route: 'egresado/mis-postulaciones',
           },
         ];
       case 'Representante':
@@ -42,12 +42,12 @@ export class MenuService {
           {
             label: 'Publicar Oferta',
             icon: 'add_circle',
-            route: '/post-job',
+            route: 'representante/post-job',
           },
           {
             label: 'Candidatos',
             icon: 'group',
-            route: '/candidates',
+            route: 'representante/candidates',
           },
         ];
       case 'Administrativo':
@@ -56,12 +56,12 @@ export class MenuService {
           {
             label: 'Estadísticas',
             icon: 'bar_chart',
-            route: '/stats',
+            route: 'administrativo/stats',
           },
           {
             label: 'Reportes',
             icon: 'description',
-            route: '/reports',
+            route: 'administrativo/reports',
           },
         ];
       default:

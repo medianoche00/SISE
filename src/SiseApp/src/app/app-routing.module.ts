@@ -4,8 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 // Layouts
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
-import { EstadisticasComponent } from './pages/estadisticas/estadisticas.component';
-import { ReportesComponent } from './pages/reportes/reportes.component';
+import { EstadisticasComponent } from './features/estadisticas/estadisticas.component';
+import { ReportesComponent } from './features/reportes/reportes.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { LoginGuard } from './core/guards/login.guard';
 import { DashboardComponent } from './features/dashboard/dashboard.component';

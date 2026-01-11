@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule } from '@angular/router';
+import { RouterLink, RouterModule } from '@angular/router';
 
 // Routing y Componentes Principales
 import { AppRoutingModule } from './app-routing.module';
@@ -41,8 +41,8 @@ import {
 
 // Feature Modules
 import { RegistroEgresadoModule } from './features/registro-egresado/registro-egresado.module';
-import { EstadisticasComponent } from './pages/estadisticas/estadisticas.component';
-import { ReportesComponent } from './pages/reportes/reportes.component';
+import { EstadisticasComponent } from './features/estadisticas/estadisticas.component';
+import { ReportesComponent } from './features/reportes/reportes.component';
 import { PersonasListComponent } from './features/personas/personas-list/personas-list.component';
 import { UsuariosListComponent } from './features/usuarios/usuarios-list/usuarios-list.component';
 

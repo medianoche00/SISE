@@ -12,8 +12,8 @@ using SiseApi.Data;
 namespace SiseApi.Migrations
 {
     [DbContext(typeof(SiseDbContext))]
-    [Migration("20251229190117_CartaPresentacion")]
-    partial class CartaPresentacion
+    [Migration("20260108015814_InicialDb")]
+    partial class InicialDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

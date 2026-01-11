@@ -12,8 +12,8 @@ using SiseApi.Data;
 namespace SiseApi.Migrations
 {
     [DbContext(typeof(SiseDbContext))]
-    [Migration("20251228014417_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260108015943_Iniciar")]
+    partial class Iniciar
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -964,6 +964,11 @@ namespace SiseApi.Migrations
                         .HasColumnName("idPostulacion");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPostulacion"));
+
+                    b.Property<string>("CartaPresentacion")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("cartaPresentacion");
 
                     b.Property<string>("Comentarios")
                         .HasMaxLength(500)

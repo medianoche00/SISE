@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms'; // <--- IMPORTANTE: Necesario para los filtros [(ngModel)]
 
 // Routing y Componentes Principales
 import { AppRoutingModule } from './app-routing.module';
@@ -31,6 +30,11 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { FormsModule } from '@angular/forms';
+import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import {
   MAT_DATE_LOCALE,
   MatNativeDateModule,
@@ -40,6 +44,8 @@ import {
 import { RegistroEgresadoModule } from './features/registro-egresado/registro-egresado.module';
 import { EstadisticasComponent } from './pages/estadisticas/estadisticas.component';
 import { ReportesComponent } from './pages/reportes/reportes.component';
+import { PersonasListComponent } from './features/personas/personas-list/personas-list.component';
+import { UsuariosListComponent } from './features/usuarios/usuarios-list/usuarios-list.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +57,8 @@ import { ReportesComponent } from './pages/reportes/reportes.component';
     DashboardReporteComponent,
     EstadisticasComponent,
     ReportesComponent,
+    PersonasListComponent,
+    UsuariosListComponent
   ],
   imports: [
     BrowserModule,
@@ -59,7 +67,7 @@ import { ReportesComponent } from './pages/reportes/reportes.component';
     BrowserAnimationsModule,
     RouterModule,
     FormsModule, // <--- Agregado para que funcionen los filtros del dashboard
-    
+
     // Angular Material
     MatToolbarModule,
     MatIconModule,
@@ -73,12 +81,15 @@ import { ReportesComponent } from './pages/reportes/reportes.component';
     MatDialogModule,
     MatDatepickerModule,
     MatNativeDateModule,
-
-    // Feature Modules
-    RegistroEgresadoModule
+    RegistroEgresadoModule,
+    FormsModule,
+    MatTableModule,
+    MatCardModule,
+    MatProgressBarModule,
+    MatTooltipModule,
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, 
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: MAT_DATE_LOCALE, useValue: 'es-PE' }
   ],
   bootstrap: [AppComponent],

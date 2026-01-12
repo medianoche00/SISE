@@ -14,9 +14,9 @@ namespace SiseApi.Controllers
     public class EgresadosController : ControllerBase
     {
         private readonly SiseDbContext _context;
-        private readonly UsuarioActualService _usuarioActualService;
+        private readonly IUsuarioActualService _usuarioActualService;
 
-        public EgresadosController(SiseDbContext context, UsuarioActualService usuarioActual)
+        public EgresadosController(SiseDbContext context, IUsuarioActualService usuarioActual)
         {
             _context = context;
             _usuarioActualService = usuarioActual;

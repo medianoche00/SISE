@@ -50,6 +50,7 @@ builder.Services.AddScoped<IDbSeeder, DbSeeder>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUsuarioActualService, UsuarioActualService>();
+builder.Services.AddScoped<ReportesService>();
 
 // Configurar autenticación JWT
 var key = builder.Configuration["Jwt:Key"];
@@ -79,7 +80,6 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAuthorization(); // añade policies luego si las necesitas
-builder.Services.AddScoped<ReportesService>();
 
 var app = builder.Build();
 

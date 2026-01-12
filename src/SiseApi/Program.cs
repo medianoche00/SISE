@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SiseApi.Controllers;
 using SiseApi.Data;
-using SiseApi.Data.Models;
 using SiseApi.Seed;
 using SiseApi.Services;
 using System.Text;
@@ -31,7 +30,7 @@ builder.Services.AddDbContext<SiseDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Especificar clases personalizadas con int
-builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+builder.Services.AddIdentity<IdentityUser<int>, IdentityRole<int>>(options =>
 {
     // Configuración de reglas de contraseña
     options.Password.RequireDigit = true;
@@ -94,8 +93,8 @@ if (app.Environment.IsDevelopment())
     var services = scope.ServiceProvider;
     try
     {
-        var db = services.GetRequiredService<SiseDbContext>();
-        db.Database.Migrate(); // aplica migraciones pendientes
+        //var db = services.GetRequiredService<SiseDbContext>();
+        //db.Database.Migrate(); // aplica migraciones pendientes
 
         // opcional: ejecutar un seeder
         var seeder = services.GetService<IDbSeeder>();

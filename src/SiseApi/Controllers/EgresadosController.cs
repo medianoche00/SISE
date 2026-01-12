@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using SiseApi.Data;
 using SiseApi.Data.Models;
 using SiseApi.Models;
+using SiseApi.Services;
 
 namespace SiseApi.Controllers
 {
@@ -13,52 +14,46 @@ namespace SiseApi.Controllers
     public class EgresadosController : ControllerBase
     {
         private readonly SiseDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UsuarioActualService _usuarioActualService;
 
-        public EgresadosController(SiseDbContext context, UserManager<ApplicationUser> userManager)
+        public EgresadosController(SiseDbContext context, UsuarioActualService usuarioActual)
         {
             _context = context;
-            _userManager = userManager;
+            _usuarioActualService = usuarioActual;
         }
 
 
         [HttpGet("mi-perfil-egresado")]
         public async Task<ActionResult<PerfilEgresadoDto>> GetMiPerfil()
         {
-            // Obtener usuario logueado
-            var userIdClaim = User.FindFirst("uid")?.Value
-                           ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-
-            if (string.IsNullOrEmpty(userIdClaim)) return Unauthorized();
-            int userId = int.Parse(userIdClaim);
-
-            // Buscar egresado con sus relaciones (Persona y Carrera)
-            var egresado = await _context.Egresados
-                .Include(e => e.Persona)
-                .Include(e => e.Carrera)
-                .FirstOrDefaultAsync(x => x.IdUsuario == userId);
+            var idEgresado = await _usuarioActualService.GetIdEgresadoActualAsync();
+            
+            var egresado = await _context.Egresado
+                .Include(e => e.IdPersonaNavigation)
+                .Include(e => e.IdCarreraNavigation)
+                .FirstOrDefaultAsync(x => x.IdEgresado == idEgresado);
 
             if (egresado == null) return Forbid("El usuario no es un egresado.");
-            if (egresado.Persona == null) return NotFound("Datos personales no encontrados.");
+            if (egresado.IdPersonaNavigation == null) return NotFound("Datos personales no encontrados.");
 
             // Mapear a DTO para enviar al Front
             var perfilDto = new PerfilEgresadoDto
             {
                 // Personales
-                Nombres = egresado.Persona.Nombres,
-                ApellidoPaterno = egresado.Persona.ApellidoPaterno,
-                ApellidoMaterno = egresado.Persona.ApellidoMaterno,
-                DocumentoIdentidad = egresado.Persona.DocumentoIdentidad, // O DNI
+                Nombres = egresado.IdPersonaNavigation.Nombres,
+                ApellidoPaterno = egresado.IdPersonaNavigation.ApellidoPaterno,
+                ApellidoMaterno = egresado.IdPersonaNavigation.ApellidoMaterno,
+                DocumentoIdentidad = egresado.IdPersonaNavigation.DocumentoIdentidad, // O DNI
 
                 // Contacto
-                Telefono = egresado.Persona.Telefono,
-                CorreoPersonal = egresado.Persona.CorreoPersonal,
+                Telefono = egresado.IdPersonaNavigation.Telefono,
+                CorreoPersonal = egresado.IdPersonaNavigation.CorreoPersonal,
 
                 // Académicos
                 IdCarrera = egresado.IdCarrera,
                 CodigoUniversitario = egresado.CodigoUniversitario, // Asumiendo que existe en Egresado
                 AñoEgreso = egresado.AñoEgreso, // Asumiendo que es int
-                Carrera = egresado.Carrera.NombreCarrera
+                Carrera = egresado.IdCarreraNavigation.NombreCarrera
             };
 
             return Ok(perfilDto);
@@ -82,8 +77,8 @@ namespace SiseApi.Controllers
                 if (string.IsNullOrEmpty(userIdClaim)) return Unauthorized();
                 int userId = int.Parse(userIdClaim);
 
-                var egresado = await _context.Egresados
-                    .Include(e => e.Persona)
+                var egresado = await _context.Egresado
+                    .Include(e => e.IdPersonaNavigation)
                     .FirstOrDefaultAsync(e => e.IdUsuario == userId);
 
                 if (egresado == null)
@@ -91,17 +86,17 @@ namespace SiseApi.Controllers
                     return BadRequest("No se encontró un perfil de egresado asociado a este usuario.");
                 }
 
-                if (egresado.Persona == null)
+                if (egresado.IdPersonaNavigation == null)
                 {
                     return BadRequest("El egresado no tiene datos personales asociados.");
                 }
 
-                egresado.Persona.Nombres = dto.Nombres;
-                egresado.Persona.ApellidoPaterno = dto.ApellidoPaterno;
-                egresado.Persona.ApellidoPaterno = dto.ApellidoMaterno;
+                egresado.IdPersonaNavigation.Nombres = dto.Nombres;
+                egresado.IdPersonaNavigation.ApellidoPaterno = dto.ApellidoPaterno;
+                egresado.IdPersonaNavigation.ApellidoPaterno = dto.ApellidoMaterno;
                 //egresado.Persona.DocumentoIdentidad = dto.DocumentoIdentidad;
-                egresado.Persona.Telefono = dto.Telefono;
-                egresado.Persona.CorreoPersonal = dto.CorreoPersonal;
+                egresado.IdPersonaNavigation.Telefono = dto.Telefono;
+                egresado.IdPersonaNavigation.CorreoPersonal = dto.CorreoPersonal;
                 egresado.AñoEgreso = dto.AñoEgreso;
 
                 await _context.SaveChangesAsync();

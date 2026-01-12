@@ -6,8 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SiseApi.Data.Models;
 
-[Table("Empresa")]
-[Index(nameof(Ruc), IsUnique = true)]
+[Index("Ruc", Name = "UQ_Empresa_RUC", IsUnique = true)]
 public partial class Empresa
 {
     [Key]
@@ -40,11 +39,15 @@ public partial class Empresa
     public string? Descripcion { get; set; }
 
     [Column("estado")]
-    public bool Estado { get; set; }
+    [StringLength(20)]
+    public string Estado { get; set; } = null!;
+
+    [InverseProperty("IdEmpresaRegistradaNavigation")]
+    public virtual ICollection<ExperienciaLaboral> ExperienciaLaboral { get; set; } = new List<ExperienciaLaboral>();
 
     [InverseProperty("IdEmpresaNavigation")]
-    public virtual ICollection<OfertaLaboral> OfertaLaborals { get; set; } = new List<OfertaLaboral>();
+    public virtual ICollection<OfertaLaboral> OfertaLaboral { get; set; } = new List<OfertaLaboral>();
 
-    [InverseProperty("Empresa")]
-    public virtual ICollection<Representante> Representantes { get; set; } = new List<Representante>();
+    [InverseProperty("IdEmpresaNavigation")]
+    public virtual ICollection<Representante> Representante { get; set; } = new List<Representante>();
 }

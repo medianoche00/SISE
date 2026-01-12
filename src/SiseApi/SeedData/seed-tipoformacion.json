@@ -1,26 +1,26 @@
 ﻿[
   {
     "NombreTipoFormacion": "Curso",
-    "Estado": true
+    "Estado": "Activo"
   },
   {
     "NombreTipoFormacion": "Diplomado",
-    "Estado": true
+    "Estado": "Activo"
   },
   {
     "NombreTipoFormacion": "Certificación Internacional",
-    "Estado": true
+    "Estado": "Activo"
   },
   {
     "NombreTipoFormacion": "Maestría",
-    "Estado": true
+    "Estado": "Activo"
   },
   {
     "NombreTipoFormacion": "Doctorado",
-    "Estado": true
+    "Estado": "Activo"
   },
   {
     "NombreTipoFormacion": "Taller",
-    "Estado": true
+    "Estado": "Activo"
   }
 ]

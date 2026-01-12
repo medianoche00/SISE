@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SiseApi.Data;
@@ -14,13 +13,11 @@ namespace SiseApi.Controllers
     public class OfertaLaboralController : ControllerBase
     {
         private readonly SiseDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUsuarioActualService _usuarioActualService;
 
-        public OfertaLaboralController(SiseDbContext context, UserManager<ApplicationUser> userManager, IUsuarioActualService usuarioActualService)
+        public OfertaLaboralController(SiseDbContext context, IUsuarioActualService usuarioActualService)
         {
             _context = context;
-            _userManager = userManager;
             _usuarioActualService = usuarioActualService;
         }
 
@@ -32,8 +29,8 @@ namespace SiseApi.Controllers
         [HttpGet("disponibles")]
         public async Task<ActionResult<List<OfertaLaboralDto>>> GetDisponibles()
         {
-            var ofertas = await _context.OfertasLaborales
-                .Where(x => x.Estado == true && x.FechaCierre >= DateOnly.FromDateTime(DateTime.Now))
+            var ofertas = await _context.OfertaLaboral
+                .Where(x => x.Estado != "Eliminado" && x.FechaCierre >= DateOnly.FromDateTime(DateTime.Now))
                 .Include(x => x.IdEmpresaNavigation)
                 .Include(x => x.IdTipoContratoNavigation)
                 .Include(x => x.IdModalidadTrabajoNavigation)
@@ -71,9 +68,9 @@ namespace SiseApi.Controllers
             var idRepresentante = await _usuarioActualService.GetIdRepresentanteActualAsync();
             if (idRepresentante == null) return Unauthorized("Usuario no es representante.");
 
-            var representante = await _context.Representantes.FindAsync(idRepresentante);
+            var representante = await _context.Representante.FindAsync(idRepresentante);
 
-            var ofertas = await _context.OfertasLaborales
+            var ofertas = await _context.OfertaLaboral
                 .Where(o => o.IdEmpresa == representante.IdEmpresa) // Muestra todas (activas e inactivas según tu lógica, o filtra aquí)
                 .Include(o => o.IdModalidadTrabajoNavigation)
                 .Include(o => o.IdTipoContratoNavigation)
@@ -90,7 +87,7 @@ namespace SiseApi.Controllers
             var idRepresentante = await _usuarioActualService.GetIdRepresentanteActualAsync();
             if (idRepresentante == null) return Unauthorized("Usuario no es representante.");
 
-            var representante = await _context.Representantes.FindAsync(idRepresentante);
+            var representante = await _context.Representante.FindAsync(idRepresentante);
 
             var nuevaOferta = new OfertaLaboral
             {
@@ -104,10 +101,10 @@ namespace SiseApi.Controllers
                 IdModalidadTrabajo = ofertaDto.IdModalidadTrabajo,
                 FechaPublicacion = DateOnly.FromDateTime(DateTime.Now),
                 FechaCierre = ofertaDto.FechaCierre,
-                Estado = true // Se crea activa por defecto
+                Estado = "Activo" // Se crea activa por defecto
             };
 
-            _context.OfertasLaborales.Add(nuevaOferta);
+            _context.OfertaLaboral.Add(nuevaOferta);
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Oferta creada exitosamente", id = nuevaOferta.IdOferta });
@@ -120,8 +117,8 @@ namespace SiseApi.Controllers
             var idRepresentante = await _usuarioActualService.GetIdRepresentanteActualAsync();
             if (idRepresentante == null) return Unauthorized("Usuario no es representante.");
 
-            var representante = await _context.Representantes.FindAsync(idRepresentante);
-            var oferta = await _context.OfertasLaborales.FindAsync(id);
+            var representante = await _context.Representante.FindAsync(idRepresentante);
+            var oferta = await _context.OfertaLaboral.FindAsync(id);
 
             if (oferta == null) return NotFound();
 
@@ -129,10 +126,10 @@ namespace SiseApi.Controllers
             if (oferta.IdEmpresa != representante.IdEmpresa)
                 return Forbid("No tienes permiso para eliminar esta oferta.");
 
-            if (oferta.Estado == false)
+            if (oferta.Estado == "Eliminado")
                 return BadRequest("La oferta ya está eliminada.");
 
-            oferta.Estado = false;
+            oferta.Estado = "Eliminado";
             await _context.SaveChangesAsync();
             return NoContent();
         }

@@ -28,8 +28,8 @@ public class FormacionComplementariaController : Controller
         var idEgresado = await _usuarioActualService.GetIdEgresadoActualAsync();
         if (idEgresado == null) return Unauthorized("Usuario no es egresado.");
 
-        var formaciones = await _context.FormacionesComplementarias
-            .Where(f => f.IdEgresado == idEgresado && f.Estado == true)
+        var formaciones = await _context.FormacionComplementaria
+            .Where(f => f.IdEgresado == idEgresado && f.Estado != "Eliminado")
             .OrderByDescending(e => e.FechaInicio) // Orden cronológico inverso
             .Select(f => new FormacionComplementariaDto
             {
@@ -56,7 +56,7 @@ public class FormacionComplementariaController : Controller
 
         if (dto.IdTipoFormacion == null)
         {
-            var tipoFormacionExistente = await _context.TiposFormacions
+            var tipoFormacionExistente = await _context.TipoFormacion
                 .FirstOrDefaultAsync(t => t.NombreTipoFormacion.ToLower() == dto.TipoFormacion.ToLower());
             if (tipoFormacionExistente == null)
             {
@@ -73,10 +73,10 @@ public class FormacionComplementariaController : Controller
             Institucion = dto.Institucion,
             FechaInicio = dto.FechaInicio,
             FechaFin = dto.FechaFin,
-            Estado = true
+            Estado = "Pendiente"
         };
 
-        _context.FormacionesComplementarias.Add(nuevaExperiencia);
+        _context.FormacionComplementaria.Add(nuevaExperiencia);
         await _context.SaveChangesAsync();
 
         return Ok(new { message = "Formacion agregada correctamente." });
@@ -88,14 +88,14 @@ public class FormacionComplementariaController : Controller
         var idEgresado = await _usuarioActualService.GetIdEgresadoActualAsync();
         if (idEgresado == null) return Unauthorized();
 
-        var formacion = await _context.FormacionesComplementarias
+        var formacion = await _context.FormacionComplementaria
             .FirstOrDefaultAsync(e => e.IdFormacion == id && e.IdEgresado == idEgresado);
 
         if (formacion == null) return NotFound("Experiencia no encontrada o no te pertenece.");
 
         if (dto.IdTipoFormacion == null)
         {
-            var tipoFormacionExistente = await _context.TiposFormacions
+            var tipoFormacionExistente = await _context.TipoFormacion
                 .FirstOrDefaultAsync(t => t.NombreTipoFormacion.ToLower() == dto.TipoFormacion.ToLower());
             if (tipoFormacionExistente == null)
             {
@@ -123,12 +123,12 @@ public class FormacionComplementariaController : Controller
         var idEgresado = await _usuarioActualService.GetIdEgresadoActualAsync();
         if (idEgresado == null) return Unauthorized();
 
-        var formacion = await _context.FormacionesComplementarias
+        var formacion = await _context.FormacionComplementaria
             .FirstOrDefaultAsync(e => e.IdFormacion == id && e.IdEgresado == idEgresado);
 
         if (formacion == null) return NotFound("Experiencia no encontrada.");
 
-        formacion.Estado = false;
+        formacion.Estado = "Eliminado";
         await _context.SaveChangesAsync();
 
         return Ok(new { message = "Experiencia eliminada." });

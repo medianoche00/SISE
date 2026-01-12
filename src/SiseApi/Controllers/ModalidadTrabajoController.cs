@@ -18,8 +18,8 @@ public class ModalidadTrabajoController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<ModalidadTrabajoDto>>> GetModalidades()
     {
-        var modalidades = await _context.ModalidadesTrabajos
-            .Where(m => m.Estado == true) //solo modalidades activas
+        var modalidades = await _context.ModalidadTrabajo
+            .Where(m => m.Estado != "Eliminado") //solo modalidades activas
             .Select(m => new ModalidadTrabajoDto 
             {
                 IdModalidad = m.IdModalidadTrabajo,

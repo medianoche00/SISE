@@ -6,7 +6,7 @@
     "Telefono": "012223333",
     "Correo": "contacto@techsolutions.com",
     "Descripcion": "Empresa líder en desarrollo de software y consultoría TI.",
-    "Estado": true
+    "Estado": "Activo"
   },
   {
     "Ruc": "20987654321",
@@ -15,6 +15,6 @@
     "Telefono": "054111222",
     "Correo": "rrhh@constructorandes.pe",
     "Descripcion": "Ejecución de obras civiles y proyectos de infraestructura.",
-    "Estado": true
+    "Estado": "Activo"
   }
 ]

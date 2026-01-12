@@ -2,21 +2,21 @@
   {
     "IdFacultad": 1,
     "NombreEscuela": "Escuela Profesional de Ingeniería de Sistemas",
-    "Estado": true
+    "Estado": "Activo"
   },
   {
     "IdFacultad": 1,
     "NombreEscuela": "Escuela Profesional de Ingeniería Civil",
-    "Estado": true
+    "Estado": "Activo"
   },
   {
     "IdFacultad": 2,
     "NombreEscuela": "Escuela Profesional de Medicina Humana",
-    "Estado": true
+    "Estado": "Activo"
   },
   {
     "IdFacultad": 3,
     "NombreEscuela": "Escuela Profesional de Administración",
-    "Estado": true
+    "Estado": "Activo"
   }
 ]

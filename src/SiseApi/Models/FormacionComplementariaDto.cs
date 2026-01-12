@@ -9,6 +9,6 @@
         public string? Institucion { get; set; }
         public DateOnly? FechaInicio { get; set; }
         public DateOnly? FechaFin { get; set; }
-        public bool Estado { get; set; }
+        public string Estado { get; set; }
     }
 }

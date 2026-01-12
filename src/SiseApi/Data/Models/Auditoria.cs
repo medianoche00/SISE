@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace SiseApi.Data.Models;
 
-[Table("Auditoria")]
 public partial class Auditoria
 {
     [Key]
@@ -34,11 +30,6 @@ public partial class Auditoria
     [Column("valorNuevo")]
     public string? ValorNuevo { get; set; }
 
-    // DateTime mapea correctamente a datetime2(7)
     [Column("fechaHora")]
     public DateTime FechaHora { get; set; }
-
-    [ForeignKey("IdUsuario")]
-    [InverseProperty("Auditorias")]
-    public virtual ApplicationUser? Usuario { get; set; }
 }

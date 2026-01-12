@@ -18,8 +18,8 @@ public class TipoFormacionController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<TipoFormacionDto>>> GetModalidades()
     {
-        var modalidades = await _context.TiposFormacions
-            .Where(m => m.Estado == true) //solo tipos activos
+        var modalidades = await _context.TipoFormacion
+            .Where(m => m.Estado != "Eliminado") //solo tipos activos
             .Select(m => new TipoFormacionDto 
             {
                 IdTipoFormacion = m.IdTipoFormacion,

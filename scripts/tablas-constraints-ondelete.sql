@@ -1,6 +1,8 @@
 /*
 use master
-drop database sise2
+go
+drop database SiseDB
+go
 */
 CREATE DATABASE SiseDB
 GO
@@ -105,6 +107,21 @@ GO
    2. TABLAS MAESTRAS / CATALOGOS
    ================================================================================== */
 
+CREATE TABLE [dbo].[TipoDocumento] (
+    [idTipoDocumento] INT IDENTITY(1,1) PRIMARY KEY,
+    [nombreTipo] NVARCHAR(50) NOT NULL, 
+    [estado] NVARCHAR(20) NOT NULL DEFAULT 'Activo',
+    CONSTRAINT CK_TipoDocumento_Estado CHECK (estado IN ('Activo', 'Eliminado'))
+) ON [PRIMARY]
+GO
+
+-- es necesario que se inserten en ese orden
+SET IDENTITY_INSERT [dbo].[TipoDocumento] ON;
+INSERT INTO [dbo].[TipoDocumento] (idTipoDocumento, nombreTipo) VALUES (1, 'DNI');
+INSERT INTO [dbo].[TipoDocumento] (idTipoDocumento, nombreTipo) VALUES (2, 'Carnet ExtranjerÃ­a');
+INSERT INTO [dbo].[TipoDocumento] (idTipoDocumento, nombreTipo) VALUES (3, 'Pasaporte');
+SET IDENTITY_INSERT [dbo].[TipoDocumento] OFF;
+
 CREATE TABLE [dbo].[Facultad](
     [idFacultad] [int] IDENTITY(1,1) NOT NULL,
     [nombreFacultad] [nvarchar](150) NOT NULL,
@@ -183,14 +200,24 @@ CREATE TABLE [dbo].[Persona](
     [nombres] [nvarchar](100) NOT NULL,
     [apellidoPaterno] [nvarchar](100) NOT NULL,
     [apellidoMaterno] [nvarchar](100) NOT NULL,
-    [documentoIdentidad] [varchar](20) NOT NULL,
+    [numeroDocumento] [varchar](20) NOT NULL,
+    [idTipoDocumento] [int] NOT NULL,
     [telefono] [nvarchar](15) NULL,
     [correoPersonal] [nvarchar](150) NULL,
     [estado] [nvarchar](20) NOT NULL DEFAULT 'Activo',
     CONSTRAINT [PK_Persona] PRIMARY KEY CLUSTERED ([idPersona] ASC),
-    CONSTRAINT [UQ_Persona_Documento] UNIQUE ([documentoIdentidad]),
-    CONSTRAINT [CK_Persona_Estado] CHECK ([estado] IN ('Activo', 'Eliminado'))
-) ON [PRIMARY]
+    CONSTRAINT [FK_Persona_TipoDocumento] FOREIGN KEY([idTipoDocumento]) 
+        REFERENCES [dbo].[TipoDocumento] ([idTipoDocumento]) ON DELETE NO ACTION,
+    CONSTRAINT [UQ_Persona_Documento] UNIQUE ([idTipoDocumento], [numeroDocumento]), -- evita que dos personas tengan el mismo numero solo si son del mismo tipo de documento
+    CONSTRAINT [CK_Persona_Estado] CHECK ([estado] IN ('Activo', 'Eliminado')),
+    CONSTRAINT [CK_Persona_ValidarDocumento] CHECK (
+        (   -- caso DNI
+            [idTipoDocumento] = 1 AND LEN([numeroDocumento]) = 8 AND [numeroDocumento] NOT LIKE '%[^0-9]%' )
+        OR 
+        (   -- caso no es dni (carnet de extrangeria, pasaporte)
+            [idTipoDocumento] <> 1 AND LEN([numeroDocumento]) >= 3 )
+    )
+) ON [PRIMARY];
 GO
 
 CREATE TABLE [dbo].[Empresa](
@@ -214,7 +241,7 @@ CREATE TABLE [dbo].[Egresado](
     [idUsuario] [int] NOT NULL,
     [idCarrera] [int] NOT NULL,
     [codigoUniversitario] [nvarchar](20) NOT NULL,
-    [añoEgreso] [int] NOT NULL,
+    [aï¿½oEgreso] [int] NOT NULL,
     [estado] [nvarchar](20) NOT NULL DEFAULT 'Buscando Trabajo',
     CONSTRAINT [PK_Egresado] PRIMARY KEY CLUSTERED ([idEgresado] ASC),
     CONSTRAINT [FK_Egresado_Persona] FOREIGN KEY([idPersona]) 
@@ -353,7 +380,7 @@ CREATE TABLE [dbo].[FormacionComplementaria](
 GO
 
 /* ==================================================================================
-   5. TABLA DE AUDITORÍA
+   5. TABLA DE AUDITORï¿½A
    ================================================================================== */
 
 CREATE TABLE [dbo].[Auditoria](

@@ -2,26 +2,26 @@
   {
     "IdEscuela": 1,
     "NombreCarrera": "Ingeniería de Software",
-    "Estado": true
+    "Estado": "Activo"
   },
   {
     "IdEscuela": 1,
     "NombreCarrera": "Sistemas de Información",
-    "Estado": true
+    "Estado": "Activo"
   },
   {
     "IdEscuela": 2,
     "NombreCarrera": "Ingeniería Civil",
-    "Estado": true
+    "Estado": "Activo"
   },
   {
     "IdEscuela": 3,
     "NombreCarrera": "Medicina General",
-    "Estado": true
+    "Estado": "Activo"
   },
   {
     "IdEscuela": 4,
     "NombreCarrera": "Administración de Empresas",
-    "Estado": true
+    "Estado": "Activo"
   }
 ]

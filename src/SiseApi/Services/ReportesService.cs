@@ -18,9 +18,9 @@ namespace SiseApi.Services
             // --- PARTE 1: Egresados Trabajando Actualmente ---
             // Nota: Asumo que la tabla se llama ExperienciaLaborals o ExperienciasLaborales en tu DbContext.
             // Si marca error aquí, verifica en SiseDbContext.cs cómo se llama el DbSet.
-            var totalEgresados = await _context.Egresados.CountAsync();
+            var totalEgresados = await _context.Egresado.CountAsync();
 
-            var egresadosTrabajando = await _context.ExperienciasLaborales // Ojo: Verifica si es con 's' o 'es'
+            var egresadosTrabajando = await _context.ExperienciaLaboral // Ojo: Verifica si es con 's' o 'es'
                 .Where(e => e.FechaInicio != null && e.FechaFin == null)
                 .Select(e => e.IdEgresado)
                 .Distinct()
@@ -31,16 +31,16 @@ namespace SiseApi.Services
                 : 0;
 
             // --- PARTE 2: Estadística por Empresa ---
-            var reporteEmpresas = await _context.Empresas
+            var reporteEmpresas = await _context.Empresa
                 .Select(emp => new
                 {
                     Empresa = emp.RazonSocial, // CORREGIDO: Usamos RazonSocial
-                    OfertasPublicadas = emp.OfertaLaborals.Count(), // CORREGIDO: Usamos OfertaLaborals
+                    OfertasPublicadas = emp.OfertaLaboral.Count(), // CORREGIDO: Usamos OfertaLaborals
 
                     // CORREGIDO: Asumimos que la lista se llama "Postulacions" (patrón inglés)
                     // Si te marca error en 'Postulacions', cámbialo a 'Postulaciones'.
-                    PuestosCubiertos = emp.OfertaLaborals
-                        .SelectMany(o => o.Postulaciones)
+                    PuestosCubiertos = emp.OfertaLaboral
+                        .SelectMany(o => o.Postulacion)
                         .Count(p => p.Estado == "Contratado" || p.Estado == "Seleccionado")
                 })
                 .OrderByDescending(x => x.OfertasPublicadas)

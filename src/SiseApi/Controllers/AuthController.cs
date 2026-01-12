@@ -11,10 +11,10 @@ namespace SiseApi.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<IdentityUser<int>> _userManager;
         private readonly ITokenService _tokenService;
 
-        public AuthController(UserManager<ApplicationUser> userManager, ITokenService tokenService)
+        public AuthController(UserManager<IdentityUser<int>> userManager, ITokenService tokenService)
         {
             _userManager = userManager;
             _tokenService = tokenService;
@@ -26,7 +26,7 @@ namespace SiseApi.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             // Buscar usuario
-            ApplicationUser? user = await _userManager.FindByEmailAsync(dto.UserNameOrEmail)
+            IdentityUser<int>? user = await _userManager.FindByEmailAsync(dto.UserNameOrEmail)
                                     ?? await _userManager.FindByNameAsync(dto.UserNameOrEmail);
 
             if (user == null) return Unauthorized(new { message = "Usuario o contraseña incorrectos." });

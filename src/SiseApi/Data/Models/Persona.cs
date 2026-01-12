@@ -6,9 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SiseApi.Data.Models;
 
-[Table("Persona")]
-[Index(nameof(DocumentoIdentidad), IsUnique = true)] // Índice único moderno
-public class Persona
+[Index("DocumentoIdentidad", Name = "UQ_Persona_Documento", IsUnique = true)]
+public partial class Persona
 {
     [Key]
     [Column("idPersona")]
@@ -26,7 +25,6 @@ public class Persona
     [StringLength(100)]
     public string ApellidoMaterno { get; set; } = null!;
 
-    // CAMBIO: De Dni a DocumentoIdentidad para soportar C.E./Pasaporte
     [Column("documentoIdentidad")]
     [StringLength(20)]
     [Unicode(false)]
@@ -36,20 +34,20 @@ public class Persona
     [StringLength(15)]
     public string? Telefono { get; set; }
 
-    // Este es el correo de contacto personal, distinto al del login
     [Column("correoPersonal")]
     [StringLength(150)]
     public string? CorreoPersonal { get; set; }
 
     [Column("estado")]
-    public bool Estado { get; set; }
+    [StringLength(20)]
+    public string Estado { get; set; } = null!;
 
-    [InverseProperty("Persona")]
-    public virtual ICollection<Egresado> Egresados { get; set; } = new List<Egresado>();
+    [InverseProperty("IdPersonaNavigation")]
+    public virtual ICollection<Administrativo> Administrativo { get; set; } = new List<Administrativo>();
 
-    [InverseProperty("Persona")]
-    public virtual ICollection<Representante> Representantes { get; set; } = new List<Representante>();
+    [InverseProperty("IdPersonaNavigation")]
+    public virtual ICollection<Egresado> Egresado { get; set; } = new List<Egresado>();
 
-    [InverseProperty("Persona")]
-    public virtual ICollection<Administrativo> Administrativos { get; set; } = new List<Administrativo>();
+    [InverseProperty("IdPersonaNavigation")]
+    public virtual ICollection<Representante> Representante { get; set; } = new List<Representante>();
 }

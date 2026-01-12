@@ -1,14 +1,14 @@
 ﻿[
   {
     "NombreModalidad": "Presencial",
-    "Estado": true
+    "Estado": "Activo"
   },
   {
     "NombreModalidad": "Remoto",
-    "Estado": true
+    "Estado": "Activo"
   },
   {
     "NombreModalidad": "Híbrido",
-    "Estado": true
+    "Estado": "Activo"
   }
 ]

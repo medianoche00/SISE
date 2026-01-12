@@ -11,15 +11,15 @@ namespace SiseApi.Services
     public class TokenService : ITokenService
     {
         private readonly IConfiguration _cfg;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<IdentityUser<int>> _userManager;
 
-        public TokenService(IConfiguration cfg, UserManager<ApplicationUser> userManager)
+        public TokenService(IConfiguration cfg, UserManager<IdentityUser<int>> userManager)
         {
             _cfg = cfg;
             _userManager = userManager;
         }
 
-        public async Task<AuthResponse> CreateTokenAsync(ApplicationUser user)
+        public async Task<AuthResponse> CreateTokenAsync(IdentityUser<int> user)
         {
             // CORRECCIÓN AQUÍ: Agregamos el ?? "..." para que nunca sea nulo
             var key = _cfg["Jwt:Key"] ?? "UnaClaveSuperSecretaYLoSuficientementeLarga123456";

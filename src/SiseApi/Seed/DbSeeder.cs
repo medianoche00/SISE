@@ -15,16 +15,16 @@ using System.Text.Json.Serialization;
 public class DbSeeder : IDbSeeder
 {
     private readonly SiseDbContext _context;
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly RoleManager<ApplicationRole> _roleManager;
+    private readonly UserManager<IdentityUser<int>> _userManager;
+    private readonly RoleManager<IdentityRole<int>> _roleManager;
     private readonly IWebHostEnvironment _env;
     private readonly ILogger<DbSeeder> _logger;
     private readonly JsonSerializerOptions _jsonOptions;
 
     public DbSeeder(
         SiseDbContext context,
-        UserManager<ApplicationUser> userManager,
-        RoleManager<ApplicationRole> roleManager,
+        UserManager<IdentityUser<int>> userManager,
+        RoleManager<IdentityRole<int>> roleManager,
         IWebHostEnvironment env,
         ILogger<DbSeeder> logger)
     {
@@ -59,8 +59,8 @@ public class DbSeeder : IDbSeeder
 
             // 2. Tablas con Dependencias de Nivel 1
             await SeedEscuelasAsync(); // Depende de Facultad
-            await SeedEmpresasAsync();
-            await SeedOfertasAsync(); // Depende de Empresas, ModalidadTrabajo, TipoContrato
+            await SeedEmpresaAsync();
+            await SeedOfertasAsync(); // Depende de Empresa, ModalidadTrabajo, TipoContrato
             await SeedPersonasAsync();
 
             // 3. Tablas con Dependencias de Nivel 2
@@ -106,9 +106,9 @@ public class DbSeeder : IDbSeeder
         
         foreach (var cargo in cargos)
         {
-            if (!await _context.CargosAdministrativos.AnyAsync(c => c.NombreCargo == cargo.NombreCargo))
+            if (!await _context.CargoAdministrativo.AnyAsync(c => c.NombreCargo == cargo.NombreCargo))
             {
-                _context.CargosAdministrativos.Add(cargo);
+                _context.CargoAdministrativo.Add(cargo);
             }
         }
         _context.SaveChanges();
@@ -118,14 +118,14 @@ public class DbSeeder : IDbSeeder
     {
         // Archivo esperado: seed-roles.json
         // Estructura JSON sugerida: [{"Name": "Admin"}, {"Name": "Egresado"}, {"Name": "Empresa"}]
-        var roles = await LoadJsonData<ApplicationRole>("seed-roles.json");
+        var roles = await LoadJsonData<IdentityRole<int>>("seed-roles.json");
         if (roles == null) return;
 
         foreach (var role in roles)
         {
             if (!await _roleManager.RoleExistsAsync(role.Name!))
             {
-                await _roleManager.CreateAsync(new ApplicationRole(role.Name!));
+                await _roleManager.CreateAsync(new IdentityRole<int>(role.Name!));
                 _logger.LogInformation($"Rol creado: {role.Name}");
             }
         }
@@ -133,37 +133,37 @@ public class DbSeeder : IDbSeeder
 
     private async Task SeedFacultadesAsync()
     {
-        if (await _context.Facultades.AnyAsync()) return; // Evitar duplicados masivos
+        if (await _context.Facultad.AnyAsync()) return; // Evitar duplicados masivos
 
         var data = await LoadJsonData<Facultad>("seed-facultad.json");
         if (data != null)
         {
-            await _context.Facultades.AddRangeAsync(data);
+            await _context.Facultad.AddRangeAsync(data);
             await _context.SaveChangesAsync();
         }
     }
 
     private async Task SeedEscuelasAsync()
     {
-        if (await _context.Escuelas.AnyAsync()) return;
+        if (await _context.Escuela.AnyAsync()) return;
 
         var data = await LoadJsonData<Escuela>("seed-escuela.json");
         // Asegurarse de que las Facultades existan por ID o hacer un lookup aquí si el JSON no tiene IDs correctos
         if (data != null)
         {
-            await _context.Escuelas.AddRangeAsync(data);
+            await _context.Escuela.AddRangeAsync(data);
             await _context.SaveChangesAsync();
         }
     }
 
     private async Task SeedCarrerasAsync()
     {
-        if (await _context.Carreras.AnyAsync()) return;
+        if (await _context.Carrera.AnyAsync()) return;
 
         var data = await LoadJsonData<Carrera>("seed-carrera.json");
         if (data != null)
         {
-            await _context.Carreras.AddRangeAsync(data);
+            await _context.Carrera.AddRangeAsync(data);
             await _context.SaveChangesAsync();
         }
     }
@@ -175,9 +175,9 @@ public class DbSeeder : IDbSeeder
 
         foreach (var item in data)
         {
-            if (!await _context.ModalidadesTrabajos.AnyAsync(m => m.NombreModalidad == item.NombreModalidad))
+            if (!await _context.ModalidadTrabajo.AnyAsync(m => m.NombreModalidad == item.NombreModalidad))
             {
-                _context.ModalidadesTrabajos.Add(item);
+                _context.ModalidadTrabajo.Add(item);
             }
         }
         await _context.SaveChangesAsync();
@@ -190,9 +190,9 @@ public class DbSeeder : IDbSeeder
 
         foreach (var item in data)
         {
-            if (!await _context.TiposContratos.AnyAsync(t => t.NombreTipo == item.NombreTipo))
+            if (!await _context.TipoContrato.AnyAsync(t => t.NombreTipo == item.NombreTipo))
             {
-                _context.TiposContratos.Add(item);
+                _context.TipoContrato.Add(item);
             }
         }
         await _context.SaveChangesAsync();
@@ -205,15 +205,15 @@ public class DbSeeder : IDbSeeder
 
         foreach (var item in data)
         {
-            if (!await _context.TiposFormacions.AnyAsync(t => t.NombreTipoFormacion == item.NombreTipoFormacion))
+            if (!await _context.TipoFormacion.AnyAsync(t => t.NombreTipoFormacion == item.NombreTipoFormacion))
             {
-                _context.TiposFormacions.Add(item);
+                _context.TipoFormacion.Add(item);
             }
         }
         await _context.SaveChangesAsync();
     }
 
-    private async Task SeedEmpresasAsync()
+    private async Task SeedEmpresaAsync()
     {
         var data = await LoadJsonData<Empresa>("seed-empresa.json");
         if (data == null) return;
@@ -221,9 +221,9 @@ public class DbSeeder : IDbSeeder
         foreach (var item in data)
         {
             // Verificación única por RUC
-            if (!await _context.Empresas.AnyAsync(e => e.Ruc == item.Ruc))
+            if (!await _context.Empresa.AnyAsync(e => e.Ruc == item.Ruc))
             {
-                _context.Empresas.Add(item);
+                _context.Empresa.Add(item);
             }
         }
         await _context.SaveChangesAsync();
@@ -237,9 +237,9 @@ public class DbSeeder : IDbSeeder
         foreach (var item in data)
         {
             // Verificación única por DocumentoIdentidad
-            if (!await _context.Personas.AnyAsync(p => p.DocumentoIdentidad == item.DocumentoIdentidad))
+            if (!await _context.Persona.AnyAsync(p => p.DocumentoIdentidad == item.DocumentoIdentidad))
             {
-                _context.Personas.Add(item);
+                _context.Persona.Add(item);
             }
         }
         await _context.SaveChangesAsync();
@@ -247,7 +247,7 @@ public class DbSeeder : IDbSeeder
 
     private async Task SeedOfertasAsync()
     {
-        if (await _context.OfertasLaborales.AnyAsync()) return;
+        if (await _context.OfertaLaboral.AnyAsync()) return;
 
         var data = await LoadJsonData<OfertaLaboral>("seed-ofertas.json");
         if (data == null) return;
@@ -255,29 +255,29 @@ public class DbSeeder : IDbSeeder
         foreach (var item in data)
         {
             // Evitar duplicados: título + empresa + fechaPublicacion
-            if (!await _context.OfertasLaborales.AnyAsync(o =>
+            if (!await _context.OfertaLaboral.AnyAsync(o =>
                 o.Titulo == item.Titulo && o.IdEmpresa == item.IdEmpresa && o.FechaPublicacion == item.FechaPublicacion))
             {
                 // Asegurar referencias mínimas: si la empresa no existe, saltar el registro
-                if (!await _context.Empresas.AnyAsync(e => e.IdEmpresa == item.IdEmpresa))
+                if (!await _context.Empresa.AnyAsync(e => e.IdEmpresa == item.IdEmpresa))
                 {
                     _logger.LogWarning($"Omitida oferta '{item.Titulo}': empresa id {item.IdEmpresa} no encontrada.");
                     continue;
                 }
 
                 // Opcional: validar que idTipoContrato e idModalidadTrabajo existan
-                if (!await _context.TiposContratos.AnyAsync(t => t.IdTipoContrato == item.IdTipoContrato))
+                if (!await _context.TipoContrato.AnyAsync(t => t.IdTipoContrato == item.IdTipoContrato))
                 {
                     _logger.LogWarning($"Omitida oferta '{item.Titulo}': tipo contrato id {item.IdTipoContrato} no encontrado.");
                     continue;
                 }
-                if (!await _context.ModalidadesTrabajos.AnyAsync(m => m.IdModalidadTrabajo == item.IdModalidadTrabajo))
+                if (!await _context.ModalidadTrabajo.AnyAsync(m => m.IdModalidadTrabajo == item.IdModalidadTrabajo))
                 {
                     _logger.LogWarning($"Omitida oferta '{item.Titulo}': modalidad trabajo id {item.IdModalidadTrabajo} no encontrado.");
                     continue;
                 }
 
-                _context.OfertasLaborales.Add(item);
+                _context.OfertaLaboral.Add(item);
             }
         }
 
@@ -287,7 +287,7 @@ public class DbSeeder : IDbSeeder
     private async Task SeedUsersAsync()
     {
         // Nota: El JSON de usuarios debe incluir una propiedad "Password" para poder crearlos,
-        // aunque esa propiedad no esté en el modelo ApplicationUser.
+        // aunque esa propiedad no esté en el modelo IdentityUser<int>.
         // Usaremos una clase DTO auxiliar interna para deserializar.
 
         var usersData = await LoadJsonData<UserSeedDto>("seed-users.json");
@@ -297,7 +297,7 @@ public class DbSeeder : IDbSeeder
         {
             if (await _userManager.FindByNameAsync(userDto.UserName!) == null)
             {
-                var user = new ApplicationUser
+                var user = new IdentityUser<int>
                 {
                     UserName = userDto.UserName,
                     Email = userDto.Email,
@@ -346,10 +346,10 @@ public class DbSeeder : IDbSeeder
         }
     }
 
-    private async Task CreateEgresadoProfile(ApplicationUser user, UserSeedDto dto)
+    private async Task CreateEgresadoProfile(IdentityUser<int> user, UserSeedDto dto)
     {
         // Buscar la persona por DNI (u otro documento)
-        var persona = await _context.Personas
+        var persona = await _context.Persona
             .FirstOrDefaultAsync(p => p.DocumentoIdentidad == dto.DocumentoIdentidad);
 
         if (persona == null)
@@ -371,23 +371,23 @@ public class DbSeeder : IDbSeeder
             IdCarrera = dto.IdCarrera ?? 1, // Valor por defecto o error si es nulo
             CodigoUniversitario = dto.CodigoUniversitario,
             AñoEgreso = dto.AnioEgreso ?? DateTime.Now.Year,
-            Estado = true
+            Estado = "Buscando Trabajo"
         };
 
-        _context.Egresados.Add(egresado);
+        _context.Egresado.Add(egresado);
         await _context.SaveChangesAsync();
         _logger.LogInformation($"Perfil Egresado creado para {user.UserName}");
     }
 
-    private async Task CreateRepresentanteProfile(ApplicationUser user, UserSeedDto dto)
+    private async Task CreateRepresentanteProfile(IdentityUser<int> user, UserSeedDto dto)
     {
         // 1. Buscar Persona
-        var persona = await _context.Personas
+        var persona = await _context.Persona
             .FirstOrDefaultAsync(p => p.DocumentoIdentidad == dto.DocumentoIdentidad);
 
         // 2. Buscar Empresa (usando un campo único como RUC, nombre, o asumiendo que el JSON trae el ID)
         // Aquí asumo que la entidad Empresa tiene un campo RUC o similar.
-        var empresa = await _context.Empresas
+        var empresa = await _context.Empresa
             .FirstOrDefaultAsync(e => e.Ruc == dto.RucEmpresa);
 
         if (persona == null || empresa == null)
@@ -402,22 +402,22 @@ public class DbSeeder : IDbSeeder
             IdPersona = persona.IdPersona,
             IdEmpresa = empresa.IdEmpresa, // ID de la empresa encontrada
             Cargo = dto.CargoEmpresa,
-            Estado = true
+            Estado = "Activo"
         };
 
-        _context.Representantes.Add(representante);
+        _context.Representante.Add(representante);
         await _context.SaveChangesAsync();
         _logger.LogInformation($"Perfil Representante creado para {user.UserName}");
     }
 
-    private async Task CreateAdministrativoProfile(ApplicationUser user, UserSeedDto dto)
+    private async Task CreateAdministrativoProfile(IdentityUser<int> user, UserSeedDto dto)
     {
         // 1. Buscar Persona
-        var persona = await _context.Personas
+        var persona = await _context.Persona
             .FirstOrDefaultAsync(p => p.DocumentoIdentidad == dto.DocumentoIdentidad);
 
         // 2. Buscar Cargo
-        var cargo = await _context.CargosAdministrativos
+        var cargo = await _context.CargoAdministrativo
             .FirstOrDefaultAsync(e => e.NombreCargo == dto.CargoAdministrativo);
 
         if (persona == null || cargo == null)
@@ -431,10 +431,10 @@ public class DbSeeder : IDbSeeder
             IdUsuario = user.Id,
             IdPersona = persona.IdPersona,
             IdCargoAdministrativo = cargo.IdCargoAdministrativo,
-            Estado = true
+            Estado = "Activo"
         };
 
-        _context.Administrativos.Add(administrativo);
+        _context.Administrativo.Add(administrativo);
         await _context.SaveChangesAsync();
         _logger.LogInformation($"Perfil Administrativo creado para {user.UserName}");
     }

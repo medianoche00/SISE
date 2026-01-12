@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SiseApi.Controllers;
 using SiseApi.Data;
-using SiseApi.Data.Models;
 using SiseApi.Seed;
 using SiseApi.Services;
 using System.Text;
@@ -31,7 +30,7 @@ builder.Services.AddDbContext<SiseDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Especificar clases personalizadas con int
-builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+builder.Services.AddIdentity<IdentityUser<int>, IdentityRole<int>>(options =>
 {
     // Configuración de reglas de contraseña
     options.Password.RequireDigit = true;
@@ -51,6 +50,7 @@ builder.Services.AddScoped<IDbSeeder, DbSeeder>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUsuarioActualService, UsuarioActualService>();
+builder.Services.AddScoped<ReportesService>();
 
 // Configurar autenticación JWT
 var key = builder.Configuration["Jwt:Key"];
@@ -80,7 +80,6 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAuthorization(); // añade policies luego si las necesitas
-builder.Services.AddScoped<ReportesService>();
 
 var app = builder.Build();
 
@@ -94,8 +93,8 @@ if (app.Environment.IsDevelopment())
     var services = scope.ServiceProvider;
     try
     {
-        var db = services.GetRequiredService<SiseDbContext>();
-        db.Database.Migrate(); // aplica migraciones pendientes
+        //var db = services.GetRequiredService<SiseDbContext>();
+        //db.Database.Migrate(); // aplica migraciones pendientes
 
         // opcional: ejecutar un seeder
         var seeder = services.GetService<IDbSeeder>();

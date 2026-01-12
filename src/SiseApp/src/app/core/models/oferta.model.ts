@@ -1,28 +1,4 @@
 
-export interface Empresa {
-  idEmpresa: number;
-  razonSocial: string;
-  direccion: string;
-  correo: string;
-  telefono: string;
-  descripcion: string;
-  ruc: string;
-  sitioWeb: string;
-  logoUrl: string;
-  estado: boolean;
-  fechaCreacion: string;
-}
-
-export interface Modalidad {
-  idModalidadTrabajo: number;
-  nombreModalidad: string;
-}
-
-export interface TipoContrato {
-  idTipoContrato: number;
-  nombreTipo: string;
-}
-
 export interface OfertaLaboral {
   idOferta: number;
   //idEmpresa: number;

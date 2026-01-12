@@ -1,41 +1,40 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SiseApi.Data.Models
+namespace SiseApi.Data.Models;
+
+public partial class Administrativo
 {
-    [Table("Administrativo")]
-    [Index(nameof(IdUsuario), IsUnique = true)]
-    public class Administrativo
-    {
-        [Key]
-        [Column("idAdministrativo")] 
-        public int IdAdministrativo { get; set; }
-        
-        [Column("idCargoAdministrativo")]
-        [StringLength(50)] 
-        public int IdCargoAdministrativo { get; set; }
+    [Key]
+    [Column("idAdministrativo")]
+    public int IdAdministrativo { get; set; }
 
-        [Column("idPersona")]
-        public int IdPersona { get; set; }
+    [Column("idCargoAdministrativo")]
+    public int IdCargoAdministrativo { get; set; }
 
-        [Column("idUsuario")]
-        public int IdUsuario { get; set; }
+    [Column("idPersona")]
+    public int IdPersona { get; set; }
 
-        [Column("estado")]
-        public bool Estado { get; set; }
+    [Column("idUsuario")]
+    public int IdUsuario { get; set; }
 
-        [ForeignKey("IdCargoAdministrativo")]
-        [InverseProperty("Administrativos")]
-        public CargoAdministrativo CargoAdministrativo { get; set; } = null!;
+    [Column("estado")]
+    [StringLength(20)]
+    public string Estado { get; set; } = null!;
 
-        [ForeignKey("IdPersona")]
-        [InverseProperty("Administrativos")]
-        public Persona Persona { get; set; } = null!;
+    [ForeignKey("IdCargoAdministrativo")]
+    [InverseProperty("Administrativo")]
+    public virtual CargoAdministrativo IdCargoAdministrativoNavigation { get; set; } = null!;
 
-        [ForeignKey("IdUsuario")]
-        [InverseProperty("Administrativos")]
-        public ApplicationUser Usuario { get; set; } = null!;
+    [ForeignKey("IdPersona")]
+    [InverseProperty("Administrativo")]
+    public virtual Persona IdPersonaNavigation { get; set; } = null!;
 
-    }
+    [ForeignKey("IdUsuario")]
+    //[InverseProperty("Administrativo")]
+    public virtual IdentityUser<int>? IdUsuarioNavigation { get; set; } = null!;
 }

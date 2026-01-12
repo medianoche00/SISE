@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SiseApi.Data;
 using SiseApi.Services;
 using SiseApi.Models;
+using SiseApi.Data.Models;
 
 namespace SiseApi.Controllers
 {
@@ -29,7 +30,7 @@ namespace SiseApi.Controllers
             var idEgresado = await _usuarioActualService.GetIdEgresadoActualAsync();
             if (idEgresado == null) return Unauthorized("Usuario no es egresado.");
 
-            var misPostulaciones = await _context.Postulaciones
+            var misPostulaciones = await _context.Postulacion
                 .Where(p => p.IdEgresado == idEgresado)
                 .Select(p => new MisPostulacionesDto
                 {
@@ -43,20 +44,20 @@ namespace SiseApi.Controllers
 
                     Oferta = new OfertaLaboralDto
                     {
-                        IdOferta = p.OfertaLaboral.IdOferta,
-                        Titulo = p.OfertaLaboral.Titulo,
-                        Descripcion = p.OfertaLaboral.Descripcion,
-                        Requisitos = p.OfertaLaboral.Requisitos,
-                        Ubicacion = p.OfertaLaboral.Ubicacion,
-                        Sueldo = (decimal)p.OfertaLaboral.Sueldo,
-                        FechaCierre = p.OfertaLaboral.FechaCierre,
-                        TipoContrato = p.OfertaLaboral.IdTipoContratoNavigation.NombreTipo,
-                        Modalidad = p.OfertaLaboral.IdModalidadTrabajoNavigation.NombreModalidad,
+                        IdOferta = p.IdOfertaNavigation.IdOferta,
+                        Titulo = p.IdOfertaNavigation.Titulo,
+                        Descripcion = p.IdOfertaNavigation.Descripcion,
+                        Requisitos = p.IdOfertaNavigation.Requisitos,
+                        Ubicacion = p.IdOfertaNavigation.Ubicacion,
+                        Sueldo = (decimal)p.IdOfertaNavigation.Sueldo,
+                        FechaCierre = p.IdOfertaNavigation.FechaCierre,
+                        TipoContrato = p.IdOfertaNavigation.IdTipoContratoNavigation.NombreTipo,
+                        Modalidad = p.IdOfertaNavigation.IdModalidadTrabajoNavigation.NombreModalidad,
 
-                        EmpresaRuc = p.OfertaLaboral.IdEmpresaNavigation.Ruc,
-                        EmpresaRazonSocial = p.OfertaLaboral.IdEmpresaNavigation.RazonSocial,
-                        EmpresaTelefono = p.OfertaLaboral.IdEmpresaNavigation.Telefono,
-                        EmpresaCorreo = p.OfertaLaboral.IdEmpresaNavigation.Correo
+                        EmpresaRuc = p.IdOfertaNavigation.IdEmpresaNavigation.Ruc,
+                        EmpresaRazonSocial = p.IdOfertaNavigation.IdEmpresaNavigation.RazonSocial,
+                        EmpresaTelefono = p.IdOfertaNavigation.IdEmpresaNavigation.Telefono,
+                        EmpresaCorreo = p.IdOfertaNavigation.IdEmpresaNavigation.Correo
                     }
                 })
                 .OrderByDescending(x => x.FechaPostulacion) // Las más recientes primero
@@ -73,15 +74,15 @@ namespace SiseApi.Controllers
             if (idEgresado == null) return Unauthorized("Usuario no es egresado.");
 
             // 1. Validar Oferta
-            var oferta = await _context.OfertasLaborales
-                .FirstOrDefaultAsync(x => x.IdOferta == request.IdOferta && x.Estado == true);
+            var oferta = await _context.OfertaLaboral
+                .FirstOrDefaultAsync(x => x.IdOferta == request.IdOferta && x.Estado != "Eliminado");
 
             if (oferta == null) return BadRequest("La oferta no existe o no está activa.");
             if (oferta.FechaCierre < DateOnly.FromDateTime(DateTime.Now))
                 return BadRequest("La oferta ha finalizado.");
 
             // 2. Validar postulación existente
-            var postulacionExistente = await _context.Postulaciones
+            var postulacionExistente = await _context.Postulacion
                 .FirstOrDefaultAsync(p => p.IdOferta == request.IdOferta && p.IdEgresado == idEgresado);
 
             if (postulacionExistente != null)
@@ -102,7 +103,7 @@ namespace SiseApi.Controllers
                 CartaPresentacion = request.CartaPresentacion
             };
 
-            _context.Postulaciones.Add(nuevaPostulacion);
+            _context.Postulacion.Add(nuevaPostulacion);
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Postulación enviada correctamente." });
@@ -115,7 +116,7 @@ namespace SiseApi.Controllers
             var idEgresado = await _usuarioActualService.GetIdEgresadoActualAsync();
             if (idEgresado == null) return Unauthorized("Usuario no es egresado.");
 
-            var postulacion = await _context.Postulaciones
+            var postulacion = await _context.Postulacion
                 .FirstOrDefaultAsync(p => p.IdOferta == idOferta && p.IdEgresado == idEgresado);
 
             if (postulacion == null) return NotFound("No has postulado a esta oferta.");
@@ -138,33 +139,33 @@ namespace SiseApi.Controllers
             var idRepresentante = await _usuarioActualService.GetIdRepresentanteActualAsync();
             if (idRepresentante == null) return Unauthorized("Usuario no es representante.");
 
-            var representante = await _context.Representantes.FindAsync(idRepresentante);
+            var representante = await _context.Representante.FindAsync(idRepresentante);
 
             // Verificar que la oferta sea de la empresa del representante
-            var oferta = await _context.OfertasLaborales.FindAsync(idOferta);
+            var oferta = await _context.OfertaLaboral.FindAsync(idOferta);
             if (oferta == null || oferta.IdEmpresa != representante.IdEmpresa)
                 return Forbid("No tienes acceso a esta oferta.");
 
-            var postulaciones = await _context.Postulaciones
+            var postulaciones = await _context.Postulacion
                 .Where(p => p.IdOferta == idOferta && p.Estado != "Cancelado")
-                .Include(p => p.Egresado)
-                    .ThenInclude(e => e.ExperienciaLaborals)
-                .Include(p => p.Egresado)
-                    .ThenInclude(e => e.Persona)
-                .Include(e => e.Egresado)
+                .Include(p => p.IdEgresadoNavigation)
+                    .ThenInclude(e => e.ExperienciaLaboral)
+                .Include(p => p.IdEgresadoNavigation)
+                    .ThenInclude(e => e.IdPersonaNavigation)
+                .Include(e => e.IdEgresadoNavigation)
                     .ThenInclude(e => e.FormacionComplementaria)
                 .Select(p => new PostulanteDetalleDto
                 {
                     IdPostulacion = p.IdPostulacion,
                     CartaPresentacion = p.CartaPresentacion,
                     FechaPostulacion = p.FechaPostulacion,
-                    NombreCompleto = p.Egresado.Persona.Nombres + " " 
-                        + p.Egresado.Persona.ApellidoPaterno + " " 
-                        + p.Egresado.Persona.ApellidoMaterno,
-                    Dni = p.Egresado.Persona.DocumentoIdentidad,
-                    Correo = p.Egresado.Persona.CorreoPersonal,
-                    Telefono = p.Egresado.Persona.Telefono,
-                    ExperienciaLaboral = p.Egresado.ExperienciaLaborals.Select(exp => new ExperienciaLaboralDto
+                    NombreCompleto = p.IdEgresadoNavigation.IdPersonaNavigation.Nombres + " " 
+                        + p.IdEgresadoNavigation.IdPersonaNavigation.ApellidoPaterno + " " 
+                        + p.IdEgresadoNavigation.IdPersonaNavigation.ApellidoMaterno,
+                    Dni = p.IdEgresadoNavigation.IdPersonaNavigation.DocumentoIdentidad,
+                    Correo = p.IdEgresadoNavigation.IdPersonaNavigation.CorreoPersonal,
+                    Telefono = p.IdEgresadoNavigation.IdPersonaNavigation.Telefono,
+                    ExperienciaLaboral = p.IdEgresadoNavigation.ExperienciaLaboral.Select(exp => new ExperienciaLaboralDto
                     {
                         Empresa = exp.Empresa,
                         Cargo = exp.Cargo,

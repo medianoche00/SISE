@@ -27,8 +27,8 @@ public class ExperienciaLaboralController : ControllerBase
         var idEgresado = await _usuarioActualService.GetIdEgresadoActualAsync();
         if (idEgresado == null) return Unauthorized("Usuario no es egresado.");
 
-        var experiencias = await _context.ExperienciasLaborales
-            .Where(e => e.IdEgresado == idEgresado && e.Estado == true)
+        var experiencias = await _context.ExperienciaLaboral
+            .Where(e => e.IdEgresado == idEgresado && e.Estado != "Eliminado")
             .OrderByDescending(e => e.FechaInicio) // Orden cronológico inverso
             .Select(e => new ExperienciaLaboralDto
             {
@@ -60,12 +60,12 @@ public class ExperienciaLaboralController : ControllerBase
             Empresa = dto.Empresa,
             Cargo = dto.Cargo,
             Descripcion = dto.Descripcion,
-            Estado = true,
+            Estado = "Buscando Trabajo",
             FechaInicio = dto.FechaInicio,
             FechaFin = dto.Actualmente ? null : dto.FechaFin
         };
 
-        _context.ExperienciasLaborales.Add(nuevaExperiencia);
+        _context.ExperienciaLaboral.Add(nuevaExperiencia);
         await _context.SaveChangesAsync();
 
         return Ok(new { message = "Experiencia agregada correctamente." });
@@ -77,7 +77,7 @@ public class ExperienciaLaboralController : ControllerBase
         var idEgresado = await _usuarioActualService.GetIdEgresadoActualAsync();
         if (idEgresado == null) return Unauthorized();
 
-        var experiencia = await _context.ExperienciasLaborales
+        var experiencia = await _context.ExperienciaLaboral
             .FirstOrDefaultAsync(e => e.IdExperiencia == id && e.IdEgresado == idEgresado);
 
         if (experiencia == null) return NotFound("Experiencia no encontrada o no te pertenece.");
@@ -99,12 +99,12 @@ public class ExperienciaLaboralController : ControllerBase
         var idEgresado = await _usuarioActualService.GetIdEgresadoActualAsync();
         if (idEgresado == null) return Unauthorized();
 
-        var experiencia = await _context.ExperienciasLaborales
+        var experiencia = await _context.ExperienciaLaboral
             .FirstOrDefaultAsync(e => e.IdExperiencia == id && e.IdEgresado == idEgresado);
 
         if (experiencia == null) return NotFound("Experiencia no encontrada.");
 
-        experiencia.Estado = false;
+        experiencia.Estado = "Eliminado";
         await _context.SaveChangesAsync();
 
         return Ok(new { message = "Experiencia eliminada." });

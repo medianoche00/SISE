@@ -1,15 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SiseApi.Models;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SiseApi.Data.Models;
 
-[Table("Representante")]
-[Index(nameof(IdUsuario), IsUnique = true)] // Garantiza 1 Usuario = 1 Perfil Representante
-public class Representante
+public partial class Representante
 {
     [Key]
     [Column("idRepresentante")]
@@ -29,20 +24,21 @@ public class Representante
     public string? Cargo { get; set; }
 
     [Column("estado")]
-    public bool Estado { get; set; }
+    [StringLength(20)]
+    public string Estado { get; set; } = null!;
 
     [ForeignKey("IdEmpresa")]
-    [InverseProperty("Representantes")]
-    public virtual Empresa Empresa { get; set; } = null!;
+    [InverseProperty("Representante")]
+    public virtual Empresa IdEmpresaNavigation { get; set; } = null!;
 
     [ForeignKey("IdPersona")]
-    [InverseProperty("Representantes")]
-    public virtual Persona Persona { get; set; } = null!;
+    [InverseProperty("Representante")]
+    public virtual Persona IdPersonaNavigation { get; set; } = null!;
 
     [ForeignKey("IdUsuario")]
-    [InverseProperty("Representantes")]
-    public virtual ApplicationUser Usuario { get; set; } = null!;
+    //[InverseProperty("Representante")]
+    public virtual IdentityUser<int>? IdUsuarioNavigation { get; set; } = null!;
 
-    [InverseProperty("RepresentanteEvaluador")]
-    public virtual ICollection<Postulacion> PostulacionesEvaluadas { get; set; } = new List<Postulacion>();
+    [InverseProperty("IdRepresentanteEvaluadorNavigation")]
+    public virtual ICollection<Postulacion> Postulacion { get; set; } = new List<Postulacion>();
 }

@@ -6,11 +6,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SiseApi.Data.Models;
 
-[Table("TipoFormacion")]
 public partial class TipoFormacion
 {
-    [Key][Column("idTipoFormacion")] public int IdTipoFormacion { get; set; }
-    [Column("nombreTipoFormacion")][StringLength(100)] public string NombreTipoFormacion { get; set; } = null!;
-    [Column("estado")] public bool Estado { get; set; }
-    [InverseProperty("IdTipoFormacionNavigation")] public virtual ICollection<FormacionComplementaria> FormacionComplementaria { get; set; } = new List<FormacionComplementaria>();
+    [Key]
+    [Column("idTipoFormacion")]
+    public int IdTipoFormacion { get; set; }
+
+    [Column("nombreTipoFormacion")]
+    [StringLength(100)]
+    public string NombreTipoFormacion { get; set; } = null!;
+
+    [Column("estado")]
+    [StringLength(20)]
+    public string Estado { get; set; } = null!;
+
+    [InverseProperty("IdTipoFormacionNavigation")]
+    public virtual ICollection<FormacionComplementaria> FormacionComplementaria { get; set; } = new List<FormacionComplementaria>();
 }

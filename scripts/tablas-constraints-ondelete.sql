@@ -1,7 +1,9 @@
-/*
-use master
-drop database sise2
+/* use master
+go
+drop database SiseDB
+go
 */
+
 CREATE DATABASE SiseDB
 GO
 
@@ -15,6 +17,7 @@ GO
 
 /* ==================================================================================
    1. TABLAS DEL SISTEMA DE IDENTITY (SEGURIDAD)
+   Nota: Se mantienen los ON DELETE CASCADE por defecto de Identity
    ================================================================================== */
 
 CREATE TABLE [dbo].[AspNetUsers](
@@ -103,7 +106,23 @@ GO
 
 /* ==================================================================================
    2. TABLAS MAESTRAS / CATALOGOS
+   (Se usa ON DELETE NO ACTION para proteger datos maestros)
    ================================================================================== */
+
+CREATE TABLE [dbo].[TipoDocumento] (
+    [idTipoDocumento] INT IDENTITY(1,1) PRIMARY KEY,
+    [nombreTipo] NVARCHAR(50) NOT NULL, 
+    [estado] NVARCHAR(20) NOT NULL DEFAULT 'Activo',
+    CONSTRAINT CK_TipoDocumento_Estado CHECK (estado IN ('Activo', 'Eliminado'))
+);
+
+-- Inserts base
+SET IDENTITY_INSERT [dbo].[TipoDocumento] ON;
+INSERT INTO [dbo].[TipoDocumento] (idTipoDocumento, nombreTipo) VALUES (1, 'DNI');
+INSERT INTO [dbo].[TipoDocumento] (idTipoDocumento, nombreTipo) VALUES (2, 'Carnet Extranjería');
+INSERT INTO [dbo].[TipoDocumento] (idTipoDocumento, nombreTipo) VALUES (3, 'Pasaporte');
+SET IDENTITY_INSERT [dbo].[TipoDocumento] OFF;
+GO
 
 CREATE TABLE [dbo].[Facultad](
     [idFacultad] [int] IDENTITY(1,1) NOT NULL,
@@ -120,6 +139,7 @@ CREATE TABLE [dbo].[Escuela](
     [nombreEscuela] [nvarchar](150) NOT NULL,
     [estado] [nvarchar](20) NOT NULL DEFAULT 'Activo',
     CONSTRAINT [PK_Escuela] PRIMARY KEY CLUSTERED ([idEscuela] ASC),
+    -- Protección: No borrar Facultad si tiene Escuelas
     CONSTRAINT [FK_Escuela_Facultad] FOREIGN KEY([idFacultad]) 
         REFERENCES [dbo].[Facultad] ([idFacultad]) ON DELETE NO ACTION,
     CONSTRAINT [CK_Escuela_Estado] CHECK ([estado] IN ('Activo', 'Eliminado'))
@@ -132,6 +152,7 @@ CREATE TABLE [dbo].[Carrera](
     [nombreCarrera] [nvarchar](150) NOT NULL,
     [estado] [nvarchar](20) NOT NULL DEFAULT 'Activo',
     CONSTRAINT [PK_Carrera] PRIMARY KEY CLUSTERED ([idCarrera] ASC),
+    -- Protección: No borrar Escuela si tiene Carreras
     CONSTRAINT [FK_Carrera_Escuela] FOREIGN KEY([idEscuela]) 
         REFERENCES [dbo].[Escuela] ([idEscuela]) ON DELETE NO ACTION,
     CONSTRAINT [CK_Carrera_Estado] CHECK ([estado] IN ('Activo', 'Eliminado'))
@@ -183,14 +204,26 @@ CREATE TABLE [dbo].[Persona](
     [nombres] [nvarchar](100) NOT NULL,
     [apellidoPaterno] [nvarchar](100) NOT NULL,
     [apellidoMaterno] [nvarchar](100) NOT NULL,
-    [documentoIdentidad] [varchar](20) NOT NULL,
+    [numeroDocumento] [varchar](20) NOT NULL,
+    [idTipoDocumento] [int] NOT NULL,
     [telefono] [nvarchar](15) NULL,
     [correoPersonal] [nvarchar](150) NULL,
     [estado] [nvarchar](20) NOT NULL DEFAULT 'Activo',
     CONSTRAINT [PK_Persona] PRIMARY KEY CLUSTERED ([idPersona] ASC),
-    CONSTRAINT [UQ_Persona_Documento] UNIQUE ([documentoIdentidad]),
-    CONSTRAINT [CK_Persona_Estado] CHECK ([estado] IN ('Activo', 'Eliminado'))
-) ON [PRIMARY]
+    CONSTRAINT [FK_Persona_TipoDocumento] FOREIGN KEY([idTipoDocumento]) 
+        REFERENCES [dbo].[TipoDocumento] ([idTipoDocumento]) ON DELETE NO ACTION,
+    
+    -- Constraints de Unicidad y Estado
+    CONSTRAINT [UQ_Persona_Documento] UNIQUE ([idTipoDocumento], [numeroDocumento]),
+    CONSTRAINT [CK_Persona_Estado] CHECK ([estado] IN ('Activo', 'Eliminado')),
+    
+    -- Constraint Compuesto: Valida DNI (8 dígitos) O Documentos varios (mínimo 3)
+    CONSTRAINT [CK_Persona_ValidarDocumento] CHECK (
+        ( [idTipoDocumento] = 1 AND LEN([numeroDocumento]) = 8 AND [numeroDocumento] NOT LIKE '%[^0-9]%' )
+        OR 
+        ( [idTipoDocumento] <> 1 AND LEN([numeroDocumento]) >= 3 )
+    )
+) ON [PRIMARY];
 GO
 
 CREATE TABLE [dbo].[Empresa](
@@ -201,10 +234,15 @@ CREATE TABLE [dbo].[Empresa](
     [telefono] [nvarchar](15) NULL,
     [correo] [nvarchar](150) NULL,
     [descripcion] [nvarchar](255) NULL,
-    [estado] [nvarchar](20) NOT NULL DEFAULT 'Registrada',
+    -- CORREGIDO: Tipo aumentado a NVARCHAR(50) según requerimiento
+    [estado] [nvarchar](50) NOT NULL DEFAULT 'Registrada',
+    
     CONSTRAINT [PK_Empresa] PRIMARY KEY CLUSTERED ([idEmpresa] ASC),
     CONSTRAINT [UQ_Empresa_RUC] UNIQUE ([ruc]),
-    CONSTRAINT [CK_Empresa_Estado] CHECK ([estado] IN ('Registrada', 'Activo', 'Rechazada', 'Vetada', 'Eliminado'))
+    
+    -- Constraints Integrados
+    CONSTRAINT [CK_Empresa_RUC_Formato] CHECK ([ruc] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'),
+    CONSTRAINT [CK_Empresa_Estado] CHECK ([estado] IN ('Registrada', 'Activa', 'Rechazada', 'Vetada', 'Inactiva', 'Eliminado'))
 ) ON [PRIMARY]
 GO
 
@@ -215,16 +253,23 @@ CREATE TABLE [dbo].[Egresado](
     [idCarrera] [int] NOT NULL,
     [codigoUniversitario] [nvarchar](20) NOT NULL,
     [añoEgreso] [int] NOT NULL,
-    [estado] [nvarchar](20) NOT NULL DEFAULT 'Buscando Trabajo',
+    -- CORREGIDO: Tipo aumentado a NVARCHAR(50) según requerimiento
+    [estado] [nvarchar](50) NOT NULL DEFAULT 'Buscando Trabajo',
+    
     CONSTRAINT [PK_Egresado] PRIMARY KEY CLUSTERED ([idEgresado] ASC),
+    CONSTRAINT [UQ_Egresado_Codigo] UNIQUE ([codigoUniversitario]),
+    
+    -- Relaciones (CASCADE INTEGRADO para Usuario)
     CONSTRAINT [FK_Egresado_Persona] FOREIGN KEY([idPersona]) 
         REFERENCES [dbo].[Persona] ([idPersona]) ON DELETE NO ACTION,
     CONSTRAINT [FK_Egresado_Usuario] FOREIGN KEY([idUsuario]) 
         REFERENCES [dbo].[AspNetUsers] ([Id]) ON DELETE CASCADE, 
     CONSTRAINT [FK_Egresado_Carrera] FOREIGN KEY([idCarrera]) 
         REFERENCES [dbo].[Carrera] ([idCarrera]) ON DELETE NO ACTION,
-    CONSTRAINT [UQ_Egresado_Codigo] UNIQUE ([codigoUniversitario]),
-    CONSTRAINT [CK_Egresado_Estado] CHECK ([estado] IN ('Buscando Trabajo', 'Trabajando', 'Estudiando', 'Eliminado'))
+    
+    -- Validaciones
+    CONSTRAINT [CK_Egresado_Estado] CHECK ([estado] IN ('Buscando Trabajo', 'Trabajando', 'Estudiando', 'Inactivo', 'Eliminado')),
+    CONSTRAINT [CK_Egresado_Anio_Real] CHECK ([añoEgreso] BETWEEN 1960 AND YEAR(GETDATE()) + 1)
 ) ON [PRIMARY]
 GO
 
@@ -234,13 +279,17 @@ CREATE TABLE [dbo].[Administrativo](
     [idPersona] [int] NOT NULL,
     [idUsuario] [int] NOT NULL,
     [estado] [nvarchar](20) NOT NULL DEFAULT 'Activo',
+    
     CONSTRAINT [PK_Administrativo] PRIMARY KEY CLUSTERED ([idAdministrativo] ASC),
+    
+    -- Relaciones (CASCADE INTEGRADO para Usuario)
     CONSTRAINT [FK_Administrativo_Cargo] FOREIGN KEY([idCargoAdministrativo]) 
         REFERENCES [dbo].[CargoAdministrativo] ([idCargoAdministrativo]) ON DELETE NO ACTION,
     CONSTRAINT [FK_Administrativo_Persona] FOREIGN KEY([idPersona]) 
         REFERENCES [dbo].[Persona] ([idPersona]) ON DELETE NO ACTION,
     CONSTRAINT [FK_Administrativo_Usuario] FOREIGN KEY([idUsuario]) 
         REFERENCES [dbo].[AspNetUsers] ([Id]) ON DELETE CASCADE,
+    
     CONSTRAINT [CK_Administrativo_Estado] CHECK ([estado] IN ('Activo', 'Eliminado'))
 ) ON [PRIMARY]
 GO
@@ -252,13 +301,17 @@ CREATE TABLE [dbo].[Representante](
     [idUsuario] [int] NOT NULL,
     [cargo] [nvarchar](100) NULL,
     [estado] [nvarchar](20) NOT NULL DEFAULT 'Activo',
+    
     CONSTRAINT [PK_Representante] PRIMARY KEY CLUSTERED ([idRepresentante] ASC),
+    
+    -- Relaciones (CASCADE INTEGRADO para Usuario)
     CONSTRAINT [FK_Representante_Empresa] FOREIGN KEY([idEmpresa]) 
         REFERENCES [dbo].[Empresa] ([idEmpresa]) ON DELETE NO ACTION,
     CONSTRAINT [FK_Representante_Persona] FOREIGN KEY([idPersona]) 
         REFERENCES [dbo].[Persona] ([idPersona]) ON DELETE NO ACTION,
     CONSTRAINT [FK_Representante_Usuario] FOREIGN KEY([idUsuario]) 
         REFERENCES [dbo].[AspNetUsers] ([Id]) ON DELETE CASCADE,
+        
     CONSTRAINT [CK_Representante_Estado] CHECK ([estado] IN ('Activo', 'Eliminado'))
 ) ON [PRIMARY]
 GO
@@ -280,8 +333,12 @@ CREATE TABLE [dbo].[OfertaLaboral](
     [fechaPublicacion] [date] NOT NULL DEFAULT GETDATE(),
     [fechaCierre] [date] NOT NULL,
     [idEgresadoGanador] [int] NULL,
-    [estado] [nvarchar](20) NOT NULL DEFAULT 'Activo',
+    -- CORREGIDO: Tipo aumentado a NVARCHAR(50) según requerimiento
+    [estado] [nvarchar](50) NOT NULL DEFAULT 'Activa',
+    
     CONSTRAINT [PK_OfertaLaboral] PRIMARY KEY CLUSTERED ([idOferta] ASC),
+    
+    -- Relaciones
     CONSTRAINT [FK_OfertaLaboral_Empresa] FOREIGN KEY([idEmpresa]) 
         REFERENCES [dbo].[Empresa] ([idEmpresa]) ON DELETE NO ACTION,
     CONSTRAINT [FK_OfertaLaboral_TipoContrato] FOREIGN KEY([idTipoContrato]) 
@@ -290,7 +347,11 @@ CREATE TABLE [dbo].[OfertaLaboral](
         REFERENCES [dbo].[ModalidadTrabajo] ([idModalidadTrabajo]) ON DELETE NO ACTION,
     CONSTRAINT [FK_OfertaLaboral_Ganador] FOREIGN KEY([idEgresadoGanador]) 
         REFERENCES [dbo].[Egresado] ([idEgresado]) ON DELETE NO ACTION,
-    CONSTRAINT [CK_OfertaLaboral_Estado] CHECK ([estado] IN ('Activo', 'Cerrada', 'Expirada', 'Cancelada', 'Eliminado'))
+    
+    -- Validaciones Integradas
+    CONSTRAINT [CK_Oferta_Sueldo_Positivo] CHECK ([sueldo] >= 0),
+    CONSTRAINT [CK_Oferta_Fechas_Logicas] CHECK ([fechaCierre] >= [fechaPublicacion]),
+    CONSTRAINT [CK_OfertaLaboral_Estado] CHECK ([estado] IN ('Activa', 'Cerrada', 'Expirada', 'Cancelada', 'Eliminado'))
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
@@ -303,15 +364,22 @@ CREATE TABLE [dbo].[Postulacion](
     [fechaEvaluacion] [datetime] NULL,
     [comentarios] [nvarchar](500) NULL,
     [cartaPresentacion] [nvarchar](500) NULL,
+    -- CORREGIDO: Tipo aumentado a NVARCHAR(50) según requerimiento
     [estado] [nvarchar](50) NOT NULL DEFAULT 'Pendiente',
+    
     CONSTRAINT [PK_Postulacion] PRIMARY KEY CLUSTERED ([idPostulacion] ASC),
+    
+    -- Relaciones (CASCADE INTEGRADO para Oferta y Egresado NO ACTION)
+    -- Nota: Se mantiene NO ACTION en Egresado para historial, pero CASCADE en Oferta si se elimina
     CONSTRAINT [FK_Postulacion_Egresado] FOREIGN KEY([idEgresado]) 
         REFERENCES [dbo].[Egresado] ([idEgresado]) ON DELETE NO ACTION,
-    CONSTRAINT [FK_Postulacion_Oferta] FOREIGN KEY([idOferta]) 
-        REFERENCES [dbo].[OfertaLaboral] ([idOferta]) ON DELETE NO ACTION,
+    CONSTRAINT [FK_Postulacion_Oferta_Cascade] FOREIGN KEY([idOferta]) 
+        REFERENCES [dbo].[OfertaLaboral] ([idOferta]) ON DELETE CASCADE,
     CONSTRAINT [FK_Postulacion_Representante] FOREIGN KEY([idRepresentanteEvaluador]) 
         REFERENCES [dbo].[Representante] ([idRepresentante]) ON DELETE NO ACTION,
-    CONSTRAINT [CK_Postulacion_Estado] CHECK ([estado] IN ('Pendiente', 'En Revision', 'Seleccionado', 'Rechazada', 'Cancelada', 'Eliminado'))
+        
+    -- Validaciones
+    CONSTRAINT [CK_Postulacion_EstadoValido] CHECK ([estado] IN ('Pendiente', 'En Revisión', 'Entrevista', 'Finalista', 'Seleccionado', 'Rechazado', 'Cancelado', 'Eliminado'))
 ) ON [PRIMARY]
 GO
 
@@ -325,11 +393,17 @@ CREATE TABLE [dbo].[ExperienciaLaboral](
     [fechaFin] [date] NULL,
     [descripcion] [nvarchar](max) NULL,
     [estado] [nvarchar](20) NOT NULL DEFAULT 'Validado',
+    
     CONSTRAINT [PK_ExperienciaLaboral] PRIMARY KEY CLUSTERED ([idExperiencia] ASC),
-    CONSTRAINT [FK_ExperienciaLaboral_Egresado] FOREIGN KEY([idEgresado]) 
+    
+    -- Relaciones (CASCADE INTEGRADO: Si borro egresado, borro experiencia)
+    CONSTRAINT [FK_Experiencia_Egresado_Cascade] FOREIGN KEY([idEgresado]) 
         REFERENCES [dbo].[Egresado] ([idEgresado]) ON DELETE CASCADE,
     CONSTRAINT [FK_ExperienciaLaboral_Empresa] FOREIGN KEY([idEmpresaRegistrada]) 
         REFERENCES [dbo].[Empresa] ([idEmpresa]) ON DELETE NO ACTION,
+    
+    -- Validaciones
+    CONSTRAINT [CK_Experiencia_Fechas] CHECK ([fechaFin] IS NULL OR [fechaFin] >= [fechaInicio]),
     CONSTRAINT [CK_Experiencia_Estado] CHECK ([estado] IN ('Validado', 'Pendiente', 'Rechazado', 'Eliminado'))
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -343,11 +417,15 @@ CREATE TABLE [dbo].[FormacionComplementaria](
     [fechaInicio] [date] NULL,
     [fechaFin] [date] NULL,
     [estado] [nvarchar](20) NOT NULL DEFAULT 'Validado',
+    
     CONSTRAINT [PK_FormacionComplementaria] PRIMARY KEY CLUSTERED ([idFormacion] ASC),
-    CONSTRAINT [FK_Formacion_Egresado] FOREIGN KEY([idEgresado]) 
+    
+    -- Relaciones (CASCADE INTEGRADO: Si borro egresado, borro formación)
+    CONSTRAINT [FK_Formacion_Egresado_Cascade] FOREIGN KEY([idEgresado]) 
         REFERENCES [dbo].[Egresado] ([idEgresado]) ON DELETE CASCADE,
     CONSTRAINT [FK_Formacion_Tipo] FOREIGN KEY([idTipoFormacion]) 
         REFERENCES [dbo].[TipoFormacion] ([idTipoFormacion]) ON DELETE NO ACTION,
+        
     CONSTRAINT [CK_Formacion_Estado] CHECK ([estado] IN ('Validado', 'Pendiente', 'Rechazado', 'Eliminado'))
 ) ON [PRIMARY]
 GO
@@ -365,78 +443,9 @@ CREATE TABLE [dbo].[Auditoria](
     [valorAnterior] [nvarchar](max) NULL,
     [valorNuevo] [nvarchar](max) NULL,
     [fechaHora] [datetime2](7) NOT NULL DEFAULT GETDATE(),
+    
     CONSTRAINT [PK_Auditoria] PRIMARY KEY CLUSTERED ([idAuditoria] ASC),
     CONSTRAINT [FK_Auditoria_Usuario] FOREIGN KEY([idUsuario]) 
         REFERENCES [dbo].[AspNetUsers] ([Id]) ON DELETE SET NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
-PRINT '=== INTEGRIDAD REFERENCIAL Y REGLAS ON DELETE ==='
-GO
-
-/* ESTRATEGIA:
-   1. Datos Maestros (Carrera, Facultad) -> NO ACTION (Protección)
-   2. Detalle de Usuario (Experiencia, Formación) -> CASCADE (Limpieza automática)
-   3. Transaccional (Postulaciones) -> CASCADE (Para evitar huérfanos)
-*/
-
--- ---------------------------------------------------------
--- A. EXPERIENCIA LABORAL (Borrado en Cascada)
--- ---------------------------------------------------------
-IF OBJECT_ID('FK__Experienc__idEgr__07C12930', 'F') IS NOT NULL 
-    ALTER TABLE [dbo].[ExperienciaLaboral] DROP CONSTRAINT [FK__Experienc__idEgr__07C12930];
-IF OBJECT_ID('FK_Experiencia_Egresado', 'F') IS NOT NULL 
-    ALTER TABLE [dbo].[ExperienciaLaboral] DROP CONSTRAINT [FK_Experiencia_Egresado];
-
-ALTER TABLE [dbo].[ExperienciaLaboral] WITH CHECK ADD CONSTRAINT [FK_Experiencia_Egresado_Cascade] 
-FOREIGN KEY([idEgresado]) REFERENCES [dbo].[Egresado] ([idEgresado])
-ON DELETE CASCADE;
-
--- ---------------------------------------------------------
--- B. FORMACIÓN COMPLEMENTARIA (Borrado en Cascada)
--- ---------------------------------------------------------
-IF OBJECT_ID('FK__Formacion__idEgr__08B54D69', 'F') IS NOT NULL 
-    ALTER TABLE [dbo].[FormacionComplementaria] DROP CONSTRAINT [FK__Formacion__idEgr__08B54D69];
-
-ALTER TABLE [dbo].[FormacionComplementaria] WITH CHECK ADD CONSTRAINT [FK_Formacion_Egresado_Cascade] 
-FOREIGN KEY([idEgresado]) REFERENCES [dbo].[Egresado] ([idEgresado])
-ON DELETE CASCADE;
-
--- ---------------------------------------------------------
--- C. POSTULACIÓN (Borrado en Cascada si se borra la Oferta)
--- ---------------------------------------------------------
-IF OBJECT_ID('FK_Postulacion_Oferta', 'F') IS NOT NULL 
-    ALTER TABLE [dbo].[Postulacion] DROP CONSTRAINT [FK_Postulacion_Oferta];
-
-ALTER TABLE [dbo].[Postulacion] WITH CHECK ADD CONSTRAINT [FK_Postulacion_Oferta_Cascade] 
-FOREIGN KEY([idOferta]) REFERENCES [dbo].[OfertaLaboral] ([idOferta])
-ON DELETE CASCADE;
-
--- ---------------------------------------------------------
--- D. ROLES DE USUARIO (Si borro el User de Identity, borro el perfil)
--- ---------------------------------------------------------
--- Egresado -> Usuario
-IF OBJECT_ID('FK_Egresado_Usuario', 'F') IS NOT NULL 
-    ALTER TABLE [dbo].[Egresado] DROP CONSTRAINT [FK_Egresado_Usuario];
-
-ALTER TABLE [dbo].[Egresado] WITH CHECK ADD CONSTRAINT [FK_Egresado_Usuario_Cascade] 
-FOREIGN KEY([idUsuario]) REFERENCES [dbo].[AspNetUsers] ([Id])
-ON DELETE CASCADE;
-
--- Administrativo -> Usuario
-IF OBJECT_ID('FK_Administrativo_Usuario', 'F') IS NOT NULL 
-    ALTER TABLE [dbo].[Administrativo] DROP CONSTRAINT [FK_Administrativo_Usuario];
-
-ALTER TABLE [dbo].[Administrativo] WITH CHECK ADD CONSTRAINT [FK_Administrativo_Usuario_Cascade] 
-FOREIGN KEY([idUsuario]) REFERENCES [dbo].[AspNetUsers] ([Id])
-ON DELETE CASCADE;
-
--- ---------------------------------------------------------
--- E. PROTECCIÓN DE DATOS MAESTROS (NO ACTION)
--- ---------------------------------------------------------
-ALTER TABLE [dbo].[Escuela] DROP CONSTRAINT IF EXISTS [FK_Escuela_Facultad];
-ALTER TABLE [dbo].[Escuela] ADD CONSTRAINT [FK_Escuela_Facultad] 
-FOREIGN KEY (idFacultad) REFERENCES Facultad(idFacultad) 
-ON DELETE NO ACTION;
-
 GO

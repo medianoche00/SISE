@@ -1,5 +1,5 @@
-AUDITORÍA (Triggers)
-Cumple con el requisito de registrar el SYSTEM_USER y guardar el estado anterior y nuevo
+--AUDITORÍA (Triggers)
+--Cumple con el requisito de registrar el SYSTEM_USER y guardar el estado anterior y nuevo
 
 -- Tabla de Auditoría
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Auditoria]') AND type in (N'U'))
@@ -34,7 +34,7 @@ END
 GO
 -- NOTA: Debes crear triggers similares para OfertaLaboral y Postulacion copiando este bloque y cambiando el nombre de la tabla.
 
-TRIGGERS FALTANTES a Auditoria
+--TRIGGERS FALTANTES a Auditoria
 
 -- ==================================================================================
 -- 1. TRIGGER PARA AUDITORÍA DE OFERTAS LABORALES

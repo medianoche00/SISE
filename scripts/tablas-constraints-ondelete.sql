@@ -1,9 +1,4 @@
-/*
-use master
-go
-drop database SiseDB
-go
-*/
+
 CREATE DATABASE SiseDB
 GO
 
@@ -112,13 +107,11 @@ CREATE TABLE [dbo].[TipoDocumento] (
     [nombreTipo] NVARCHAR(50) NOT NULL, 
     [estado] NVARCHAR(20) NOT NULL DEFAULT 'Activo',
     CONSTRAINT CK_TipoDocumento_Estado CHECK (estado IN ('Activo', 'Eliminado'))
-) ON [PRIMARY]
-GO
 
 -- es necesario que se inserten en ese orden
 SET IDENTITY_INSERT [dbo].[TipoDocumento] ON;
 INSERT INTO [dbo].[TipoDocumento] (idTipoDocumento, nombreTipo) VALUES (1, 'DNI');
-INSERT INTO [dbo].[TipoDocumento] (idTipoDocumento, nombreTipo) VALUES (2, 'Carnet Extranjería');
+INSERT INTO [dbo].[TipoDocumento] (idTipoDocumento, nombreTipo) VALUES (2, 'Carnet Extranjeria');
 INSERT INTO [dbo].[TipoDocumento] (idTipoDocumento, nombreTipo) VALUES (3, 'Pasaporte');
 SET IDENTITY_INSERT [dbo].[TipoDocumento] OFF;
 
@@ -205,17 +198,16 @@ CREATE TABLE [dbo].[Persona](
     [telefono] [nvarchar](15) NULL,
     [correoPersonal] [nvarchar](150) NULL,
     [estado] [nvarchar](20) NOT NULL DEFAULT 'Activo',
+    
     CONSTRAINT [PK_Persona] PRIMARY KEY CLUSTERED ([idPersona] ASC),
     CONSTRAINT [FK_Persona_TipoDocumento] FOREIGN KEY([idTipoDocumento]) 
-        REFERENCES [dbo].[TipoDocumento] ([idTipoDocumento]) ON DELETE NO ACTION,
-    CONSTRAINT [UQ_Persona_Documento] UNIQUE ([idTipoDocumento], [numeroDocumento]), -- evita que dos personas tengan el mismo numero solo si son del mismo tipo de documento
+        REFERENCES [dbo].[TipoDocumento] ([idTipoDocumento]) ON DELETE NO ACTION,    
+    CONSTRAINT [UQ_Persona_Documento] UNIQUE ([idTipoDocumento], [numeroDocumento]),
     CONSTRAINT [CK_Persona_Estado] CHECK ([estado] IN ('Activo', 'Eliminado')),
     CONSTRAINT [CK_Persona_ValidarDocumento] CHECK (
-        (   -- caso DNI
-            [idTipoDocumento] = 1 AND LEN([numeroDocumento]) = 8 AND [numeroDocumento] NOT LIKE '%[^0-9]%' )
+        ( [idTipoDocumento] = 1 AND LEN([numeroDocumento]) = 8 AND [numeroDocumento] NOT LIKE '%[^0-9]%' )
         OR 
-        (   -- caso no es dni (carnet de extrangeria, pasaporte)
-            [idTipoDocumento] <> 1 AND LEN([numeroDocumento]) >= 3 )
+        ( [idTipoDocumento] <> 1 AND LEN([numeroDocumento]) >= 3 )
     )
 ) ON [PRIMARY];
 GO
@@ -229,9 +221,11 @@ CREATE TABLE [dbo].[Empresa](
     [correo] [nvarchar](150) NULL,
     [descripcion] [nvarchar](255) NULL,
     [estado] [nvarchar](20) NOT NULL DEFAULT 'Registrada',
+    
     CONSTRAINT [PK_Empresa] PRIMARY KEY CLUSTERED ([idEmpresa] ASC),
     CONSTRAINT [UQ_Empresa_RUC] UNIQUE ([ruc]),
-    CONSTRAINT [CK_Empresa_Estado] CHECK ([estado] IN ('Registrada', 'Activo', 'Rechazada', 'Vetada', 'Eliminado'))
+    CONSTRAINT [CK_Empresa_RUC_Formato] CHECK ([ruc] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'),
+    CONSTRAINT [CK_Empresa_Estado] CHECK ([estado] IN ('Registrada', 'Activa', 'Rechazada', 'Vetada', 'Inactiva', 'Eliminado'))
 ) ON [PRIMARY]
 GO
 
@@ -243,15 +237,19 @@ CREATE TABLE [dbo].[Egresado](
     [codigoUniversitario] [nvarchar](20) NOT NULL,
     [anioEgreso] [int] NOT NULL,
     [estado] [nvarchar](20) NOT NULL DEFAULT 'Buscando Trabajo',
+    
     CONSTRAINT [PK_Egresado] PRIMARY KEY CLUSTERED ([idEgresado] ASC),
+    CONSTRAINT [UQ_Egresado_Codigo] UNIQUE ([codigoUniversitario]),
+    
     CONSTRAINT [FK_Egresado_Persona] FOREIGN KEY([idPersona]) 
         REFERENCES [dbo].[Persona] ([idPersona]) ON DELETE NO ACTION,
     CONSTRAINT [FK_Egresado_Usuario] FOREIGN KEY([idUsuario]) 
         REFERENCES [dbo].[AspNetUsers] ([Id]) ON DELETE CASCADE, 
     CONSTRAINT [FK_Egresado_Carrera] FOREIGN KEY([idCarrera]) 
         REFERENCES [dbo].[Carrera] ([idCarrera]) ON DELETE NO ACTION,
-    CONSTRAINT [UQ_Egresado_Codigo] UNIQUE ([codigoUniversitario]),
-    CONSTRAINT [CK_Egresado_Estado] CHECK ([estado] IN ('Buscando Trabajo', 'Trabajando', 'Estudiando', 'Eliminado'))
+    
+    CONSTRAINT [CK_Egresado_Estado] CHECK ([estado] IN ('Buscando Trabajo', 'Trabajando', 'Estudiando', 'Inactivo', 'Eliminado')),
+    CONSTRAINT [CK_Egresado_Anio_Real] CHECK ([a�oEgreso] BETWEEN 1960 AND YEAR(GETDATE()) + 1)
 ) ON [PRIMARY]
 GO
 
@@ -261,13 +259,16 @@ CREATE TABLE [dbo].[Administrativo](
     [idPersona] [int] NOT NULL,
     [idUsuario] [int] NOT NULL,
     [estado] [nvarchar](20) NOT NULL DEFAULT 'Activo',
+    
     CONSTRAINT [PK_Administrativo] PRIMARY KEY CLUSTERED ([idAdministrativo] ASC),
+
     CONSTRAINT [FK_Administrativo_Cargo] FOREIGN KEY([idCargoAdministrativo]) 
         REFERENCES [dbo].[CargoAdministrativo] ([idCargoAdministrativo]) ON DELETE NO ACTION,
     CONSTRAINT [FK_Administrativo_Persona] FOREIGN KEY([idPersona]) 
         REFERENCES [dbo].[Persona] ([idPersona]) ON DELETE NO ACTION,
     CONSTRAINT [FK_Administrativo_Usuario] FOREIGN KEY([idUsuario]) 
         REFERENCES [dbo].[AspNetUsers] ([Id]) ON DELETE CASCADE,
+    
     CONSTRAINT [CK_Administrativo_Estado] CHECK ([estado] IN ('Activo', 'Eliminado'))
 ) ON [PRIMARY]
 GO
@@ -279,13 +280,16 @@ CREATE TABLE [dbo].[Representante](
     [idUsuario] [int] NOT NULL,
     [cargo] [nvarchar](100) NULL,
     [estado] [nvarchar](20) NOT NULL DEFAULT 'Activo',
+    
     CONSTRAINT [PK_Representante] PRIMARY KEY CLUSTERED ([idRepresentante] ASC),
+    
     CONSTRAINT [FK_Representante_Empresa] FOREIGN KEY([idEmpresa]) 
         REFERENCES [dbo].[Empresa] ([idEmpresa]) ON DELETE NO ACTION,
     CONSTRAINT [FK_Representante_Persona] FOREIGN KEY([idPersona]) 
         REFERENCES [dbo].[Persona] ([idPersona]) ON DELETE NO ACTION,
     CONSTRAINT [FK_Representante_Usuario] FOREIGN KEY([idUsuario]) 
         REFERENCES [dbo].[AspNetUsers] ([Id]) ON DELETE CASCADE,
+        
     CONSTRAINT [CK_Representante_Estado] CHECK ([estado] IN ('Activo', 'Eliminado'))
 ) ON [PRIMARY]
 GO
@@ -307,8 +311,10 @@ CREATE TABLE [dbo].[OfertaLaboral](
     [fechaPublicacion] [date] NOT NULL DEFAULT GETDATE(),
     [fechaCierre] [date] NOT NULL,
     [idEgresadoGanador] [int] NULL,
-    [estado] [nvarchar](20) NOT NULL DEFAULT 'Activo',
+    [estado] [nvarchar](20) NOT NULL DEFAULT 'Activa',
+    
     CONSTRAINT [PK_OfertaLaboral] PRIMARY KEY CLUSTERED ([idOferta] ASC),
+    
     CONSTRAINT [FK_OfertaLaboral_Empresa] FOREIGN KEY([idEmpresa]) 
         REFERENCES [dbo].[Empresa] ([idEmpresa]) ON DELETE NO ACTION,
     CONSTRAINT [FK_OfertaLaboral_TipoContrato] FOREIGN KEY([idTipoContrato]) 
@@ -317,7 +323,10 @@ CREATE TABLE [dbo].[OfertaLaboral](
         REFERENCES [dbo].[ModalidadTrabajo] ([idModalidadTrabajo]) ON DELETE NO ACTION,
     CONSTRAINT [FK_OfertaLaboral_Ganador] FOREIGN KEY([idEgresadoGanador]) 
         REFERENCES [dbo].[Egresado] ([idEgresado]) ON DELETE NO ACTION,
-    CONSTRAINT [CK_OfertaLaboral_Estado] CHECK ([estado] IN ('Activo', 'Cerrada', 'Expirada', 'Cancelada', 'Eliminado'))
+
+    CONSTRAINT [CK_Oferta_Sueldo_Positivo] CHECK ([sueldo] >= 0),
+    CONSTRAINT [CK_Oferta_Fechas_Logicas] CHECK ([fechaCierre] >= [fechaPublicacion]),
+    CONSTRAINT [CK_OfertaLaboral_Estado] CHECK ([estado] IN ('Activa', 'Cerrada', 'Expirada', 'Cancelada', 'Eliminado'))
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
@@ -330,15 +339,18 @@ CREATE TABLE [dbo].[Postulacion](
     [fechaEvaluacion] [datetime] NULL,
     [comentarios] [nvarchar](500) NULL,
     [cartaPresentacion] [nvarchar](500) NULL,
-    [estado] [nvarchar](50) NOT NULL DEFAULT 'Pendiente',
+    [estado] [nvarchar](20) NOT NULL DEFAULT 'Pendiente',
+    
     CONSTRAINT [PK_Postulacion] PRIMARY KEY CLUSTERED ([idPostulacion] ASC),
+    
     CONSTRAINT [FK_Postulacion_Egresado] FOREIGN KEY([idEgresado]) 
         REFERENCES [dbo].[Egresado] ([idEgresado]) ON DELETE NO ACTION,
-    CONSTRAINT [FK_Postulacion_Oferta] FOREIGN KEY([idOferta]) 
-        REFERENCES [dbo].[OfertaLaboral] ([idOferta]) ON DELETE NO ACTION,
+    CONSTRAINT [FK_Postulacion_Oferta_Cascade] FOREIGN KEY([idOferta]) 
+        REFERENCES [dbo].[OfertaLaboral] ([idOferta]) ON DELETE CASCADE,
     CONSTRAINT [FK_Postulacion_Representante] FOREIGN KEY([idRepresentanteEvaluador]) 
         REFERENCES [dbo].[Representante] ([idRepresentante]) ON DELETE NO ACTION,
-    CONSTRAINT [CK_Postulacion_Estado] CHECK ([estado] IN ('Pendiente', 'En Revision', 'Seleccionado', 'Rechazada', 'Cancelada', 'Eliminado'))
+        
+    CONSTRAINT [CK_Postulacion_EstadoValido] CHECK ([estado] IN ('Pendiente', 'En Revisi�n', 'Entrevista', 'Finalista', 'Seleccionado', 'Rechazado', 'Cancelado', 'Eliminado'))
 ) ON [PRIMARY]
 GO
 
@@ -352,11 +364,15 @@ CREATE TABLE [dbo].[ExperienciaLaboral](
     [fechaFin] [date] NULL,
     [descripcion] [nvarchar](max) NULL,
     [estado] [nvarchar](20) NOT NULL DEFAULT 'Validado',
+    
     CONSTRAINT [PK_ExperienciaLaboral] PRIMARY KEY CLUSTERED ([idExperiencia] ASC),
-    CONSTRAINT [FK_ExperienciaLaboral_Egresado] FOREIGN KEY([idEgresado]) 
+
+    CONSTRAINT [FK_Experiencia_Egresado_Cascade] FOREIGN KEY([idEgresado]) 
         REFERENCES [dbo].[Egresado] ([idEgresado]) ON DELETE CASCADE,
     CONSTRAINT [FK_ExperienciaLaboral_Empresa] FOREIGN KEY([idEmpresaRegistrada]) 
         REFERENCES [dbo].[Empresa] ([idEmpresa]) ON DELETE NO ACTION,
+    
+    CONSTRAINT [CK_Experiencia_Fechas] CHECK ([fechaFin] IS NULL OR [fechaFin] >= [fechaInicio]),
     CONSTRAINT [CK_Experiencia_Estado] CHECK ([estado] IN ('Validado', 'Pendiente', 'Rechazado', 'Eliminado'))
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -370,11 +386,14 @@ CREATE TABLE [dbo].[FormacionComplementaria](
     [fechaInicio] [date] NULL,
     [fechaFin] [date] NULL,
     [estado] [nvarchar](20) NOT NULL DEFAULT 'Validado',
+    
     CONSTRAINT [PK_FormacionComplementaria] PRIMARY KEY CLUSTERED ([idFormacion] ASC),
-    CONSTRAINT [FK_Formacion_Egresado] FOREIGN KEY([idEgresado]) 
+    
+    CONSTRAINT [FK_Formacion_Egresado_Cascade] FOREIGN KEY([idEgresado]) 
         REFERENCES [dbo].[Egresado] ([idEgresado]) ON DELETE CASCADE,
     CONSTRAINT [FK_Formacion_Tipo] FOREIGN KEY([idTipoFormacion]) 
         REFERENCES [dbo].[TipoFormacion] ([idTipoFormacion]) ON DELETE NO ACTION,
+        
     CONSTRAINT [CK_Formacion_Estado] CHECK ([estado] IN ('Validado', 'Pendiente', 'Rechazado', 'Eliminado'))
 ) ON [PRIMARY]
 GO
@@ -392,6 +411,7 @@ CREATE TABLE [dbo].[Auditoria](
     [valorAnterior] [nvarchar](max) NULL,
     [valorNuevo] [nvarchar](max) NULL,
     [fechaHora] [datetime2](7) NOT NULL DEFAULT GETDATE(),
+    
     CONSTRAINT [PK_Auditoria] PRIMARY KEY CLUSTERED ([idAuditoria] ASC),
     CONSTRAINT [FK_Auditoria_Usuario] FOREIGN KEY([idUsuario]) 
         REFERENCES [dbo].[AspNetUsers] ([Id]) ON DELETE SET NULL

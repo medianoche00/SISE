@@ -6,12 +6,44 @@ import { Usuario } from '../../../core/models/usuario.interface';
 @Component({
   selector: 'app-usuarios-list',
   templateUrl: './usuarios-list.component.html',
-  styleUrls: ['./usuarios-list.component.css']
+  styleUrls: ['./usuarios-list.component.css'],
 })
 export class UsuariosListComponent implements OnInit {
-
   // Fuente de datos para la tabla y filtro
-  dataSource = new MatTableDataSource<Usuario>([]);
+  dataSource = new MatTableDataSource<Usuario>([
+    {
+      nombreUsuario: 'admin',
+      id: 0,
+      rol: 'Administrador',
+      personaId: 0,
+      activo: 'Activo',
+      email: 'admin@sise.com',
+    },
+    {
+      id: 1,
+      nombreUsuario: 'juan.perez',
+      email: 'juan@mail.com',
+      rol: 'Egresado',
+      personaId: 0,
+      activo: 'Activo',
+    },
+    {
+      nombreUsuario: 'maria.gerente',
+      id: 2,
+      rol: 'Representante',
+      personaId: 0,
+      activo: 'Activo',
+      email: 'maria@empresa.com',
+    },
+    {
+      id: 3,
+      nombreUsuario: 'rector',
+      email: 'rector@sise.com',
+      rol: 'Administrativo',
+      personaId: 0,
+      activo: 'Activo',
+    },
+  ]);
   cargando: boolean = true;
 
   // Variables del Modal
@@ -26,13 +58,13 @@ export class UsuariosListComponent implements OnInit {
     password: '',
     rol: 'Estudiante',
     dni: '',
-    nombres: '',      // Asegúrate de usar nombres que coincidan con tu HTML
+    nombres: '', // Asegúrate de usar nombres que coincidan con tu HTML
     apellidoPaterno: '',
     apellidoMaterno: '',
-    idCarrera: ''
+    idCarrera: '',
   };
 
-  constructor(private usuarioService: UsuarioService) { }
+  constructor(private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
     this.cargarUsuarios();
@@ -48,7 +80,7 @@ export class UsuariosListComponent implements OnInit {
       error: (e) => {
         console.error(e);
         this.cargando = false;
-      }
+      },
     });
   }
 
@@ -92,7 +124,7 @@ export class UsuariosListComponent implements OnInit {
       nombres: '',
       apellidoPaterno: '',
       apellidoMaterno: '',
-      idCarrera: ''
+      idCarrera: '',
     };
   }
 
@@ -109,7 +141,7 @@ export class UsuariosListComponent implements OnInit {
   }
 
   cambiarEstado(usuario: Usuario) {
-    usuario.activo = !usuario.activo;
+    //usuario.activo = !usuario.activo;
     // Llamar al servicio...
   }
 }

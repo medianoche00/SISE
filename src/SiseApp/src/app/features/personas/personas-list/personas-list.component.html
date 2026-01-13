@@ -15,14 +15,14 @@
     </thead>
     <tbody>
       <tr *ngFor="let persona of personas">
-        <td>{{ persona.id }}</td>
+        <td>{{ persona.idPersona }}</td>
         <td>{{ persona.nombres }}</td>
-        <td>{{ persona.apellidos }}</td>
-        <td>{{ persona.dni }}</td>
-        <td>{{ persona.email }}</td>
+        <td>{{ persona.apellidoPaterno + " " + persona.apellidoMaterno }}</td>
+        <td>{{ persona.numeroDocumento }}</td>
+        <td>{{ persona.correoPersonal }}</td>
         <td>
           <button class="btn btn-sm btn-warning me-2">Editar</button>
-          <button class="btn btn-sm btn-danger" (click)="eliminarPersona(persona.id)">Eliminar</button>
+          <button class="btn btn-sm btn-danger" (click)="eliminarPersona(persona.idPersona)">Eliminar</button>
         </td>
       </tr>
     </tbody>

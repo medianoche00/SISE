@@ -107,6 +107,8 @@ CREATE TABLE [dbo].[TipoDocumento] (
     [nombreTipo] NVARCHAR(50) NOT NULL, 
     [estado] NVARCHAR(20) NOT NULL DEFAULT 'Activo',
     CONSTRAINT CK_TipoDocumento_Estado CHECK (estado IN ('Activo', 'Eliminado'))
+)
+GO
 
 -- es necesario que se inserten en ese orden
 SET IDENTITY_INSERT [dbo].[TipoDocumento] ON;
@@ -114,6 +116,7 @@ INSERT INTO [dbo].[TipoDocumento] (idTipoDocumento, nombreTipo) VALUES (1, 'DNI'
 INSERT INTO [dbo].[TipoDocumento] (idTipoDocumento, nombreTipo) VALUES (2, 'Carnet Extranjeria');
 INSERT INTO [dbo].[TipoDocumento] (idTipoDocumento, nombreTipo) VALUES (3, 'Pasaporte');
 SET IDENTITY_INSERT [dbo].[TipoDocumento] OFF;
+GO
 
 CREATE TABLE [dbo].[Facultad](
     [idFacultad] [int] IDENTITY(1,1) NOT NULL,
@@ -249,7 +252,7 @@ CREATE TABLE [dbo].[Egresado](
         REFERENCES [dbo].[Carrera] ([idCarrera]) ON DELETE NO ACTION,
     
     CONSTRAINT [CK_Egresado_Estado] CHECK ([estado] IN ('Buscando Trabajo', 'Trabajando', 'Estudiando', 'Inactivo', 'Eliminado')),
-    CONSTRAINT [CK_Egresado_Anio_Real] CHECK ([a�oEgreso] BETWEEN 1960 AND YEAR(GETDATE()) + 1)
+    CONSTRAINT [CK_Egresado_Anio_Real] CHECK ([anioEgreso] BETWEEN 1960 AND YEAR(GETDATE()) + 1)
 ) ON [PRIMARY]
 GO
 
@@ -350,7 +353,7 @@ CREATE TABLE [dbo].[Postulacion](
     CONSTRAINT [FK_Postulacion_Representante] FOREIGN KEY([idRepresentanteEvaluador]) 
         REFERENCES [dbo].[Representante] ([idRepresentante]) ON DELETE NO ACTION,
         
-    CONSTRAINT [CK_Postulacion_EstadoValido] CHECK ([estado] IN ('Pendiente', 'En Revisi�n', 'Entrevista', 'Finalista', 'Seleccionado', 'Rechazado', 'Cancelado', 'Eliminado'))
+    CONSTRAINT [CK_Postulacion_EstadoValido] CHECK ([estado] IN ('Pendiente', 'En Revision', 'Entrevista', 'Finalista', 'Seleccionado', 'Rechazado', 'Cancelado', 'Eliminado'))
 ) ON [PRIMARY]
 GO
 

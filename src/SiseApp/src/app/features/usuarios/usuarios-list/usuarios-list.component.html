@@ -52,16 +52,18 @@
               </td>
               <td>
                 <span class="badge rounded-pill px-3 py-2"
-                      [ngClass]="element.activo ? 'bg-success-soft text-success' : 'bg-danger-soft text-danger'">
-                  {{ element.activo ? 'ACTIVO' : 'INACTIVO' }}
+                      [ngClass]="element.activo == 'Activo' ? 'bg-success-soft text-success' : 'bg-danger-soft text-danger'">
+                  {{ element.activo== 'Activo' ? 'ACTIVO' : 'INACTIVO' }}
                 </span>
               </td>
               <td class="text-end pe-4">
                 <button class="btn btn-icon text-muted me-2" (click)="abrirModalEditar(element)" title="Editar">
+                  <mat-icon>edit</mat-icon>
                   <i class="bi bi-pencil-square"></i>
                 </button>
                 <button class="btn btn-icon text-muted" (click)="cambiarEstado(element)" title="Cambiar Estado">
-                  <i class="bi" [ngClass]="element.activo ? 'bi-slash-circle' : 'bi-check-circle'"></i>
+                  <mat-icon>delete</mat-icon>
+                  <i class="bi" [ngClass]="element.activo == 'Activo' ? 'bi-slash-circle' : 'bi-check-circle'"></i>
                 </button>
               </td>
             </tr>

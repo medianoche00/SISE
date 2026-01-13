@@ -1,8 +1,12 @@
 export interface Persona {
-  id: number;
+  idPersona: number;
   nombres: string;
-  apellidos: string;
-  dni: string;
-  email: string;
-  telefono?: string;
+  apellidoPaterno: string;
+  apellidoMaterno: string;
+  numeroDocumento: string;
+  idTipoDocumento: number;
+  nombreTipoDocumento: string;
+  tlefono: string;
+  correoPersonal: string;
+  estado: string;
 }

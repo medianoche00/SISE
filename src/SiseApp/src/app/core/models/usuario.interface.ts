@@ -4,7 +4,7 @@ export interface Usuario {
   rol: string;
   personaId: number;
   nombreCompleto?: string;
-  activo: boolean;
+  activo: string;
   dni?: string;
   nombres?: string;
   apellidoPaterno?: string;

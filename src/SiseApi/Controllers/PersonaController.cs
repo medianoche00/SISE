@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SiseApi.Data;
 using SiseApi.Data.Models;
@@ -20,16 +21,37 @@ namespace SiseApi.Controllers
             _usuarioActualService = usuarioActualService;
         }
 
-        public async Task<ActionResult<List<PersonaDto>>> Get()
+        public async Task<ActionResult<List<PersonaDto>>> GetAll()
         {
-            //var idAdministrador = _usuarioActualService.GetIdAdministrativoActualAsync();
-            //if (idAdministrador == null) return Unauthorized("Usuario no es administrador.");
+            var idAdministrador = _usuarioActualService.GetIdAdministrativoActualAsync();
+            if (idAdministrador == null) return Unauthorized("Usuario no es administrador.");
 
             var personas = await _context.Database.SqlQueryRaw<PersonaDto>(
                 "EXEC dbo.sp_Persona_Listar"
             ).ToListAsync();
 
             return Ok(personas);
+        }
+
+        [HttpDelete("{idPersona:int}")]
+        public async Task<ActionResult> EliminarPersona(int idPersona)
+        {
+            var idAdministrador = await _usuarioActualService.GetIdAdministrativoActualAsync();
+            if (idAdministrador == null) return Unauthorized("Usuario no es administrador.");
+
+            try
+            {
+                await _context.Database.ExecuteSqlInterpolatedAsync($"EXEC sp_Persona_Eliminar {idPersona}");
+                return NoContent();
+            }
+            catch (SqlException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Ocurrió un error interno al eliminar la persona.");
+            }
         }
     }
 }

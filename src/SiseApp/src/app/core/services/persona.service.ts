@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Persona } from '../models/persona.interface'; // Importación corregida
+import { Persona } from '../models/persona.interface';
 import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PersonaService {
-  private apiUrl = `${environment.apiUrl}/personas`;
+  private apiUrl = `${environment.apiUrl}/Persona`;
 
   constructor(private http: HttpClient) { }
 

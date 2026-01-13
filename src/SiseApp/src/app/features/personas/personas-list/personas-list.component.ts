@@ -19,7 +19,6 @@ export class PersonasListComponent implements OnInit {
 
   cargarPersonas() {
     this.personaService.getAll().subscribe({
-      // Agregamos el tipo explícito ': Persona[]' y ': any' para corregir el error TS7006
       next: (data: Persona[]) => {
         this.personas = data;
       },

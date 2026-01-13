@@ -186,3 +186,83 @@ BEGIN
     INSERT INTO Auditoria (tablaAfectada, accion, usuarioSQL, datosAntiguos, datosNuevos)
     SELECT 'ExperienciaLaboral', @acc, SYSTEM_USER, (SELECT * FROM deleted FOR JSON AUTO), (SELECT * FROM inserted FOR JSON AUTO) FROM (SELECT 1 as c) as t;
 END; GO
+
+CREATE OR ALTER TRIGGER [dbo].[trg_Auditoria_Empresa] ON [dbo].[Empresa] AFTER INSERT, UPDATE, DELETE AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @Accion NVARCHAR(20);
+    IF EXISTS (SELECT * FROM inserted) AND EXISTS (SELECT * FROM deleted) SET @Accion = 'UPDATE';
+    ELSE IF EXISTS (SELECT * FROM inserted) SET @Accion = 'INSERT';
+    ELSE IF EXISTS (SELECT * FROM deleted) SET @Accion = 'DELETE';
+    ELSE RETURN;
+
+    INSERT INTO [dbo].[Auditoria] (tablaAfectada, accion, usuarioSQL, datosAntiguos, datosNuevos)
+    SELECT 'Empresa', @Accion, SYSTEM_USER, 
+           (SELECT * FROM deleted FOR JSON AUTO), 
+           (SELECT * FROM inserted FOR JSON AUTO);
+END
+GO
+
+CREATE OR ALTER TRIGGER [dbo].[trg_Auditoria_OfertaLaboral] ON [dbo].[OfertaLaboral] AFTER INSERT, UPDATE, DELETE AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @Accion NVARCHAR(20);
+    IF EXISTS (SELECT * FROM inserted) AND EXISTS (SELECT * FROM deleted) SET @Accion = 'UPDATE';
+    ELSE IF EXISTS (SELECT * FROM inserted) SET @Accion = 'INSERT';
+    ELSE IF EXISTS (SELECT * FROM deleted) SET @Accion = 'DELETE';
+    ELSE RETURN;
+
+    INSERT INTO [dbo].[Auditoria] (tablaAfectada, accion, usuarioSQL, datosAntiguos, datosNuevos)
+    SELECT 'OfertaLaboral', @Accion, SYSTEM_USER, 
+           (SELECT * FROM deleted FOR JSON AUTO), 
+           (SELECT * FROM inserted FOR JSON AUTO);
+END
+GO
+
+CREATE OR ALTER TRIGGER [dbo].[trg_Auditoria_Postulacion] ON [dbo].[Postulacion] AFTER INSERT, UPDATE, DELETE AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @Accion NVARCHAR(20);
+    IF EXISTS (SELECT * FROM inserted) AND EXISTS (SELECT * FROM deleted) SET @Accion = 'UPDATE';
+    ELSE IF EXISTS (SELECT * FROM inserted) SET @Accion = 'INSERT';
+    ELSE IF EXISTS (SELECT * FROM deleted) SET @Accion = 'DELETE';
+    ELSE RETURN;
+
+    INSERT INTO [dbo].[Auditoria] (tablaAfectada, accion, usuarioSQL, datosAntiguos, datosNuevos)
+    SELECT 'Postulacion', @Accion, SYSTEM_USER, 
+           (SELECT * FROM deleted FOR JSON AUTO), 
+           (SELECT * FROM inserted FOR JSON AUTO);
+END
+GO
+
+-- Valida que un Egresado no sea Admin ni Rep
+CREATE OR ALTER TRIGGER [dbo].[trg_ValidaUsuarioUnico_Egresado] ON [dbo].[Egresado] AFTER INSERT, UPDATE AS
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM inserted i WHERE i.idUsuario IS NOT NULL AND (
+            EXISTS (SELECT 1 FROM [dbo].[Administrativo] a WHERE a.idUsuario = i.idUsuario) OR
+            EXISTS (SELECT 1 FROM [dbo].[Representante] r WHERE r.idUsuario = i.idUsuario)
+        )
+    )
+    BEGIN
+        RAISERROR ('ERROR DE INTEGRIDAD: El usuario ya tiene otro rol asignado (Admin o Rep).', 16, 1);
+        ROLLBACK TRANSACTION;
+    END
+END
+GO
+
+-- Valida que un Admin no sea Egresado ni Rep
+CREATE OR ALTER TRIGGER [dbo].[trg_ValidaUsuarioUnico_Admin] ON [dbo].[Administrativo] AFTER INSERT, UPDATE AS
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM inserted i WHERE i.idUsuario IS NOT NULL AND (
+            EXISTS (SELECT 1 FROM [dbo].[Egresado] e WHERE e.idUsuario = i.idUsuario) OR
+            EXISTS (SELECT 1 FROM [dbo].[Representante] r WHERE r.idUsuario = i.idUsuario)
+        )
+    )
+    BEGIN
+        RAISERROR ('ERROR DE INTEGRIDAD: El usuario ya tiene otro rol asignado (Egresado o Rep).', 16, 1);
+        ROLLBACK TRANSACTION;
+    END
+END
+GO

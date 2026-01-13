@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SiseApi.Data.Models;
 
-[Index("DocumentoIdentidad", Name = "UQ_Persona_Documento", IsUnique = true)]
+[Index("IdTipoDocumento", "NumeroDocumento", Name = "UQ_Persona_Documento", IsUnique = true)]
 public partial class Persona
 {
     [Key]
@@ -25,10 +25,13 @@ public partial class Persona
     [StringLength(100)]
     public string ApellidoMaterno { get; set; } = null!;
 
-    [Column("documentoIdentidad")]
+    [Column("numeroDocumento")]
     [StringLength(20)]
     [Unicode(false)]
-    public string DocumentoIdentidad { get; set; } = null!;
+    public string NumeroDocumento { get; set; } = null!;
+
+    [Column("idTipoDocumento")]
+    public int IdTipoDocumento { get; set; }
 
     [Column("telefono")]
     [StringLength(15)]
@@ -47,6 +50,10 @@ public partial class Persona
 
     [InverseProperty("IdPersonaNavigation")]
     public virtual ICollection<Egresado> Egresado { get; set; } = new List<Egresado>();
+
+    [ForeignKey("IdTipoDocumento")]
+    [InverseProperty("Persona")]
+    public virtual TipoDocumento IdTipoDocumentoNavigation { get; set; } = null!;
 
     [InverseProperty("IdPersonaNavigation")]
     public virtual ICollection<Representante> Representante { get; set; } = new List<Representante>();

@@ -236,9 +236,10 @@ public class DbSeeder : IDbSeeder
 
         foreach (var item in data)
         {
-            // Verificación única por DocumentoIdentidad
-            if (!await _context.Persona.AnyAsync(p => p.DocumentoIdentidad == item.DocumentoIdentidad))
+            // Verificación única por NumeroDocumento
+            if (!await _context.Persona.AnyAsync(p => p.NumeroDocumento == item.NumeroDocumento))
             {
+                item.IdTipoDocumento = 1; //dni
                 _context.Persona.Add(item);
             }
         }
@@ -350,11 +351,11 @@ public class DbSeeder : IDbSeeder
     {
         // Buscar la persona por DNI (u otro documento)
         var persona = await _context.Persona
-            .FirstOrDefaultAsync(p => p.DocumentoIdentidad == dto.DocumentoIdentidad);
+            .FirstOrDefaultAsync(p => p.NumeroDocumento == dto.NumeroDocumento);
 
         if (persona == null)
         {
-            _logger.LogWarning($"No se encontró Persona con Doc {dto.DocumentoIdentidad} para el usuario {user.UserName}");
+            _logger.LogWarning($"No se encontró Persona con Doc {dto.NumeroDocumento} para el usuario {user.UserName}");
             return;
         }
 
@@ -370,7 +371,7 @@ public class DbSeeder : IDbSeeder
             IdPersona = persona.IdPersona, // Vinculamos a la persona existente
             IdCarrera = dto.IdCarrera ?? 1, // Valor por defecto o error si es nulo
             CodigoUniversitario = dto.CodigoUniversitario,
-            AñoEgreso = dto.AnioEgreso ?? DateTime.Now.Year,
+            AnioEgreso = dto.AnioEgreso ?? DateTime.Now.Year,
             Estado = "Buscando Trabajo"
         };
 
@@ -383,7 +384,7 @@ public class DbSeeder : IDbSeeder
     {
         // 1. Buscar Persona
         var persona = await _context.Persona
-            .FirstOrDefaultAsync(p => p.DocumentoIdentidad == dto.DocumentoIdentidad);
+            .FirstOrDefaultAsync(p => p.NumeroDocumento == dto.NumeroDocumento);
 
         // 2. Buscar Empresa (usando un campo único como RUC, nombre, o asumiendo que el JSON trae el ID)
         // Aquí asumo que la entidad Empresa tiene un campo RUC o similar.
@@ -414,7 +415,7 @@ public class DbSeeder : IDbSeeder
     {
         // 1. Buscar Persona
         var persona = await _context.Persona
-            .FirstOrDefaultAsync(p => p.DocumentoIdentidad == dto.DocumentoIdentidad);
+            .FirstOrDefaultAsync(p => p.NumeroDocumento == dto.NumeroDocumento);
 
         // 2. Buscar Cargo
         var cargo = await _context.CargoAdministrativo
@@ -447,7 +448,7 @@ public class DbSeeder : IDbSeeder
         public string Password { get; set; } = null!;
         public string? PhoneNumber { get; set; }
         public string? Role { get; set; } // Nombre del rol a asignar
-        public string? DocumentoIdentidad { get; set; }
+        public string? NumeroDocumento { get; set; }
         // Datos específicos para Egresado
         public string? CodigoUniversitario { get; set; }
         public int? IdCarrera { get; set; }

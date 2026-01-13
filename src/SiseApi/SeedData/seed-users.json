@@ -5,14 +5,14 @@
     "Password": "Password123!",
     "Role": "Administrador",
     "CargoAdministrativo": "Soporte TI",
-    "DocumentoIdentidad": "00000001"
+    "NumeroDocumento": "00000001"
   },
   {
     "UserName": "juan.perez",
     "Email": "juan@mail.com",
     "Password": "Password123!",
     "Role": "Egresado",
-    "DocumentoIdentidad": "45879632",
+    "NumeroDocumento": "45879632",
     "CodigoUniversitario": "20201001",
     "IdCarrera": 1,
     "AnioEgreso": 2023
@@ -22,7 +22,7 @@
     "Email": "maria@empresa.com",
     "Password": "Password123!",
     "Role": "Representante",
-    "DocumentoIdentidad": "10203040",
+    "NumeroDocumento": "10203040",
     "RucEmpresa": "10203040",
     "CargoEmpresa": "Gerente de RRHH"
   },
@@ -32,6 +32,6 @@
     "Password": "Password123!",
     "Role": "Administrativo",
     "CargoAdministrativo": "Rector",
-    "DocumentoIdentidad": "45203042"
+    "NumeroDocumento": "45203042"
   }
 ]

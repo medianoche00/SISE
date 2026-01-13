@@ -241,7 +241,7 @@ CREATE TABLE [dbo].[Egresado](
     [idUsuario] [int] NOT NULL,
     [idCarrera] [int] NOT NULL,
     [codigoUniversitario] [nvarchar](20) NOT NULL,
-    [a�oEgreso] [int] NOT NULL,
+    [anioEgreso] [int] NOT NULL,
     [estado] [nvarchar](20) NOT NULL DEFAULT 'Buscando Trabajo',
     CONSTRAINT [PK_Egresado] PRIMARY KEY CLUSTERED ([idEgresado] ASC),
     CONSTRAINT [FK_Egresado_Persona] FOREIGN KEY([idPersona]) 
@@ -380,7 +380,7 @@ CREATE TABLE [dbo].[FormacionComplementaria](
 GO
 
 /* ==================================================================================
-   5. TABLA DE AUDITOR�A
+   5. TABLA DE AUDITORIA
    ================================================================================== */
 
 CREATE TABLE [dbo].[Auditoria](

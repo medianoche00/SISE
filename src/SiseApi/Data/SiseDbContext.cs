@@ -44,6 +44,8 @@ public partial class SiseDbContext : IdentityDbContext<IdentityUser<int>, Identi
 
     public virtual DbSet<TipoContrato> TipoContrato { get; set; }
 
+    public virtual DbSet<TipoDocumento> TipoDocumento { get; set; }
+
     public virtual DbSet<TipoFormacion> TipoFormacion { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -61,7 +63,7 @@ public partial class SiseDbContext : IdentityDbContext<IdentityUser<int>, Identi
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Administrativo_Persona");
 
-        });
+                    });
 
         modelBuilder.Entity<Auditoria>(entity =>
         {
@@ -164,6 +166,10 @@ public partial class SiseDbContext : IdentityDbContext<IdentityUser<int>, Identi
         modelBuilder.Entity<Persona>(entity =>
         {
             entity.Property(e => e.Estado).HasDefaultValue("Activo");
+
+            entity.HasOne(d => d.IdTipoDocumentoNavigation).WithMany(p => p.Persona)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Persona_TipoDocumento");
         });
 
         modelBuilder.Entity<Postulacion>(entity =>
@@ -198,6 +204,13 @@ public partial class SiseDbContext : IdentityDbContext<IdentityUser<int>, Identi
 
         modelBuilder.Entity<TipoContrato>(entity =>
         {
+            entity.Property(e => e.Estado).HasDefaultValue("Activo");
+        });
+
+        modelBuilder.Entity<TipoDocumento>(entity =>
+        {
+            entity.HasKey(e => e.IdTipoDocumento).HasName("PK__TipoDocu__61FDF9F5CF4B6FA7");
+
             entity.Property(e => e.Estado).HasDefaultValue("Activo");
         });
 

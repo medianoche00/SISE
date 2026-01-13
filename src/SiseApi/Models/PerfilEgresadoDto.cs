@@ -6,7 +6,7 @@
         public string Nombres { get; set; }
         public string ApellidoPaterno { get; set; }
         public string ApellidoMaterno { get; set; }
-        public string DocumentoIdentidad { get; set; }
+        public string NumeroDocumento { get; set; }
 
         // Datos de Contacto (Editables)
         public string Telefono { get; set; }

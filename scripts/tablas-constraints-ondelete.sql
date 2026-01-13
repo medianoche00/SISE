@@ -107,14 +107,13 @@ CREATE TABLE [dbo].[TipoDocumento] (
     [nombreTipo] NVARCHAR(50) NOT NULL, 
     [estado] NVARCHAR(20) NOT NULL DEFAULT 'Activo',
     CONSTRAINT CK_TipoDocumento_Estado CHECK (estado IN ('Activo', 'Eliminado'))
-);
 
+-- es necesario que se inserten en ese orden
 SET IDENTITY_INSERT [dbo].[TipoDocumento] ON;
 INSERT INTO [dbo].[TipoDocumento] (idTipoDocumento, nombreTipo) VALUES (1, 'DNI');
-INSERT INTO [dbo].[TipoDocumento] (idTipoDocumento, nombreTipo) VALUES (2, 'Carnet Extranjería');
+INSERT INTO [dbo].[TipoDocumento] (idTipoDocumento, nombreTipo) VALUES (2, 'Carnet Extranjeria');
 INSERT INTO [dbo].[TipoDocumento] (idTipoDocumento, nombreTipo) VALUES (3, 'Pasaporte');
 SET IDENTITY_INSERT [dbo].[TipoDocumento] OFF;
-GO
 
 CREATE TABLE [dbo].[Facultad](
     [idFacultad] [int] IDENTITY(1,1) NOT NULL,
@@ -202,8 +201,7 @@ CREATE TABLE [dbo].[Persona](
     
     CONSTRAINT [PK_Persona] PRIMARY KEY CLUSTERED ([idPersona] ASC),
     CONSTRAINT [FK_Persona_TipoDocumento] FOREIGN KEY([idTipoDocumento]) 
-        REFERENCES [dbo].[TipoDocumento] ([idTipoDocumento]) ON DELETE NO ACTION,
-    
+        REFERENCES [dbo].[TipoDocumento] ([idTipoDocumento]) ON DELETE NO ACTION,    
     CONSTRAINT [UQ_Persona_Documento] UNIQUE ([idTipoDocumento], [numeroDocumento]),
     CONSTRAINT [CK_Persona_Estado] CHECK ([estado] IN ('Activo', 'Eliminado')),
     CONSTRAINT [CK_Persona_ValidarDocumento] CHECK (
@@ -226,7 +224,6 @@ CREATE TABLE [dbo].[Empresa](
     
     CONSTRAINT [PK_Empresa] PRIMARY KEY CLUSTERED ([idEmpresa] ASC),
     CONSTRAINT [UQ_Empresa_RUC] UNIQUE ([ruc]),
-    
     CONSTRAINT [CK_Empresa_RUC_Formato] CHECK ([ruc] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'),
     CONSTRAINT [CK_Empresa_Estado] CHECK ([estado] IN ('Registrada', 'Activa', 'Rechazada', 'Vetada', 'Inactiva', 'Eliminado'))
 ) ON [PRIMARY]
@@ -238,7 +235,7 @@ CREATE TABLE [dbo].[Egresado](
     [idUsuario] [int] NOT NULL,
     [idCarrera] [int] NOT NULL,
     [codigoUniversitario] [nvarchar](20) NOT NULL,
-    [añoEgreso] [int] NOT NULL,
+    [anioEgreso] [int] NOT NULL,
     [estado] [nvarchar](20) NOT NULL DEFAULT 'Buscando Trabajo',
     
     CONSTRAINT [PK_Egresado] PRIMARY KEY CLUSTERED ([idEgresado] ASC),
@@ -252,7 +249,7 @@ CREATE TABLE [dbo].[Egresado](
         REFERENCES [dbo].[Carrera] ([idCarrera]) ON DELETE NO ACTION,
     
     CONSTRAINT [CK_Egresado_Estado] CHECK ([estado] IN ('Buscando Trabajo', 'Trabajando', 'Estudiando', 'Inactivo', 'Eliminado')),
-    CONSTRAINT [CK_Egresado_Anio_Real] CHECK ([añoEgreso] BETWEEN 1960 AND YEAR(GETDATE()) + 1)
+    CONSTRAINT [CK_Egresado_Anio_Real] CHECK ([aï¿½oEgreso] BETWEEN 1960 AND YEAR(GETDATE()) + 1)
 ) ON [PRIMARY]
 GO
 
@@ -353,7 +350,7 @@ CREATE TABLE [dbo].[Postulacion](
     CONSTRAINT [FK_Postulacion_Representante] FOREIGN KEY([idRepresentanteEvaluador]) 
         REFERENCES [dbo].[Representante] ([idRepresentante]) ON DELETE NO ACTION,
         
-    CONSTRAINT [CK_Postulacion_EstadoValido] CHECK ([estado] IN ('Pendiente', 'En Revisión', 'Entrevista', 'Finalista', 'Seleccionado', 'Rechazado', 'Cancelado', 'Eliminado'))
+    CONSTRAINT [CK_Postulacion_EstadoValido] CHECK ([estado] IN ('Pendiente', 'En Revisiï¿½n', 'Entrevista', 'Finalista', 'Seleccionado', 'Rechazado', 'Cancelado', 'Eliminado'))
 ) ON [PRIMARY]
 GO
 
@@ -402,7 +399,7 @@ CREATE TABLE [dbo].[FormacionComplementaria](
 GO
 
 /* ==================================================================================
-   5. TABLA DE AUDITORÍA
+   5. TABLA DE AUDITORIA
    ================================================================================== */
 
 CREATE TABLE [dbo].[Auditoria](

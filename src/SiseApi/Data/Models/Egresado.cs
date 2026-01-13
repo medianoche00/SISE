@@ -27,8 +27,8 @@ public partial class Egresado
     [StringLength(20)]
     public string CodigoUniversitario { get; set; } = null!;
 
-    [Column("añoEgreso")]
-    public int AñoEgreso { get; set; }
+    [Column("anioEgreso")]
+    public int AnioEgreso { get; set; }
 
     [Column("estado")]
     [StringLength(20)]

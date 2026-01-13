@@ -162,7 +162,7 @@ namespace SiseApi.Controllers
                     NombreCompleto = p.IdEgresadoNavigation.IdPersonaNavigation.Nombres + " " 
                         + p.IdEgresadoNavigation.IdPersonaNavigation.ApellidoPaterno + " " 
                         + p.IdEgresadoNavigation.IdPersonaNavigation.ApellidoMaterno,
-                    Dni = p.IdEgresadoNavigation.IdPersonaNavigation.DocumentoIdentidad,
+                    Dni = p.IdEgresadoNavigation.IdPersonaNavigation.NumeroDocumento,
                     Correo = p.IdEgresadoNavigation.IdPersonaNavigation.CorreoPersonal,
                     Telefono = p.IdEgresadoNavigation.IdPersonaNavigation.Telefono,
                     ExperienciaLaboral = p.IdEgresadoNavigation.ExperienciaLaboral.Select(exp => new ExperienciaLaboralDto

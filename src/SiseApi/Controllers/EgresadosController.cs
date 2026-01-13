@@ -43,7 +43,7 @@ namespace SiseApi.Controllers
                 Nombres = egresado.IdPersonaNavigation.Nombres,
                 ApellidoPaterno = egresado.IdPersonaNavigation.ApellidoPaterno,
                 ApellidoMaterno = egresado.IdPersonaNavigation.ApellidoMaterno,
-                DocumentoIdentidad = egresado.IdPersonaNavigation.DocumentoIdentidad, // O DNI
+                NumeroDocumento = egresado.IdPersonaNavigation.NumeroDocumento, // O DNI
 
                 // Contacto
                 Telefono = egresado.IdPersonaNavigation.Telefono,
@@ -52,7 +52,7 @@ namespace SiseApi.Controllers
                 // Académicos
                 IdCarrera = egresado.IdCarrera,
                 CodigoUniversitario = egresado.CodigoUniversitario, // Asumiendo que existe en Egresado
-                AñoEgreso = egresado.AñoEgreso, // Asumiendo que es int
+                AñoEgreso = egresado.AnioEgreso, // Asumiendo que es int
                 Carrera = egresado.IdCarreraNavigation.NombreCarrera
             };
 
@@ -94,10 +94,10 @@ namespace SiseApi.Controllers
                 egresado.IdPersonaNavigation.Nombres = dto.Nombres;
                 egresado.IdPersonaNavigation.ApellidoPaterno = dto.ApellidoPaterno;
                 egresado.IdPersonaNavigation.ApellidoPaterno = dto.ApellidoMaterno;
-                //egresado.Persona.DocumentoIdentidad = dto.DocumentoIdentidad;
+                //egresado.Persona.NumeroDocumento = dto.NumeroDocumento;
                 egresado.IdPersonaNavigation.Telefono = dto.Telefono;
                 egresado.IdPersonaNavigation.CorreoPersonal = dto.CorreoPersonal;
-                egresado.AñoEgreso = dto.AñoEgreso;
+                egresado.AnioEgreso = dto.AñoEgreso;
 
                 await _context.SaveChangesAsync();
                 return Ok(new { message = "Perfil actualizado correctamente." });

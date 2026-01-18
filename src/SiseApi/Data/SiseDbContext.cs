@@ -2,14 +2,18 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SiseApi.Data.Models;
+using SiseApi.Services;
 
 namespace SiseApi.Data;
 
 public partial class SiseDbContext : IdentityDbContext<IdentityUser<int>, IdentityRole<int>, int>
 {
-    public SiseDbContext(DbContextOptions<SiseDbContext> options)
+    private readonly IUsuarioActualService _usuarioActualService;
+
+    public SiseDbContext(DbContextOptions<SiseDbContext> options, IUsuarioActualService usuarioActualService )
         : base(options)
     {
+        _usuarioActualService = usuarioActualService;
     }
 
     public virtual DbSet<Administrativo> Administrativo { get; set; }
@@ -47,6 +51,17 @@ public partial class SiseDbContext : IdentityDbContext<IdentityUser<int>, Identi
     public virtual DbSet<TipoDocumento> TipoDocumento { get; set; }
 
     public virtual DbSet<TipoFormacion> TipoFormacion { get; set; }
+
+    public override int SaveChanges()
+    {
+        int? currentUserId = _usuarioActualService.GetIdUsuarioLogueado();
+        if (currentUserId.HasValue)
+        {
+            // inyectar el id del usuario actual en el contexto de la sesión de sql server
+            Database.ExecuteSqlRaw($"EXEC sp_set_session_context 'AuditUserId', {currentUserId}");
+        }
+        return base.SaveChanges();
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

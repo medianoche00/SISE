@@ -406,17 +406,15 @@ GO
    ================================================================================== */
 
 CREATE TABLE [dbo].[Auditoria](
-    [idAuditoria] [int] IDENTITY(1,1) NOT NULL,
+    [idAuditoria] [bigint] IDENTITY(1,1) NOT NULL,
+    [nombreTabla] [nvarchar](100) NOT NULL,
+    [idRegistro] [nvarchar](100) NOT NULL,
+    [tipoAccion] [nvarchar](20) NOT NULL,
     [idUsuario] [int] NULL,
-    [tablaAfectada] [nvarchar](100) NOT NULL,
-    [columnaAfectada] [nvarchar](100) NULL,
-    [accion] [nvarchar](20) NOT NULL,
-    [valorAnterior] [nvarchar](max) NULL,
-    [valorNuevo] [nvarchar](max) NULL,
-    [fechaHora] [datetime2](7) NOT NULL DEFAULT GETDATE(),
-    
+    [fechaCambio] [datetime2](7) NOT NULL DEFAULT GETDATE(),
+    [valAntiguos] [nvarchar](max) NULL, -- JSON
+    [valNuevos] [nvarchar](max) NULL, -- JSON
     CONSTRAINT [PK_Auditoria] PRIMARY KEY CLUSTERED ([idAuditoria] ASC),
-    CONSTRAINT [FK_Auditoria_Usuario] FOREIGN KEY([idUsuario]) 
-        REFERENCES [dbo].[AspNetUsers] ([Id]) ON DELETE SET NULL
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+    CONSTRAINT [CK_Auditoria_TipoAccion] CHECK ([tipoAccion] IN ('INSERT', 'UPDATE', 'DELETE'))
+) ON [PRIMARY]
 GO

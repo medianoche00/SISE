@@ -30,3 +30,24 @@ BEGIN
     END
 END
 GO
+
+CREATE OR ALTER TRIGGER [dbo].[trg_ValidaUsuarioUnico_Representante] 
+ON [dbo].[Representante] 
+AFTER INSERT, UPDATE 
+AS
+BEGIN
+    SET NOCOUNT ON;
+    IF EXISTS (
+        SELECT 1 FROM inserted i 
+        WHERE i.idUsuario IS NOT NULL 
+        AND (
+            EXISTS (SELECT 1 FROM [dbo].[Administrativo] a WHERE a.idUsuario = i.idUsuario) OR
+            EXISTS (SELECT 1 FROM [dbo].[Egresado] e WHERE e.idUsuario = i.idUsuario)
+        )
+    )
+    BEGIN
+        RAISERROR ('ERROR DE INTEGRIDAD: El usuario ya tiene otro rol asignado (Admin o Egresado).', 16, 1);
+        ROLLBACK TRANSACTION;
+    END
+END
+GO

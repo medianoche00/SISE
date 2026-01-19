@@ -39,9 +39,16 @@ namespace SiseApi.Controllers
             var idAdministrador = await _usuarioActualService.GetIdAdministrativoActualAsync();
             if (idAdministrador == null) return Unauthorized("Usuario no es administrador.");
 
+            var idUsuario = _usuarioActualService.GetIdUsuarioLogueado();
+
             try
             {
-                await _context.Database.ExecuteSqlInterpolatedAsync($"EXEC sp_Persona_Eliminar {idPersona}");
+                await _context.EjecutarSpConAuditoriaAsync(
+                    "documentoXX",
+                    idUsuario,
+                    "EXEC sp_Persona_Eliminar @IdPersona",
+                    new SqlParameter("@IdPersona", idPersona)
+                );
                 return NoContent();
             }
             catch (SqlException ex)

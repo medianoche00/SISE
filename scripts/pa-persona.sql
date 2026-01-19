@@ -60,13 +60,13 @@ BEGIN
             estado
         )
         VALUES (
-            @Nombres, 
-            @ApellidoPaterno, 
-            @ApellidoMaterno, 
+            TRIM(@Nombres), 
+            TRIM(@ApellidoPaterno), 
+            TRIM(@ApellidoMaterno), 
             @IdTipoDocumento,
             @NumeroDocumento, 
             @Telefono, 
-            @CorreoPersonal, 
+            LOWER(@CorreoPersonal), 
             'Activo'
         );
 
@@ -136,13 +136,13 @@ BEGIN
         -- Actualización
         UPDATE dbo.Persona
         SET 
-            nombres = @Nombres,
-            apellidoPaterno = @ApellidoPaterno,
-            apellidoMaterno = @ApellidoMaterno,
+            nombres = TRIM(@Nombres),
+            apellidoPaterno = TRIM(@ApellidoPaterno),
+            apellidoMaterno = TRIM(@ApellidoMaterno),
             idTipoDocumento = @IdTipoDocumento,
             numeroDocumento = @NumeroDocumento,
             telefono = @Telefono,
-            correoPersonal = @CorreoPersonal
+            correoPersonal = LOWER(@CorreoPersonal)
         WHERE idPersona = @IdPersona;
 
         COMMIT TRANSACTION;

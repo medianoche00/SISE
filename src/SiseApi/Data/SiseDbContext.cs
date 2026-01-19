@@ -8,12 +8,14 @@ namespace SiseApi.Data;
 
 public partial class SiseDbContext : IdentityDbContext<IdentityUser<int>, IdentityRole<int>, int>
 {
-    private readonly IUsuarioActualService _usuarioActualService;
+    //private readonly IUsuarioActualService _usuarioActualService;
 
-    public SiseDbContext(DbContextOptions<SiseDbContext> options, IUsuarioActualService usuarioActualService )
-        : base(options)
+    public SiseDbContext(
+        DbContextOptions<SiseDbContext> options
+        //, IUsuarioActualService usuarioActualService 
+        ) : base(options)
     {
-        _usuarioActualService = usuarioActualService;
+        //_usuarioActualService = usuarioActualService;
     }
 
     public virtual DbSet<Administrativo> Administrativo { get; set; }
@@ -52,6 +54,7 @@ public partial class SiseDbContext : IdentityDbContext<IdentityUser<int>, Identi
 
     public virtual DbSet<TipoFormacion> TipoFormacion { get; set; }
 
+    /*
     public override int SaveChanges()
     {
         int? currentUserId = _usuarioActualService.GetIdUsuarioLogueado();
@@ -62,10 +65,15 @@ public partial class SiseDbContext : IdentityDbContext<IdentityUser<int>, Identi
         }
         return base.SaveChanges();
     }
+    */
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<IdentityUser<int>>(entity =>
+        {
+            entity.ToTable(name: "AspNetUsers", table => table.HasTrigger("TRG_Audit_AspNetUser"));
+        });
         modelBuilder.Entity<Administrativo>(entity =>
         {
             entity.Property(e => e.Estado).HasDefaultValue("Activo");

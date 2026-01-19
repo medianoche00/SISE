@@ -97,8 +97,8 @@ if (app.Environment.IsDevelopment())
         //db.Database.Migrate(); // aplica migraciones pendientes
 
         // opcional: ejecutar un seeder
-        var seeder = services.GetService<IDbSeeder>();
-        seeder?.SeedAsync().GetAwaiter().GetResult();
+        //var seeder = services.GetService<IDbSeeder>();
+        //seeder?.SeedAsync().GetAwaiter().GetResult();
     }
     catch (Exception ex)
     {

@@ -49,6 +49,18 @@ public class DbSeeder : IDbSeeder
     {
         try
         {
+            var user = new IdentityUser<int>
+            {
+                UserName = "otro",
+                Email = "email@gmail.com",
+                EmailConfirmed = true,
+                PhoneNumber = "999888777"
+            };
+
+            await _userManager.CreateAsync(user, "Password123!");
+
+
+            /*
             // 1. Tablas Maestras / Catálogos (Sin dependencias)
             await SeedCargosAdministrativosAsync();
             await SeedRolesAsync();
@@ -73,7 +85,7 @@ public class DbSeeder : IDbSeeder
                 await _context.SaveChangesAsync(cancellationToken);
             }
 
-            _logger.LogInformation("Proceso de Seeding completado exitosamente.");
+            _logger.LogInformation("Proceso de Seeding completado exitosamente.");*/
         }
         catch (Exception ex)
         {

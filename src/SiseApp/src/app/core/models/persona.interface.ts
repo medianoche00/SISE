@@ -3,10 +3,13 @@ export interface Persona {
   nombres: string;
   apellidoPaterno: string;
   apellidoMaterno: string;
+  tipoDocumento: string;
   numeroDocumento: string;
-  idTipoDocumento: number;
-  nombreTipoDocumento: string;
-  tlefono: string;
-  correoPersonal: string;
+  telefono?: string;
+  correoPersonal?: string;
+  departamento?: string;
+  provincia?: string;
+  distrito?: string;
+  direccionEspecifica?: string;
   estado: string;
 }

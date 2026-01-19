@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterLink, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 // Routing y Componentes Principales
 import { AppRoutingModule } from './app-routing.module';
@@ -45,6 +45,7 @@ import { EstadisticasComponent } from './features/estadisticas/estadisticas.comp
 import { ReportesComponent } from './features/reportes/reportes.component';
 import { PersonasListComponent } from './features/personas/personas-list/personas-list.component';
 import { UsuariosListComponent } from './features/usuarios/usuarios-list/usuarios-list.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -85,7 +86,8 @@ import { UsuariosListComponent } from './features/usuarios/usuarios-list/usuario
     MatCardModule,
     MatProgressBarModule,
     MatTooltipModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatPaginatorModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

@@ -1,30 +1,86 @@
-<div class="container mt-4">
-  <h2>Gestión de Personas</h2>
-  <button class="btn btn-primary mb-3">Nueva Persona</button>
+<div class="container-fluid p-4 main-container">
 
-  <table class="table table-striped table-bordered">
-    <thead class="table-dark">
-      <tr>
-        <th>ID</th>
-        <th>Nombres</th>
-        <th>Apellidos</th>
-        <th>DNI</th>
-        <th>Email</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let persona of personas">
-        <td>{{ persona.idPersona }}</td>
-        <td>{{ persona.nombres }}</td>
-        <td>{{ persona.apellidoPaterno + " " + persona.apellidoMaterno }}</td>
-        <td>{{ persona.numeroDocumento }}</td>
-        <td>{{ persona.correoPersonal }}</td>
-        <td>
-          <button class="btn btn-sm btn-warning me-2">Editar</button>
-          <button class="btn btn-sm btn-danger" (click)="eliminarPersona(persona.idPersona)">Eliminar</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="text-primary fw-bold mb-0">Gestión de Personas</h2>
+      <p class="text-muted m-0">Administra el listado de personas registradas.</p>
+    </div>
+    <button mat-raised-button color="primary" class="btn-rounded-custom" (click)="abrirModal('crear')">
+      <mat-icon>add</mat-icon> NUEVA PERSONA
+    </button>
+  </div>
+
+  <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="card-body p-0">
+
+      <div class="p-3 border-bottom bg-white">
+        <div class="search-box">
+          <mat-icon class="search-icon">search</mat-icon>
+          <input type="text" placeholder="Buscar por nombre, documento..." (keyup)="aplicarFiltro($event)">
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table mat-table [dataSource]="dataSource" class="w-100">
+
+          <ng-container matColumnDef="nombre">
+            <th mat-header-cell *matHeaderCellDef> Nombre </th>
+            <td mat-cell *matCellDef="let element" class="fw-bold text-dark"> {{element.nombres}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="apellidoPaterno">
+            <th mat-header-cell *matHeaderCellDef> Ap. Paterno </th>
+            <td mat-cell *matCellDef="let element"> {{element.apellidoPaterno}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="apellidoMaterno">
+            <th mat-header-cell *matHeaderCellDef> Ap. Materno </th>
+            <td mat-cell *matCellDef="let element"> {{element.apellidoMaterno}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="tipoDocumento">
+            <th mat-header-cell *matHeaderCellDef> Tipo Doc. </th>
+            <td mat-cell *matCellDef="let element">
+              <span class="badge-custom">{{element.tipoDocumento}}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="numeroDocumento">
+            <th mat-header-cell *matHeaderCellDef> N° Documento </th>
+            <td mat-cell *matCellDef="let element"> {{element.numeroDocumento}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef class="text-end pe-4"> Acciones </th>
+            <td mat-cell *matCellDef="let element" class="text-end pe-4">
+
+              <button mat-icon-button color="primary" (click)="abrirModal('ver', element)" matTooltip="Ver Detalle">
+                <mat-icon>visibility</mat-icon>
+              </button>
+
+              <button mat-icon-button class="text-secondary" (click)="abrirModal('editar', element)" matTooltip="Editar">
+                <mat-icon>edit</mat-icon>
+              </button>
+
+              <button mat-icon-button color="warn" (click)="eliminar(element.idPersona)" matTooltip="Eliminar">
+                <mat-icon>delete</mat-icon>
+              </button>
+
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover-row"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell text-center py-4 text-muted" colspan="6">
+              No se encontraron datos.
+            </td>
+          </tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+  </div>
 </div>

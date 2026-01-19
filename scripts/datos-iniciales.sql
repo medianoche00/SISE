@@ -49,7 +49,7 @@ INSERT INTO [dbo].[Carrera] (idEscuela, nombreCarrera) VALUES
 -- Catalogos de Trabajo
 INSERT INTO [dbo].[TipoContrato] (nombreTipo) VALUES ('Tiempo Completo'), ('Medio Tiempo'), ('Prácticas Pre-Profesionales'), ('Prácticas Profesionales');
 INSERT INTO [dbo].[ModalidadTrabajo] (nombreModalidad) VALUES ('Presencial'), ('Remoto'), ('Híbrido');
-INSERT INTO [dbo].[CargoAdministrativo] (nombreCargo) VALUES ('Jefe de Bolsa de Trabajo'), ('Analista de Selección'), ('Asistente Administrativo'), ('Administrador del Sistema');
+INSERT INTO [dbo].[CargoAdministrativo] (nombreCargo) VALUES ('Jefe de Bolsa de Trabajo'), ('Analista de Selección'), ('Asistente Administrativo'), ('Administrador del Sistema'), ('Rector');
 INSERT INTO [dbo].[TipoFormacion] (nombreTipoFormacion) VALUES ('Curso'), ('Diplomado'), ('Certificación'), ('Taller');
 GO
 
@@ -88,7 +88,7 @@ DECLARE @IdDirAdmin INT = SCOPE_IDENTITY();
 
 -- 2. Persona
 INSERT INTO [dbo].[Persona] (nombres, apellidoPaterno, apellidoMaterno, numeroDocumento, idTipoDocumento, idDireccion, correoPersonal, estado)
-VALUES ('Juan', 'Perez', 'Admin', '10000001', @IdTipoDocDNI, @IdDirAdmin, 'admin@sise.edu.pe', 'Activo');
+VALUES ('Juan', 'Perez', 'Lopez', '10000001', @IdTipoDocDNI, @IdDirAdmin, 'juan.perez@gmail.com', 'Activo');
 DECLARE @IdPersAdmin INT = SCOPE_IDENTITY();
 
 -- 3. AspNetUsers
@@ -96,7 +96,7 @@ INSERT INTO [dbo].[AspNetUsers]
 (UserName, NormalizedUserName, Email, NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnabled, AccessFailedCount)
 VALUES 
 ('admin', 'ADMIN', 'admin@sise.edu.pe', 'ADMIN@SISE.EDU.PE', 1, 
-'AQAAAAIAAYagAAAAEMPrGu1OqHz9tDYivMRwd9epbz6spWDrsoGP1+UtPo+DECdfk21gQ6I24nzHT5xg7A==', -- Hash Dummy, actualizar via app si falla
+'AQAAAAIAAYagAAAAEMPrGu1OqHz9tDYivMRwd9epbz6spWDrsoGP1+UtPo+DECdfk21gQ6I24nzHT5xg7A==',
 @SecurityStamp, NEWID(), 1, 0, 1, 0);
 DECLARE @IdUserAdmin INT = SCOPE_IDENTITY();
 
@@ -122,19 +122,19 @@ DECLARE @IdDirStaff INT = SCOPE_IDENTITY();
 
 -- 2. Persona
 INSERT INTO [dbo].[Persona] (nombres, apellidoPaterno, apellidoMaterno, numeroDocumento, idTipoDocumento, idDireccion, correoPersonal, estado)
-VALUES ('Maria', 'Gomez', 'Staff', '20000002', @IdTipoDocDNI, @IdDirStaff, 'staff@sise.edu.pe', 'Activo');
+VALUES ('Maria', 'Gomez', 'Silva', '20000002', @IdTipoDocDNI, @IdDirStaff, 'maria.gomez@gmail.com', 'Activo');
 DECLARE @IdPersStaff INT = SCOPE_IDENTITY();
 
 -- 3. AspNetUsers
 INSERT INTO [dbo].[AspNetUsers] (UserName, NormalizedUserName, Email, NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnabled, AccessFailedCount)
-VALUES ('staff', 'STAFF', 'staff@sise.edu.pe', 'STAFF@SISE.EDU.PE', 1, 'AQAAAAIAAYagAAAAEMPrGu1OqHz9tDYivMRwd9epbz6spWDrsoGP1+UtPo+DECdfk21gQ6I24nzHT5xg7A==', @SecurityStamp, NEWID(), 1, 0, 1, 0);
+VALUES ('rector', 'RECTOR', 'rector@sise.edu.pe', 'RECTOR@SISE.EDU.PE', 1, 'AQAAAAIAAYagAAAAEMPrGu1OqHz9tDYivMRwd9epbz6spWDrsoGP1+UtPo+DECdfk21gQ6I24nzHT5xg7A==', @SecurityStamp, NEWID(), 1, 0, 1, 0);
 DECLARE @IdUserStaff INT = SCOPE_IDENTITY();
 
 -- 4. Rol
 INSERT INTO [dbo].[AspNetUserRoles] (UserId, RoleId) SELECT @IdUserStaff, Id FROM AspNetRoles WHERE Name = 'Administrativo';
 
--- 5. Tabla Administrativo (Cargo: Analista)
-DECLARE @IdCargoStaff INT = (SELECT TOP 1 idCargoAdministrativo FROM CargoAdministrativo WHERE nombreCargo LIKE '%Analista%');
+-- 5. Tabla Administrativo (Cargo: Rector)
+DECLARE @IdCargoStaff INT = (SELECT TOP 1 idCargoAdministrativo FROM CargoAdministrativo WHERE nombreCargo LIKE '%Rector%');
 INSERT INTO [dbo].[Administrativo] (idCargoAdministrativo, idPersona, idUsuario, estado)
 VALUES (@IdCargoStaff, @IdPersStaff, @IdUserStaff, 'Activo');
 
@@ -151,12 +151,12 @@ DECLARE @IdDirEgre INT = SCOPE_IDENTITY();
 
 -- 2. Persona
 INSERT INTO [dbo].[Persona] (nombres, apellidoPaterno, apellidoMaterno, numeroDocumento, idTipoDocumento, idDireccion, correoPersonal, estado)
-VALUES ('Carlos', 'Lopez', 'Egresado', '30000003', @IdTipoDocDNI, @IdDirEgre, 'alumno@sise.edu.pe', 'Activo');
+VALUES ('Carlos', 'Lopez', 'Aldana', '30000003', @IdTipoDocDNI, @IdDirEgre, 'lopez.silva@gmail.com', 'Activo');
 DECLARE @IdPersEgre INT = SCOPE_IDENTITY();
 
 -- 3. AspNetUsers
 INSERT INTO [dbo].[AspNetUsers] (UserName, NormalizedUserName, Email, NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnabled, AccessFailedCount)
-VALUES ('alumno', 'ALUMNO', 'alumno@sise.edu.pe', 'ALUMNO@SISE.EDU.PE', 1, 'AQAAAAIAAYagAAAAEMPrGu1OqHz9tDYivMRwd9epbz6spWDrsoGP1+UtPo+DECdfk21gQ6I24nzHT5xg7A==', @SecurityStamp, NEWID(), 1, 0, 1, 0);
+VALUES ('carlos.lopez', 'CARLOS.LOPEZ', 'carlos.lopez@sise.edu.pe', 'CARLOS.LOPEZ@SISE.EDU.PE', 1, 'AQAAAAIAAYagAAAAEMPrGu1OqHz9tDYivMRwd9epbz6spWDrsoGP1+UtPo+DECdfk21gQ6I24nzHT5xg7A==', @SecurityStamp, NEWID(), 1, 0, 1, 0);
 DECLARE @IdUserEgre INT = SCOPE_IDENTITY();
 
 -- 4. Rol
@@ -191,7 +191,7 @@ DECLARE @IdDirRep INT = SCOPE_IDENTITY();
 
 -- 2. Persona
 INSERT INTO [dbo].[Persona] (nombres, apellidoPaterno, apellidoMaterno, numeroDocumento, idTipoDocumento, idDireccion, correoPersonal, estado)
-VALUES ('Roberto', 'Diaz', 'Gerente', '40000004', @IdTipoDocDNI, @IdDirRep, 'reclutador@techsolutions.com', 'Activo');
+VALUES ('Roberto', 'Diaz', 'Luna', '40000004', @IdTipoDocDNI, @IdDirRep, 'roberto.diaz@gmail.com', 'Activo');
 DECLARE @IdPersRep INT = SCOPE_IDENTITY();
 
 -- 3. AspNetUsers

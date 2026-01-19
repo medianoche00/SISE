@@ -17,6 +17,7 @@ export class PersonasListComponent implements OnInit {
     'apellidoMaterno',
     'tipoDocumento',
     'numeroDocumento',
+    'rol',
     'acciones',
   ];
   dataSource = new MatTableDataSource<Persona>([]);
@@ -35,6 +36,7 @@ export class PersonasListComponent implements OnInit {
       correoPersonal: 'juan@mail.com',
       telefono: '999888777',
       estado: 'Buscando Trabajo',
+      rol: 'Administrador'
     },
     {
       idPersona: 2,
@@ -84,6 +86,7 @@ export class PersonasListComponent implements OnInit {
             (p) => p.idPersona === result.idPersona,
           );
           const dataActualizada = [...this.dataSource.data];
+          result.rol = dataActualizada[index].rol;
           dataActualizada[index] = result;
           this.dataSource.data = dataActualizada;
         }
@@ -96,4 +99,10 @@ export class PersonasListComponent implements OnInit {
       this.dataSource.data = this.dataSource.data.filter((p) => p.idPersona !== id);
     }
   }
+
+  asignarRol(persona: Persona) {
+    console.log('Asignando rol a:', persona.nombres);
+    alert(`Funcionalidad para asignar rol a ${persona.nombres}`);
+  }
+
 }

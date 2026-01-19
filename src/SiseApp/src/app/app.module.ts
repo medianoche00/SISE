@@ -14,6 +14,7 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { HeaderComponent } from './shared/header/header.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 
+
 // Interceptores
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
@@ -57,7 +58,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     EstadisticasComponent,
     ReportesComponent,
     PersonasListComponent,
-    UsuariosListComponent,
   ],
   imports: [
     BrowserModule,
@@ -87,7 +87,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatProgressBarModule,
     MatTooltipModule,
     MatToolbarModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    UsuariosListComponent
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

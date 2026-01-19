@@ -4,6 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { Persona } from '../../../core/models/persona.interface';
 import { PersonasDetailComponent } from '../../../shared/persona-detail/persona-detail.component';
+import { RoleAssignmentComponent } from '../../../shared/role-assignment/role-assignment.component';
 
 @Component({
   selector: 'app-personas-list',
@@ -69,7 +70,7 @@ export class PersonasListComponent implements OnInit {
   abrirModal(accion: 'crear' | 'editar' | 'ver', persona?: Persona) {
     const dialogRef = this.dialog.open(PersonasDetailComponent, {
       width: '800px',
-      disableClose: true, // El usuario debe dar click en cerrar
+      disableClose: true, 
       data: {
         accion: accion,
         persona: persona ? { ...persona } : null,
@@ -79,7 +80,7 @@ export class PersonasListComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         if (accion === 'crear') {
-          result.id = new Date().getTime(); // ID Simulado
+          result.id = new Date().getTime();
           this.dataSource.data = [...this.dataSource.data, result];
         } else if (accion === 'editar') {
           const index = this.dataSource.data.findIndex(
@@ -101,8 +102,17 @@ export class PersonasListComponent implements OnInit {
   }
 
   asignarRol(persona: Persona) {
-    console.log('Asignando rol a:', persona.nombres);
-    alert(`Funcionalidad para asignar rol a ${persona.nombres}`);
+    const dialogRef = this.dialog.open(RoleAssignmentComponent, {
+      width: '600px',
+      disableClose: true,
+      data: { persona: persona } 
+    });
+
+    dialogRef.afterClosed().subscribe(exito => {
+      if (exito) {
+        console.log('Usuario creado exitosamente');
+      }
+    });
   }
 
 }

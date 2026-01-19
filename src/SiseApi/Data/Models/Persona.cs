@@ -33,6 +33,9 @@ public partial class Persona
     [Column("idTipoDocumento")]
     public int IdTipoDocumento { get; set; }
 
+    [Column("idDireccion")]
+    public int IdDireccion { get; set; }
+
     [Column("telefono")]
     [StringLength(15)]
     public string? Telefono { get; set; }
@@ -50,6 +53,10 @@ public partial class Persona
 
     [InverseProperty("IdPersonaNavigation")]
     public virtual ICollection<Egresado> Egresado { get; set; } = new List<Egresado>();
+
+    [ForeignKey("IdDireccion")]
+    [InverseProperty("Persona")]
+    public virtual Direccion IdDireccionNavigation { get; set; } = null!;
 
     [ForeignKey("IdTipoDocumento")]
     [InverseProperty("Persona")]

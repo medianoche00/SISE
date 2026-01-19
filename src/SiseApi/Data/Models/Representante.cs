@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace SiseApi.Data.Models;
 
@@ -36,7 +36,6 @@ public partial class Representante
     public virtual Persona IdPersonaNavigation { get; set; } = null!;
 
     [ForeignKey("IdUsuario")]
-    //[InverseProperty("Representante")]
     public virtual IdentityUser<int>? IdUsuarioNavigation { get; set; } = null!;
 
     [InverseProperty("IdRepresentanteEvaluadorNavigation")]

@@ -480,3 +480,18 @@ CREATE TABLE [dbo].[Auditoria](
         REFERENCES [dbo].[AspNetUsers] ([Id])
 ) ON [PRIMARY]
 GO
+
+/* ==================================================================================
+   Mover las tablas de seguridad al esquema "seguridad"
+   ================================================================================== */
+
+-- CREATE SCHEMA seguridad
+-- GO
+-- ALTER SCHEMA seguridad TRANSFER dbo.AspNetUsers; 
+-- ALTER SCHEMA seguridad TRANSFER dbo.AspNetRoles; 
+-- ALTER SCHEMA seguridad TRANSFER dbo.AspNetUserRoles; 
+-- ALTER SCHEMA seguridad TRANSFER dbo.AspNetUserClaims; 
+-- ALTER SCHEMA seguridad TRANSFER dbo.AspNetRoleClaims; 
+-- ALTER SCHEMA seguridad TRANSFER dbo.AspNetUserLogins; 
+-- ALTER SCHEMA seguridad TRANSFER dbo.AspNetUserTokens;
+-- GO

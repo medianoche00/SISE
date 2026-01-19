@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace SiseApi.Data.Models;
 
@@ -15,6 +12,9 @@ public partial class OfertaLaboral
     [Column("idEmpresa")]
     public int IdEmpresa { get; set; }
 
+    [Column("idDireccion")]
+    public int IdDireccion { get; set; }
+
     [Column("titulo")]
     [StringLength(150)]
     public string Titulo { get; set; } = null!;
@@ -25,15 +25,11 @@ public partial class OfertaLaboral
     [Column("requisitos")]
     public string? Requisitos { get; set; }
 
-    [Column("ubicacion")]
-    [StringLength(150)]
-    public string? Ubicacion { get; set; }
-
     [Column("idTipoContrato")]
     public int IdTipoContrato { get; set; }
 
     [Column("sueldo", TypeName = "decimal(10, 2)")]
-    public decimal? Sueldo { get; set; }
+    public decimal Sueldo { get; set; }
 
     [Column("idModalidadTrabajo")]
     public int IdModalidadTrabajo { get; set; }
@@ -50,6 +46,10 @@ public partial class OfertaLaboral
     [Column("estado")]
     [StringLength(20)]
     public string Estado { get; set; } = null!;
+
+    [ForeignKey("IdDireccion")]
+    [InverseProperty("OfertaLaboral")]
+    public virtual Direccion IdDireccionNavigation { get; set; } = null!;
 
     [ForeignKey("IdEgresadoGanador")]
     [InverseProperty("OfertaLaboral")]

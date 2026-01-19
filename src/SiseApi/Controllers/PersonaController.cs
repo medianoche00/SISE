@@ -26,11 +26,22 @@ namespace SiseApi.Controllers
             var idAdministrador = _usuarioActualService.GetIdAdministrativoActualAsync();
             if (idAdministrador == null) return Unauthorized("Usuario no es administrador.");
 
-            var personas = await _context.Database.SqlQueryRaw<PersonaDto>(
-                "EXEC dbo.sp_Persona_Listar"
-            ).ToListAsync();
+            try
+            {
+                var personas = await _context.Database.SqlQueryRaw<PersonaDto>(
+                    "EXEC dbo.sp_Persona_Listar"
+                ).ToListAsync();
 
-            return Ok(personas);
+                return Ok(personas);
+            }
+            catch (SqlException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Ocurrió un error interno al obtener las personas.");
+            }
         }
 
         [HttpDelete("{idPersona:int}")]
@@ -44,7 +55,7 @@ namespace SiseApi.Controllers
             try
             {
                 await _context.EjecutarSpConAuditoriaAsync(
-                    "documentoXX",
+                    "documentoXX", //! cambiar por documento que respalde la operacion
                     idUsuario,
                     "EXEC sp_Persona_Eliminar @IdPersona",
                     new SqlParameter("@IdPersona", idPersona)

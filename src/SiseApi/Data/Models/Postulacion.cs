@@ -36,7 +36,7 @@ public partial class Postulacion
     public string? CartaPresentacion { get; set; }
 
     [Column("estado")]
-    [StringLength(50)]
+    [StringLength(20)]
     public string Estado { get; set; } = null!;
 
     [ForeignKey("IdEgresado")]

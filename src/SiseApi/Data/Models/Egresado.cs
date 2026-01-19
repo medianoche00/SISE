@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -49,7 +47,6 @@ public partial class Egresado
     public virtual Persona IdPersonaNavigation { get; set; } = null!;
 
     [ForeignKey("IdUsuario")]
-    //[InverseProperty("Egresado")]
     public virtual IdentityUser<int>? IdUsuarioNavigation { get; set; } = null!;
 
     [InverseProperty("IdEgresadoGanadorNavigation")]

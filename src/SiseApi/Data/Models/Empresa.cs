@@ -13,6 +13,9 @@ public partial class Empresa
     [Column("idEmpresa")]
     public int IdEmpresa { get; set; }
 
+    [Column("idDireccion")]
+    public int IdDireccion { get; set; }
+
     [Column("ruc")]
     [StringLength(11)]
     [Unicode(false)]
@@ -21,10 +24,6 @@ public partial class Empresa
     [Column("razonSocial")]
     [StringLength(150)]
     public string RazonSocial { get; set; } = null!;
-
-    [Column("direccion")]
-    [StringLength(255)]
-    public string? Direccion { get; set; }
 
     [Column("telefono")]
     [StringLength(15)]
@@ -44,6 +43,10 @@ public partial class Empresa
 
     [InverseProperty("IdEmpresaRegistradaNavigation")]
     public virtual ICollection<ExperienciaLaboral> ExperienciaLaboral { get; set; } = new List<ExperienciaLaboral>();
+
+    [ForeignKey("IdDireccion")]
+    [InverseProperty("Empresa")]
+    public virtual Direccion IdDireccionNavigation { get; set; } = null!;
 
     [InverseProperty("IdEmpresaNavigation")]
     public virtual ICollection<OfertaLaboral> OfertaLaboral { get; set; } = new List<OfertaLaboral>();

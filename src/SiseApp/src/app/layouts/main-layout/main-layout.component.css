@@ -2,6 +2,19 @@
   height: 100vh; /* Ocupa toda la altura de la ventana */
 }
 
+mat-sidenav-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;/* Importante: Quitamos el scroll global de Material */
+}
+
+app-header {
+  flex: 0 0 auto; /* El header no crece ni se encoge */
+  z-index: 100;
+  position: relative;
+}
+
 .sidenav {
   width: 250px; /* Ancho fijo del sidebar */
   border-right: 1px solid #e0e0e0;
@@ -16,5 +29,7 @@
 }
 
 .content-wrapper {
-  padding: 20px; /* Espaciado interno para el contenido */
+  flex: 1; /* Ocupa todo el espacio sobrante verticalmente */
+  overflow-y: auto; /* Aquí es donde ocurre el scroll ahora */
+  padding: 20px;
 }

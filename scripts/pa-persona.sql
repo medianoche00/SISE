@@ -1,78 +1,71 @@
-
 USE SiseDB
 GO
--- select * from persona
 
 /* ==================================================================================
-   1. CREAR (INSERTAR) PERSONA
+   1. INSERTAR PERSONA
    ================================================================================== */
 CREATE OR ALTER PROCEDURE sp_Persona_Insertar
-    @Nombres nvarchar(100),
-    @ApellidoPaterno nvarchar(100),
-    @ApellidoMaterno nvarchar(100),
-    @IdTipoDocumento int,
-    @NumeroDocumento varchar(20),
-    @Telefono nvarchar(15) = NULL,
-    @CorreoPersonal nvarchar(150) = NULL,
-    @IdPersonaGenerado int OUTPUT
+    @Nombres NVARCHAR(100),
+    @ApellidoPaterno NVARCHAR(100),
+    @ApellidoMaterno NVARCHAR(100),
+    @IdTipoDocumento INT,
+    @NumeroDocumento VARCHAR(20),
+    @IdDireccion INT,
+    @Telefono NVARCHAR(15) = NULL,
+    @CorreoPersonal NVARCHAR(150) = NULL,
+    @IdPersonaGenerado INT OUTPUT
 AS
 BEGIN
     SET NOCOUNT ON;
-    
     BEGIN TRANSACTION;
 
     BEGIN TRY
-        -- Validaciones de Negocio
-        
-        -- Validar Duplicidad
-        IF EXISTS (SELECT 1 FROM dbo.Persona 
-                   WHERE idTipoDocumento = @IdTipoDocumento 
-                   AND numeroDocumento = @NumeroDocumento)
+        -- Validar dirección
+        IF NOT EXISTS (
+            SELECT 1 
+            FROM dbo.Direccion
+            WHERE idDireccion = @IdDireccion
+              AND estado = 'Activo'
+        )
         BEGIN
-            RAISERROR('El número de documento ya existe para el tipo de documento seleccionado.', 16, 1);
+            RAISERROR('La dirección no existe o no está activa.', 16, 1);
         END
 
-        -- Validar Formato DNI
-        IF @IdTipoDocumento = 1 -- DNI
+        -- Validar duplicidad de documento
+        IF EXISTS (
+            SELECT 1 
+            FROM dbo.Persona
+            WHERE idTipoDocumento = @IdTipoDocumento
+              AND numeroDocumento = @NumeroDocumento
+        )
         BEGIN
-            IF LEN(@NumeroDocumento) <> 8 OR @NumeroDocumento LIKE '%[^0-9]%'
-            BEGIN
-                RAISERROR('El DNI debe contener exactamente 8 dígitos numéricos.', 16, 1);
-            END
-        END
-        ELSE -- Otros documentos
-        BEGIN
-            IF LEN(@NumeroDocumento) < 3
-            BEGIN
-                RAISERROR('El número de documento debe tener al menos 3 caracteres.', 16, 1);
-            END
+            RAISERROR('El número de documento ya está registrado.', 16, 1);
         END
 
-        -- Inserción
         INSERT INTO dbo.Persona (
-            nombres, 
-            apellidoPaterno, 
-            apellidoMaterno, 
+            nombres,
+            apellidoPaterno,
+            apellidoMaterno,
+            numeroDocumento,
             idTipoDocumento,
-            numeroDocumento, 
-            telefono, 
-            correoPersonal, 
+            idDireccion,
+            telefono,
+            correoPersonal,
             estado
         )
         VALUES (
-            TRIM(@Nombres), 
-            TRIM(@ApellidoPaterno), 
-            TRIM(@ApellidoMaterno), 
+            TRIM(@Nombres),
+            TRIM(@ApellidoPaterno),
+            TRIM(@ApellidoMaterno),
+            @NumeroDocumento,
             @IdTipoDocumento,
-            @NumeroDocumento, 
-            @Telefono, 
-            LOWER(@CorreoPersonal), 
+            @IdDireccion,
+            @Telefono,
+            LOWER(@CorreoPersonal),
             'Activo'
         );
 
-        -- Obtener el ID generado
         SET @IdPersonaGenerado = SCOPE_IDENTITY();
-
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
@@ -94,53 +87,58 @@ GO
    2. ACTUALIZAR PERSONA
    ================================================================================== */
 CREATE OR ALTER PROCEDURE sp_Persona_Actualizar
-    @IdPersona int,
-    @Nombres nvarchar(100),
-    @ApellidoPaterno nvarchar(100),
-    @ApellidoMaterno nvarchar(100),
-    @IdTipoDocumento int,
-    @NumeroDocumento varchar(20),
-    @Telefono nvarchar(15) = NULL,
-    @CorreoPersonal nvarchar(150) = NULL
+    @IdPersona INT,
+    @Nombres NVARCHAR(100),
+    @ApellidoPaterno NVARCHAR(100),
+    @ApellidoMaterno NVARCHAR(100),
+    @IdTipoDocumento INT,
+    @NumeroDocumento VARCHAR(20),
+    @IdDireccion INT,
+    @Telefono NVARCHAR(15) = NULL,
+    @CorreoPersonal NVARCHAR(150) = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
-
     BEGIN TRANSACTION;
 
     BEGIN TRY
-        -- Validar existencia
+        -- Validar persona
         IF NOT EXISTS (SELECT 1 FROM dbo.Persona WHERE idPersona = @IdPersona)
         BEGIN
             RAISERROR('La persona no existe.', 16, 1);
         END
 
-        -- Validar que el nuevo documento no pertenezca a otra persona
-        IF EXISTS (SELECT 1 FROM dbo.Persona 
-                   WHERE idTipoDocumento = @IdTipoDocumento 
-                   AND numeroDocumento = @NumeroDocumento 
-                   AND idPersona != @IdPersona)
+        -- Validar dirección
+        IF NOT EXISTS (
+            SELECT 1 
+            FROM dbo.Direccion
+            WHERE idDireccion = @IdDireccion
+              AND estado = 'Activo'
+        )
         BEGIN
-            RAISERROR('El número de documento ya está registrado por otra persona.', 16, 1);
+            RAISERROR('La dirección no existe o no está activa.', 16, 1);
         END
 
-        -- Validar Formato DNI
-        IF @IdTipoDocumento = 1 
+        -- Validar duplicidad de documento
+        IF EXISTS (
+            SELECT 1 
+            FROM dbo.Persona
+            WHERE idTipoDocumento = @IdTipoDocumento
+              AND numeroDocumento = @NumeroDocumento
+              AND idPersona <> @IdPersona
+        )
         BEGIN
-            IF LEN(@NumeroDocumento) <> 8 OR @NumeroDocumento LIKE '%[^0-9]%'
-            BEGIN
-                RAISERROR('El DNI debe contener exactamente 8 dígitos numéricos.', 16, 1);
-            END
+            RAISERROR('El número de documento ya pertenece a otra persona.', 16, 1);
         END
 
-        -- Actualización
         UPDATE dbo.Persona
-        SET 
+        SET
             nombres = TRIM(@Nombres),
             apellidoPaterno = TRIM(@ApellidoPaterno),
             apellidoMaterno = TRIM(@ApellidoMaterno),
-            idTipoDocumento = @IdTipoDocumento,
             numeroDocumento = @NumeroDocumento,
+            idTipoDocumento = @IdTipoDocumento,
+            idDireccion = @IdDireccion,
             telefono = @Telefono,
             correoPersonal = LOWER(@CorreoPersonal)
         WHERE idPersona = @IdPersona;
@@ -153,6 +151,7 @@ BEGIN
             ROLLBACK TRANSACTION;
         END
 
+        -- Propagar el error al aplicativo
         DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
         DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
         DECLARE @ErrorState INT = ERROR_STATE();
@@ -165,18 +164,16 @@ GO
    3. ELIMINAR PERSONA (LÓGICO)
    ================================================================================== */
 CREATE OR ALTER PROCEDURE sp_Persona_Eliminar
-    @IdPersona int
+    @IdPersona INT
 AS
 BEGIN
     SET NOCOUNT ON;
-
     BEGIN TRANSACTION;
 
     BEGIN TRY
-        -- Validar existencia antes de intentar borrar
         IF NOT EXISTS (SELECT 1 FROM dbo.Persona WHERE idPersona = @IdPersona)
         BEGIN
-             RAISERROR('La persona a eliminar no existe.', 16, 1);
+            RAISERROR('La persona no existe.', 16, 1);
         END
 
         UPDATE dbo.Persona
@@ -191,8 +188,11 @@ BEGIN
             ROLLBACK TRANSACTION;
         END
 
+        -- Propagar el error al aplicativo
         DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
-        RAISERROR(@ErrorMessage, 16, 1);
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END
 GO
@@ -205,19 +205,22 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT 
+    SELECT
         P.idPersona,
         P.nombres,
         P.apellidoPaterno,
         P.apellidoMaterno,
-        TD.idTipoDocumento,
-        TD.nombreTipo AS nombreTipoDocumento, -- Nombre descriptivo (ej. DNI)
+        TD.nombreTipo AS tipoDocumento,
         P.numeroDocumento,
         P.telefono,
         P.correoPersonal,
+        D.calle,
+        D.numero,
+        D.referencia,
         P.estado
     FROM dbo.Persona P
     INNER JOIN dbo.TipoDocumento TD ON P.idTipoDocumento = TD.idTipoDocumento
+    INNER JOIN dbo.Direccion D ON P.idDireccion = D.idDireccion
     WHERE P.estado = 'Activo';
 END
 GO
@@ -226,24 +229,28 @@ GO
    5. OBTENER PERSONA POR ID
    ================================================================================== */
 CREATE OR ALTER PROCEDURE sp_Persona_ObtenerPorId
-    @IdPersona int
+    @IdPersona INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT 
+    SELECT
         P.idPersona,
         P.nombres,
         P.apellidoPaterno,
         P.apellidoMaterno,
-        TD.idTipoDocumento,
-        TD.nombreTipo AS nombreTipoDocumento,
+        TD.nombreTipo AS tipoDocumento,
         P.numeroDocumento,
         P.telefono,
         P.correoPersonal,
+        P.idDireccion,
+        D.calle,
+        D.numero,
+        D.referencia,
         P.estado
     FROM dbo.Persona P
     INNER JOIN dbo.TipoDocumento TD ON P.idTipoDocumento = TD.idTipoDocumento
+    INNER JOIN dbo.Direccion D ON P.idDireccion = D.idDireccion
     WHERE P.idPersona = @IdPersona;
 END
 GO
@@ -252,26 +259,30 @@ GO
    6. OBTENER PERSONA POR DOCUMENTO
    ================================================================================== */
 CREATE OR ALTER PROCEDURE sp_Persona_ObtenerPorDocumento
-    @IdTipoDocumento int,
-    @NumeroDocumento varchar(20)
+    @IdTipoDocumento INT,
+    @NumeroDocumento VARCHAR(20)
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT 
+    SELECT
         P.idPersona,
         P.nombres,
         P.apellidoPaterno,
         P.apellidoMaterno,
-        TD.idTipoDocumento,
-        TD.nombreTipo AS nombreTipoDocumento,
+        TD.nombreTipo AS tipoDocumento,
         P.numeroDocumento,
         P.telefono,
         P.correoPersonal,
+        P.idDireccion,
+        D.calle,
+        D.numero,
+        D.referencia,
         P.estado
     FROM dbo.Persona P
     INNER JOIN dbo.TipoDocumento TD ON P.idTipoDocumento = TD.idTipoDocumento
-    WHERE P.idTipoDocumento = @IdTipoDocumento 
+    INNER JOIN dbo.Direccion D ON P.idDireccion = D.idDireccion
+    WHERE P.idTipoDocumento = @IdTipoDocumento
       AND P.numeroDocumento = @NumeroDocumento;
 END
 GO

@@ -249,3 +249,20 @@ BEGIN
     LEFT JOIN Representante R2 ON R2.idUsuario = U.Id;
 END
 GO
+
+/* =========================================================
+    PA: PROCEDIMIENTOS DE ROLES
+   ========================================================= */
+
+CREATE OR ALTER PROCEDURE sp_Username_Esta_Disponible
+    @UserName NVARCHAR(256),
+    @Disponible BIT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF EXISTS (SELECT 1 FROM AspNetUsers WHERE UserName = @UserName)
+        SET @Disponible = 0;
+    ELSE
+        SET @Disponible = 1;
+END

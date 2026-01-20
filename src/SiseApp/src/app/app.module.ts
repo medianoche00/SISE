@@ -65,7 +65,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     AppRoutingModule,
     BrowserAnimationsModule,
     RouterModule,
-    FormsModule, // <--- Agregado para que funcionen los filtros del dashboard
+    FormsModule, 
 
     // Angular Material
     MatToolbarModule,

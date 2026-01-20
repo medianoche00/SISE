@@ -12,4 +12,5 @@ export interface Persona {
   distrito?: string;
   direccionEspecifica?: string;
   estado: string;
+  rol?: string;
 }

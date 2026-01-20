@@ -4,6 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { Persona } from '../../../core/models/persona.interface';
 import { PersonasDetailComponent } from '../../../shared/persona-detail/persona-detail.component';
+import { RoleAssignmentComponent } from '../../../shared/role-assignment/role-assignment.component';
 
 @Component({
   selector: 'app-personas-list',
@@ -17,6 +18,7 @@ export class PersonasListComponent implements OnInit {
     'apellidoMaterno',
     'tipoDocumento',
     'numeroDocumento',
+    'rol',
     'acciones',
   ];
   dataSource = new MatTableDataSource<Persona>([]);
@@ -35,6 +37,7 @@ export class PersonasListComponent implements OnInit {
       correoPersonal: 'juan@mail.com',
       telefono: '999888777',
       estado: 'Buscando Trabajo',
+      rol: 'Administrador'
     },
     {
       idPersona: 2,
@@ -67,7 +70,7 @@ export class PersonasListComponent implements OnInit {
   abrirModal(accion: 'crear' | 'editar' | 'ver', persona?: Persona) {
     const dialogRef = this.dialog.open(PersonasDetailComponent, {
       width: '800px',
-      disableClose: true, // El usuario debe dar click en cerrar
+      disableClose: true, 
       data: {
         accion: accion,
         persona: persona ? { ...persona } : null,
@@ -77,13 +80,14 @@ export class PersonasListComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         if (accion === 'crear') {
-          result.id = new Date().getTime(); // ID Simulado
+          result.id = new Date().getTime();
           this.dataSource.data = [...this.dataSource.data, result];
         } else if (accion === 'editar') {
           const index = this.dataSource.data.findIndex(
             (p) => p.idPersona === result.idPersona,
           );
           const dataActualizada = [...this.dataSource.data];
+          result.rol = dataActualizada[index].rol;
           dataActualizada[index] = result;
           this.dataSource.data = dataActualizada;
         }
@@ -96,4 +100,19 @@ export class PersonasListComponent implements OnInit {
       this.dataSource.data = this.dataSource.data.filter((p) => p.idPersona !== id);
     }
   }
+
+  asignarRol(persona: Persona) {
+    const dialogRef = this.dialog.open(RoleAssignmentComponent, {
+      width: '600px',
+      disableClose: true,
+      data: { persona: persona } 
+    });
+
+    dialogRef.afterClosed().subscribe(exito => {
+      if (exito) {
+        console.log('Usuario creado exitosamente');
+      }
+    });
+  }
+
 }

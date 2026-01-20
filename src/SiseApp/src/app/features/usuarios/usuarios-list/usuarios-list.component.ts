@@ -1,147 +1,139 @@
-import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
 import { UsuarioService } from '../../../core/services/usuario.service';
-import { Usuario } from '../../../core/models/usuario.interface';
+import { RoleAssignmentComponent } from '../../../shared/role-assignment/role-assignment.component';
+import { Persona } from '../../../core/models/persona.interface';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select'; 
 
 @Component({
   selector: 'app-usuarios-list',
   templateUrl: './usuarios-list.component.html',
   styleUrls: ['./usuarios-list.component.css'],
+  standalone: true, 
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatSelectModule 
+  ]
 })
-export class UsuariosListComponent implements OnInit {
-  // Fuente de datos para la tabla y filtro
-  dataSource = new MatTableDataSource<Usuario>([
-    {
-      nombreUsuario: 'admin',
-      id: 0,
-      rol: 'Administrador',
-      personaId: 0,
-      activo: 'Activo',
-      email: 'admin@sise.com',
-    },
+export class UsuariosListComponent implements OnInit, AfterViewInit {
+
+  displayedColumns: string[] = ['username', 'email', 'rol', 'estado', 'acciones'];
+
+  dataSource = new MatTableDataSource<any>([]);
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  cargando: boolean = true;
+
+  datosOriginales: any[] = [
     {
       id: 1,
-      nombreUsuario: 'juan.perez',
-      email: 'juan@mail.com',
-      rol: 'Egresado',
-      personaId: 0,
-      activo: 'Activo',
+      username: 'admin', 
+      email: 'admin@sise.com',
+      rol: 'Administrador',
+      activo: true, 
     },
     {
-      nombreUsuario: 'maria.gerente',
       id: 2,
-      rol: 'Representante',
-      personaId: 0,
-      activo: 'Activo',
-      email: 'maria@empresa.com',
+      username: 'juan.perez',
+      email: 'juan@mail.com',
+      rol: 'Egresado',
+      activo: true,
     },
     {
       id: 3,
-      nombreUsuario: 'rector',
+      username: 'maria.gerente',
+      email: 'maria@empresa.com',
+      rol: 'Representante',
+      activo: true,
+    },
+    {
+      id: 4,
+      username: 'rector',
       email: 'rector@sise.com',
       rol: 'Administrativo',
-      personaId: 0,
-      activo: 'Activo',
+      activo: true,
     },
-  ]);
-  cargando: boolean = true;
+  ];
 
-  // Variables del Modal
-  mostrarModal: boolean = false;
-  mostrarPassword: boolean = false;
-  esEdicion: boolean = false; // <--- Bandera para saber si editamos
-
-  // Objeto del formulario
-  nuevoUsuario: any = {
-    id: 0,
-    email: '',
-    password: '',
-    rol: 'Estudiante',
-    dni: '',
-    nombres: '', // Asegúrate de usar nombres que coincidan con tu HTML
-    apellidoPaterno: '',
-    apellidoMaterno: '',
-    idCarrera: '',
-  };
-
-  constructor(private usuarioService: UsuarioService) {}
+  constructor(
+    private usuarioService: UsuarioService,
+    private dialog: MatDialog 
+  ) { }
 
   ngOnInit(): void {
     this.cargarUsuarios();
   }
 
-  cargarUsuarios() {
-    this.cargando = true;
-    this.usuarioService.getAll().subscribe({
-      next: (data) => {
-        this.dataSource.data = data;
-        this.cargando = false;
-      },
-      error: (e) => {
-        console.error(e);
-        this.cargando = false;
-      },
-    });
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
 
-  filtrar(event: Event) {
+  cargarUsuarios() {
+    this.cargando = true;
+    this.dataSource.data = this.datosOriginales;
+    this.cargando = false;
+  }
+
+  aplicarFiltro(event: Event) {
     const valor = (event.target as HTMLInputElement).value;
     this.dataSource.filter = valor.trim().toLowerCase();
   }
 
+  filtrarPorRol(rol: string) {
+    if (!rol) {
+      this.dataSource.data = this.datosOriginales;
+    } else {
+      this.dataSource.data = this.datosOriginales.filter(u => u.rol === rol);
+    }
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
   abrirModalCrear() {
-    this.esEdicion = false;
-    this.reiniciarFormulario();
-    this.mostrarModal = true;
-  }
-
-  abrirModalEditar(usuario: Usuario) {
-    this.esEdicion = true;
-    this.nuevoUsuario = {
-      id: usuario.id,
-      email: usuario.nombreUsuario,
-      password: '',
-      rol: usuario.rol,
-      dni: usuario.dni || '',
-      nombres: usuario.nombres || '',
-      apellidoPaterno: usuario.apellidoPaterno || '',
-      apellidoMaterno: usuario.apellidoMaterno || '',
-    };
-    this.mostrarModal = true;
-  }
-
-  cerrarModal() {
-    this.mostrarModal = false;
-  }
-
-  reiniciarFormulario() {
-    this.nuevoUsuario = {
-      id: 0,
-      email: '',
-      password: '',
-      rol: 'Estudiante',
-      dni: '',
+    const nuevaPersona: Persona = {
+      idPersona: 0,
       nombres: '',
       apellidoPaterno: '',
       apellidoMaterno: '',
-      idCarrera: '',
+      tipoDocumento: '',
+      numeroDocumento: '',
+      estado: 'Activo'
     };
+
+    const dialogRef = this.dialog.open(RoleAssignmentComponent, {
+      width: '600px',
+      disableClose: true,
+      data: { persona: nuevaPersona }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Usuario creado, recargando lista...');
+        alert('Usuario creado correctamente (Simulación)');
+      }
+    });
   }
 
-  guardarUsuario() {
-    if (this.esEdicion) {
-      console.log('Editando usuario:', this.nuevoUsuario);
-      // Lógica de Update: this.usuarioService.update(this.nuevoUsuario)...
-    } else {
-      console.log('Creando usuario:', this.nuevoUsuario);
-      // Lógica de Create: this.usuarioService.create(this.nuevoUsuario)...
-    }
-    this.cerrarModal();
-    // this.cargarUsuarios(); // Recargar tabla
-  }
-
-  cambiarEstado(usuario: Usuario) {
-    //usuario.activo = !usuario.activo;
-    // Llamar al servicio...
+  cambiarEstado(usuario: any) {
+    usuario.activo = !usuario.activo;
+    console.log('Nuevo estado:', usuario.activo);
   }
 }

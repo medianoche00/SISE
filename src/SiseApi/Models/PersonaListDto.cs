@@ -1,6 +1,6 @@
 ﻿namespace SiseApi.Models
 {
-    public class PersonaDto
+    public class PersonaListDto
     {
         
         public int IdPersona { get; set; }
@@ -12,7 +12,6 @@
         public string NombreTipoDocumento { get; set; } = null!;
         public string? Telefono { get; set; }
         public string? CorreoPersonal { get; set; }
-        public string? DocumentoRespaldo { get; set; }
         // direccion
         public int IdDireccion { get; set; }
         public int IdDistrito { get; set; }

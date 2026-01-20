@@ -2,58 +2,26 @@ USE SiseDB
 GO
 
 /* ==================================================================================
-   1. LISTAR DEPARTAMENTOS ACTIVOS
+   1. LISTAR JOIN DE LAS 3 TABLAS
    ================================================================================== */
-CREATE OR ALTER PROCEDURE sp_Departamento_ListarActivos
+CREATE OR ALTER PROCEDURE [dbo].[sp_Ubicacion_ListarCompleto]
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT
-        idDepartamento,
-        nombreDepartamento
-    FROM dbo.Departamento
-    WHERE estado = 'Activo'
-    ORDER BY nombreDepartamento;
-END
-GO
-
-/* ==================================================================================
-   2. LISTAR PROVINCIAS ACTIVAS POR DEPARTAMENTO
-   ================================================================================== */
-CREATE OR ALTER PROCEDURE sp_Provincia_ListarPorDepartamento
-    @IdDepartamento INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT
-        idProvincia,
-        idDepartamento,
-        nombreProvincia
-    FROM dbo.Provincia
-    WHERE estado = 'Activo'
-      AND idDepartamento = @IdDepartamento
-    ORDER BY nombreProvincia;
-END
-GO
-
-/* ==================================================================================
-   3. LISTAR DISTRITOS ACTIVOS POR PROVINCIA
-   ================================================================================== */
-CREATE OR ALTER PROCEDURE sp_Distrito_ListarPorProvincia
-    @IdProvincia INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT
-        idDistrito,
-        idProvincia,
-        nombreDistrito
-    FROM dbo.Distrito
-    WHERE estado = 'Activo'
-      AND idProvincia = @IdProvincia
-    ORDER BY nombreDistrito;
+    SELECT 
+        d.idDepartamento,
+        d.nombreDepartamento,
+        p.idProvincia,
+        p.nombreProvincia,
+        dis.idDistrito,
+        dis.nombreDistrito
+    FROM [dbo].[Departamento] d
+    INNER JOIN [dbo].[Provincia] p ON d.idDepartamento = p.idDepartamento
+    INNER JOIN [dbo].[Distrito] dis ON p.idProvincia = dis.idProvincia
+    WHERE d.estado = 'Activo' 
+      AND p.estado = 'Activo' 
+      AND dis.estado = 'Activo'
+    ORDER BY d.nombreDepartamento, p.nombreProvincia, dis.nombreDistrito;
 END
 GO

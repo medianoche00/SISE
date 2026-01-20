@@ -5,14 +5,23 @@ GO
    1. INSERTAR PERSONA
    ================================================================================== */
 CREATE OR ALTER PROCEDURE sp_Persona_Insertar
+    -- Datos Persona
     @Nombres NVARCHAR(100),
     @ApellidoPaterno NVARCHAR(100),
     @ApellidoMaterno NVARCHAR(100),
     @IdTipoDocumento INT,
     @NumeroDocumento VARCHAR(20),
-    @IdDireccion INT,
     @Telefono NVARCHAR(15) = NULL,
     @CorreoPersonal NVARCHAR(150) = NULL,
+    
+    -- Datos Dirección
+    @IdDistrito INT,
+    @Calle NVARCHAR(150),
+    @Numero VARCHAR(20) = NULL,
+    @PisoDepartamento VARCHAR(20) = NULL,
+    @Referencia NVARCHAR(200) = NULL,
+    
+    -- Salida
     @IdPersonaGenerado INT OUTPUT
 AS
 BEGIN
@@ -20,52 +29,34 @@ BEGIN
     BEGIN TRANSACTION;
 
     BEGIN TRY
-        -- Validar dirección
-        IF NOT EXISTS (
-            SELECT 1 
-            FROM dbo.Direccion
-            WHERE idDireccion = @IdDireccion
-              AND estado = 'Activo'
-        )
+        IF EXISTS (SELECT 1 FROM dbo.Persona WHERE idTipoDocumento = @IdTipoDocumento AND numeroDocumento = @NumeroDocumento)
         BEGIN
-            RAISERROR('La dirección no existe o no está activa.', 16, 1);
+            RAISERROR('El documento ya existe registrado.', 16, 1);
         END
 
-        -- Validar duplicidad de documento
-        IF EXISTS (
-            SELECT 1 
-            FROM dbo.Persona
-            WHERE idTipoDocumento = @IdTipoDocumento
-              AND numeroDocumento = @NumeroDocumento
-        )
-        BEGIN
-            RAISERROR('El número de documento ya está registrado.', 16, 1);
-        END
+        DECLARE @NewIdDireccion INT;
 
-        INSERT INTO dbo.Persona (
-            nombres,
-            apellidoPaterno,
-            apellidoMaterno,
-            numeroDocumento,
-            idTipoDocumento,
-            idDireccion,
-            telefono,
-            correoPersonal,
-            estado
+        INSERT INTO dbo.Direccion (
+            idDistrito, calle, numero, pisoDepartamento, referencia, estado, fechaRegistro
         )
         VALUES (
-            TRIM(@Nombres),
-            TRIM(@ApellidoPaterno),
-            TRIM(@ApellidoMaterno),
-            @NumeroDocumento,
-            @IdTipoDocumento,
-            @IdDireccion,
-            @Telefono,
-            LOWER(@CorreoPersonal),
-            'Activo'
+            @IdDistrito, @Calle, @Numero, @PisoDepartamento, @Referencia, 'Activo', GETDATE()
+        );
+
+        SET @NewIdDireccion = SCOPE_IDENTITY();
+
+        INSERT INTO dbo.Persona (
+            nombres, apellidoPaterno, apellidoMaterno, numeroDocumento, 
+            idTipoDocumento, idDireccion, telefono, correoPersonal, estado
+        )
+        VALUES (
+            TRIM(@Nombres), TRIM(@ApellidoPaterno), TRIM(@ApellidoMaterno), @NumeroDocumento,
+            @IdTipoDocumento, @NewIdDireccion, 
+            @Telefono, LOWER(@CorreoPersonal), 'Activo'
         );
 
         SET @IdPersonaGenerado = SCOPE_IDENTITY();
+
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
@@ -88,49 +79,61 @@ GO
    ================================================================================== */
 CREATE OR ALTER PROCEDURE sp_Persona_Actualizar
     @IdPersona INT,
+    -- Datos Persona
     @Nombres NVARCHAR(100),
     @ApellidoPaterno NVARCHAR(100),
     @ApellidoMaterno NVARCHAR(100),
     @IdTipoDocumento INT,
     @NumeroDocumento VARCHAR(20),
-    @IdDireccion INT,
     @Telefono NVARCHAR(15) = NULL,
-    @CorreoPersonal NVARCHAR(150) = NULL
+    @CorreoPersonal NVARCHAR(150) = NULL,
+    
+    -- Datos Dirección
+    @IdDistrito INT,
+    @Calle NVARCHAR(150),
+    @Numero VARCHAR(20) = NULL,
+    @PisoDepartamento VARCHAR(20) = NULL,
+    @Referencia NVARCHAR(200) = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRANSACTION;
 
     BEGIN TRY
-        -- Validar persona
-        IF NOT EXISTS (SELECT 1 FROM dbo.Persona WHERE idPersona = @IdPersona)
+        -- 1. Obtener ID Dirección actual
+        DECLARE @IdDireccionActual INT;
+
+        SELECT @IdDireccionActual = idDireccion
+        FROM dbo.Persona
+        WHERE idPersona = @IdPersona;
+
+        IF @IdDireccionActual IS NULL
         BEGIN
             RAISERROR('La persona no existe.', 16, 1);
         END
 
-        -- Validar dirección
-        IF NOT EXISTS (
-            SELECT 1 
-            FROM dbo.Direccion
-            WHERE idDireccion = @IdDireccion
-              AND estado = 'Activo'
-        )
-        BEGIN
-            RAISERROR('La dirección no existe o no está activa.', 16, 1);
-        END
-
-        -- Validar duplicidad de documento
+        -- 2. Validar Documento
         IF EXISTS (
-            SELECT 1 
-            FROM dbo.Persona
-            WHERE idTipoDocumento = @IdTipoDocumento
-              AND numeroDocumento = @NumeroDocumento
+            SELECT 1 FROM dbo.Persona
+            WHERE idTipoDocumento = @IdTipoDocumento 
+              AND numeroDocumento = @NumeroDocumento 
               AND idPersona <> @IdPersona
         )
         BEGIN
-            RAISERROR('El número de documento ya pertenece a otra persona.', 16, 1);
+            RAISERROR('El documento ya pertenece a otra persona.', 16, 1);
         END
 
+        -- 3. ACTUALIZAR DIRECCION
+        UPDATE dbo.Direccion
+        SET 
+            idDistrito = @IdDistrito,
+            calle = @Calle,
+            numero = @Numero,
+            pisoDepartamento = @PisoDepartamento,
+            referencia = @Referencia
+        WHERE idDireccion = @IdDireccionActual;
+
+        -- 4. ACTUALIZAR PERSONA
         UPDATE dbo.Persona
         SET
             nombres = TRIM(@Nombres),
@@ -138,7 +141,6 @@ BEGIN
             apellidoMaterno = TRIM(@ApellidoMaterno),
             numeroDocumento = @NumeroDocumento,
             idTipoDocumento = @IdTipoDocumento,
-            idDireccion = @IdDireccion,
             telefono = @Telefono,
             correoPersonal = LOWER(@CorreoPersonal)
         WHERE idPersona = @IdPersona;
@@ -210,12 +212,16 @@ BEGIN
         P.nombres,
         P.apellidoPaterno,
         P.apellidoMaterno,
-        TD.nombreTipo AS tipoDocumento,
         P.numeroDocumento,
+        TD.idTipoDocumento,
+        TD.nombreTipo AS nombreTipoDocumento,
         P.telefono,
         P.correoPersonal,
+        D.idDireccion,
+        D.idDistrito,
         D.calle,
         D.numero,
+        D.pisoDepartamento,
         D.referencia,
         P.estado
     FROM dbo.Persona P

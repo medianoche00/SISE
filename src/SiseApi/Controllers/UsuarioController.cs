@@ -46,7 +46,6 @@ namespace SiseApi.Controllers
             }
             catch (Exception ex)
             {
-                throw;
                 return StatusCode(500, "Ocurrió un error interno.");
             }
         }

@@ -58,7 +58,7 @@ namespace SiseApi.Controllers
             var idAdministrador = await _usuarioActualService.GetIdAdministrativoActualAsync();
             if (idAdministrador == null) return Unauthorized("Usuario no es administrador.");
 
-            var idUsuario = _usuarioActualService.GetIdUsuarioLogueado(); // Tu SP actual no pide este parámetro, lo comento.
+            var idUsuario = _usuarioActualService.GetIdUsuarioLogueado();
 
             try
             {

@@ -1,44 +1,50 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace SiseApi.Data.Models;
 
-[Table("Auditoria")]
 public partial class Auditoria
 {
     [Key]
     [Column("idAuditoria")]
-    public int IdAuditoria { get; set; }
+    public long IdAuditoria { get; set; }
+
+    [Column("nombreTabla")]
+    [StringLength(100)]
+    public string NombreTabla { get; set; } = null!;
+
+    [Column("idRegistro")]
+    [StringLength(100)]
+    public string IdRegistro { get; set; } = null!;
+
+    [Column("tipoAccion")]
+    [StringLength(20)]
+    public string TipoAccion { get; set; } = null!;
 
     [Column("idUsuario")]
     public int? IdUsuario { get; set; }
 
-    [Column("tablaAfectada")]
+    [Column("usuarioDB")]
     [StringLength(100)]
-    public string TablaAfectada { get; set; } = null!;
+    public string UsuarioDb { get; set; } = null!;
 
-    [Column("columnaAfectada")]
+    [Column("fechaCambio")]
+    public DateTime FechaCambio { get; set; }
+
+    [Column("valAntiguos")]
+    public string? ValAntiguos { get; set; }
+
+    [Column("valNuevos")]
+    public string? ValNuevos { get; set; }
+
+    [Column("docRespaldo")]
     [StringLength(100)]
-    public string? ColumnaAfectada { get; set; }
-
-    [Column("accion")]
-    [StringLength(20)]
-    public string Accion { get; set; } = null!;
-
-    [Column("valorAnterior")]
-    public string? ValorAnterior { get; set; }
-
-    [Column("valorNuevo")]
-    public string? ValorNuevo { get; set; }
-
-    // DateTime mapea correctamente a datetime2(7)
-    [Column("fechaHora")]
-    public DateTime FechaHora { get; set; }
+    public string? DocRespaldo { get; set; }
 
     [ForeignKey("IdUsuario")]
-    [InverseProperty("Auditorias")]
-    public virtual ApplicationUser? Usuario { get; set; }
+    public virtual IdentityUser<int>? IdUsuarioNavigation { get; set; }
 }

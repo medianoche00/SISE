@@ -35,7 +35,7 @@ namespace SiseApi.Services
             var userId = GetIdUsuarioLogueado();
             if (userId == null) return null;
 
-            var egresado = await _context.Egresados
+            var egresado = await _context.Egresado
                 .AsNoTracking()
                 .Select(e => new { e.IdEgresado, e.IdUsuario })
                 .FirstOrDefaultAsync(e => e.IdUsuario == userId);
@@ -48,7 +48,7 @@ namespace SiseApi.Services
             var userId = GetIdUsuarioLogueado();
             if (userId == null) return null;
 
-            var rep = await _context.Representantes
+            var rep = await _context.Representante
                 .AsNoTracking()
                 .Select(r => new { r.IdRepresentante, r.IdUsuario })
                 .FirstOrDefaultAsync(r => r.IdUsuario == userId);
@@ -61,7 +61,7 @@ namespace SiseApi.Services
             var userId = GetIdUsuarioLogueado();
             if (userId == null) return null;
 
-            var adm = await _context.Administrativos
+            var adm = await _context.Administrativo
                 .AsNoTracking()
                 .Select(r => new { r.IdAdministrativo, r.IdUsuario })
                 .FirstOrDefaultAsync(r => r.IdUsuario == userId);

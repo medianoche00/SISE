@@ -1,0 +1,75 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using SiseApi.Data;
+using SiseApi.Data.Models;
+using SiseApi.Models;
+using SiseApi.Services;
+
+namespace SiseApi.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class PersonaController : ControllerBase
+    {
+        private readonly SiseDbContext _context;
+        private readonly IUsuarioActualService _usuarioActualService;
+
+        public PersonaController(SiseDbContext context, IUsuarioActualService usuarioActualService)
+        {
+            _context = context;
+            _usuarioActualService = usuarioActualService;
+        }
+
+        public async Task<ActionResult<List<PersonaDto>>> GetAll()
+        {
+            var idAdministrador = _usuarioActualService.GetIdAdministrativoActualAsync();
+            if (idAdministrador == null) return Unauthorized("Usuario no es administrador.");
+
+            try
+            {
+                var personas = await _context.Database.SqlQueryRaw<PersonaDto>(
+                    "EXEC dbo.sp_Persona_Listar"
+                ).ToListAsync();
+
+                return Ok(personas);
+            }
+            catch (SqlException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Ocurrió un error interno al obtener las personas.");
+            }
+        }
+
+        [HttpDelete("{idPersona:int}")]
+        public async Task<ActionResult> EliminarPersona(int idPersona)
+        {
+            var idAdministrador = await _usuarioActualService.GetIdAdministrativoActualAsync();
+            if (idAdministrador == null) return Unauthorized("Usuario no es administrador.");
+
+            var idUsuario = _usuarioActualService.GetIdUsuarioLogueado();
+
+            try
+            {
+                await _context.EjecutarSpConAuditoriaAsync(
+                    "documentoXX", //! cambiar por documento que respalde la operacion
+                    idUsuario,
+                    "EXEC sp_Persona_Eliminar @IdPersona",
+                    new SqlParameter("@IdPersona", idPersona)
+                );
+                return NoContent();
+            }
+            catch (SqlException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Ocurrió un error interno al eliminar la persona.");
+            }
+        }
+    }
+}

@@ -2,266 +2,323 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SiseApi.Data.Models;
-using SiseApi.Models;
+using System;
+using System.Collections.Generic;
 
-namespace SiseApi.Data
+namespace SiseApi.Data;
+
+public partial class SiseDbContext : IdentityDbContext<IdentityUser<int>, IdentityRole<int>, int>
 {
-    // Heredamos de IdentityDbContext especificando nuestro User, Role y el tipo de PK (int)
-    public class SiseDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
+    public SiseDbContext(DbContextOptions<SiseDbContext> options)
+        : base(options)
     {
-        public SiseDbContext(DbContextOptions<SiseDbContext> options) : base(options)
-        {
-        }
-
-        // --- DbSets de Negocio ---
-        public virtual DbSet<Auditoria> Auditoria { get; set; }
-        public virtual DbSet<Carrera> Carreras { get; set; }
-        public virtual DbSet<Egresado> Egresados { get; set; }
-        public virtual DbSet<Empresa> Empresas { get; set; }
-        public virtual DbSet<Escuela> Escuelas { get; set; }
-        public virtual DbSet<ExperienciaLaboral> ExperienciasLaborales { get; set; }
-        public virtual DbSet<Facultad> Facultades { get; set; }
-        public virtual DbSet<FormacionComplementaria> FormacionesComplementarias { get; set; }
-        public virtual DbSet<ModalidadTrabajo> ModalidadesTrabajos { get; set; }
-        public virtual DbSet<OfertaLaboral> OfertasLaborales { get; set; }
-        public virtual DbSet<Persona> Personas { get; set; }
-        public virtual DbSet<Representante> Representantes { get; set; }
-        public virtual DbSet<TipoContrato> TiposContratos { get; set; }
-        public virtual DbSet<TipoFormacion> TiposFormacions { get; set; }
-        public virtual DbSet<VwOfertasDisponible> VwOfertasDisponibles { get; set; }
-        public virtual DbSet<Postulacion> Postulaciones { get; set; }
-        public virtual DbSet<Administrativo> Administrativos { get; set; }
-        public virtual DbSet<CargoAdministrativo> CargosAdministrativos { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            // 1. CRÍTICO: Configura todas las tablas de Identity (Users, Roles, Claims, etc.)
-            base.OnModelCreating(modelBuilder);
-
-            // 2. Configuraciones de tablas
-            modelBuilder.Entity<CargoAdministrativo>(entity =>
-            {
-                entity.HasKey(e => e.IdCargoAdministrativo);
-                entity.Property(e => e.NombreCargo).IsRequired();
-            });
-
-            modelBuilder.Entity<Auditoria>(entity =>
-            {
-                entity.HasKey(e => e.IdAuditoria);
-                entity.Property(e => e.FechaHora).HasDefaultValueSql("(getdate())");
-
-                entity.HasOne(d => d.Usuario)
-                      .WithMany(p => p.Auditorias)
-                      .HasForeignKey(d => d.IdUsuario)
-                      .HasConstraintName("FK_Auditoria_Usuario_Identity");
-            });
-
-            modelBuilder.Entity<Carrera>(entity =>
-            {
-                entity.HasKey(e => e.IdCarrera);
-                entity.Property(e => e.Estado).HasDefaultValue(true);
-
-                entity.HasOne(d => d.IdEscuelaNavigation).WithMany(p => p.Carreras)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Carrera_Escuela");
-            });
-
-            modelBuilder.Entity<Egresado>(entity =>
-            {
-                entity.HasKey(e => e.IdEgresado);
-                entity.Property(e => e.Estado).HasDefaultValue(true);
-
-                // Relación con Carrera
-                entity.HasOne(d => d.Carrera).WithMany(p => p.Egresados)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Egresado_Carrera");
-
-                // Relación con Persona
-                entity.HasOne(d => d.Persona).WithMany(p => p.Egresados)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Egresado_Persona");
-
-                // Relación con Usuario (Identity)
-                // Aquí es donde se une la cuenta de acceso con el perfil de egresado
-                entity.HasOne(d => d.Usuario)
-                    .WithMany(p => p.Egresados)
-                    .HasForeignKey(d => d.IdUsuario)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Egresado_Usuario");
-            });
-
-            modelBuilder.Entity<Empresa>(entity =>
-            {
-                entity.HasKey(e => e.IdEmpresa);
-                entity.Property(e => e.Estado).HasDefaultValue(true);
-                entity.Property(e => e.Ruc).IsFixedLength();
-            });
-
-            modelBuilder.Entity<Escuela>(entity =>
-            {
-                entity.HasKey(e => e.IdEscuela).HasName("PK__Escuela__9F67B289F35514A8");
-                entity.Property(e => e.Estado).HasDefaultValue(true);
-                entity.HasOne(d => d.IdFacultadNavigation).WithMany(p => p.Escuelas)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Escuela__idFacul__06CD04F7");
-            });
-
-            modelBuilder.Entity<ExperienciaLaboral>(entity =>
-            {
-                entity.HasKey(e => e.IdExperiencia).HasName("PK__Experien__77DCF2941080D70A");
-                entity.Property(e => e.Estado).HasDefaultValue(true);
-                entity.HasOne(d => d.IdEgresadoNavigation).WithMany(p => p.ExperienciaLaborals)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Experienc__idEgr__07C12930");
-            });
-
-            modelBuilder.Entity<Facultad>(entity =>
-            {
-                entity.HasKey(e => e.IdFacultad).HasName("PK__Facultad__B57E5B202D9641D0");
-                entity.Property(e => e.Estado).HasDefaultValue(true);
-            });
-
-            modelBuilder.Entity<FormacionComplementaria>(entity =>
-            {
-                entity.HasKey(e => e.IdFormacion).HasName("PK__Formacio__9DE85F3DDE9E96E9");
-                entity.Property(e => e.Estado).HasDefaultValue(true);
-                entity.HasOne(d => d.IdEgresadoNavigation).WithMany(p => p.FormacionComplementaria)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Formacion__idEgr__08B54D69");
-                entity.HasOne(d => d.IdTipoFormacionNavigation).WithMany(p => p.FormacionComplementaria)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Formacion__idTip__09A971A2");
-            });
-
-            modelBuilder.Entity<ModalidadTrabajo>(entity =>
-            {
-                entity.HasKey(e => e.IdModalidadTrabajo).HasName("PK__Modalida__82081B5D073BB510");
-                entity.Property(e => e.Estado).HasDefaultValue(true);
-            });
-
-            modelBuilder.Entity<OfertaLaboral>(entity =>
-            {
-                entity.HasKey(e => e.IdOferta).HasName("PK__OfertaLa__05A1245E53519920");
-                entity.Property(e => e.Estado).HasDefaultValue(true);
-                entity.HasOne(d => d.IdEgresadoGanadorNavigation).WithMany(p => p.OfertaLaborals)
-                      .HasConstraintName("FK__OfertaLab__idEgr__0A9D95DB");
-                entity.HasOne(d => d.IdEmpresaNavigation).WithMany(p => p.OfertaLaborals)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__OfertaLab__idEmp__0B91BA14");
-                entity.HasOne(d => d.IdModalidadTrabajoNavigation).WithMany(p => p.OfertaLaborals)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__OfertaLab__idMod__0C85DE4D");
-                entity.HasOne(d => d.IdTipoContratoNavigation).WithMany(p => p.OfertaLaborals)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__OfertaLab__idTip__0D7A0286");
-            });
-
-            // --- CORRECCIÓN CLAVE EN PERSONA ---
-            modelBuilder.Entity<Persona>(entity =>
-            {
-                entity.HasKey(e => e.IdPersona);
-                // NOTA IMPORTANTE: Aquí NO se define ninguna relación con Usuario.
-                // Si la clase C# 'ApplicationUser' está limpia, EF no creará 'IdUsuario' en esta tabla.
-            });
-
-            // --- CORRECCIÓN EN REPRESENTANTE ---
-            modelBuilder.Entity<Representante>(entity =>
-            {
-                entity.HasKey(e => e.IdRepresentante);
-                entity.Property(e => e.Estado).HasDefaultValue(true);
-
-                // Relación con Empresa
-                entity.HasOne(d => d.Empresa)
-                    .WithMany(p => p.Representantes)
-                    .HasForeignKey(d => d.IdEmpresa)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Representante_Empresa");
-
-                // Relación con Persona
-                entity.HasOne(d => d.Persona)
-                    .WithMany(p => p.Representantes)
-                    .HasForeignKey(d => d.IdPersona)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Representante_Persona");
-
-                // Relación con Usuario (Identity)
-                entity.HasOne(d => d.Usuario)
-                    .WithMany(p => p.Representantes)
-                    .HasForeignKey(d => d.IdUsuario)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Representante_Usuario");
-            });
-
-            modelBuilder.Entity<TipoContrato>(entity =>
-            {
-                // Se asume que tiene PK definida en la clase o por convención, 
-                // pero si quieres ser explícito agrégalo aquí.
-            });
-
-            modelBuilder.Entity<TipoFormacion>(entity =>
-            {
-                // Igual que arriba.
-            });
-
-            modelBuilder.Entity<VwOfertasDisponible>(entity =>
-            {
-                entity.HasNoKey();
-                entity.ToView("vwOfertasDisponibles");
-            });
-
-            modelBuilder.Entity<Postulacion>(entity =>
-            {
-                entity.HasKey(e => e.IdPostulacion);
-
-                // Estado por defecto desde BD
-                entity.Property(e => e.Estado).HasDefaultValue("Pendiente");
-                entity.Property(e => e.FechaPostulacion).HasDefaultValueSql("(getdate())");
-
-                // Relación con Egresado
-                entity.HasOne(d => d.Egresado)
-                    .WithMany(p => p.Postulaciones)
-                    .HasForeignKey(d => d.IdEgresado)
-                    .OnDelete(DeleteBehavior.ClientSetNull) // Evita borrado en cascada peligroso
-                    .HasConstraintName("FK_Postulacion_Egresado");
-
-                // Relación con Oferta
-                entity.HasOne(d => d.OfertaLaboral)
-                    .WithMany(p => p.Postulaciones)
-                    .HasForeignKey(d => d.IdOferta)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Postulacion_Oferta");
-
-                // Relación con Representante (Evaluador)
-                entity.HasOne(d => d.RepresentanteEvaluador)
-                    .WithMany(p => p.PostulacionesEvaluadas)
-                    .HasForeignKey(d => d.IdRepresentanteEvaluador)
-                    .OnDelete(DeleteBehavior.ClientSetNull) // Si se borra el repre, no se borra la postulación (queda el histórico)
-                    .HasConstraintName("FK_Postulacion_Representante");
-            });
-
-            modelBuilder.Entity<Administrativo>(entity =>
-            {
-                entity.HasKey(e => e.IdAdministrativo);
-                entity.Property(e => e.Estado).HasDefaultValue(true);
-
-                // Relación con Cargo
-                entity.HasOne(d => d.CargoAdministrativo).WithMany(p => p.Administrativos)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Administrativo_Cargo");
-
-                // Relación con Persona
-                entity.HasOne(d => d.Persona).WithMany(p => p.Administrativos)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Administrativo_Persona");
-
-                // Relación con Usuario (Identity)
-                // Aquí es donde se une la cuenta de acceso con el perfil de egresado
-                entity.HasOne(d => d.Usuario)
-                    .WithMany(p => p.Administrativos)
-                    .HasForeignKey(d => d.IdUsuario)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Administrativo_Usuario");
-            });
-        }
     }
+
+    public virtual DbSet<Administrativo> Administrativo { get; set; }
+
+    public virtual DbSet<Auditoria> Auditoria { get; set; }
+
+    public virtual DbSet<CargoAdministrativo> CargoAdministrativo { get; set; }
+
+    public virtual DbSet<Carrera> Carrera { get; set; }
+
+    public virtual DbSet<Departamento> Departamento { get; set; }
+
+    public virtual DbSet<Direccion> Direccion { get; set; }
+
+    public virtual DbSet<Distrito> Distrito { get; set; }
+
+    public virtual DbSet<Egresado> Egresado { get; set; }
+
+    public virtual DbSet<Empresa> Empresa { get; set; }
+
+    public virtual DbSet<Escuela> Escuela { get; set; }
+
+    public virtual DbSet<ExperienciaLaboral> ExperienciaLaboral { get; set; }
+
+    public virtual DbSet<Facultad> Facultad { get; set; }
+
+    public virtual DbSet<FormacionComplementaria> FormacionComplementaria { get; set; }
+
+    public virtual DbSet<ModalidadTrabajo> ModalidadTrabajo { get; set; }
+
+    public virtual DbSet<OfertaLaboral> OfertaLaboral { get; set; }
+
+    public virtual DbSet<Persona> Persona { get; set; }
+
+    public virtual DbSet<Postulacion> Postulacion { get; set; }
+
+    public virtual DbSet<Provincia> Provincia { get; set; }
+
+    public virtual DbSet<Representante> Representante { get; set; }
+
+    public virtual DbSet<TipoContrato> TipoContrato { get; set; }
+
+    public virtual DbSet<TipoDocumento> TipoDocumento { get; set; }
+
+    public virtual DbSet<TipoFormacion> TipoFormacion { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<IdentityUser<int>>(entity =>
+        {
+            entity.ToTable(name: "AspNetUsers", table => table.HasTrigger("TRG_Audit_AspNetUser"));
+        });
+        modelBuilder.Entity<Administrativo>(entity =>
+        {
+            entity.ToTable(tb => tb.HasTrigger("TRG_Audit_Administrativo"));
+
+            entity.Property(e => e.Estado).HasDefaultValue("Activo");
+
+            entity.HasOne(d => d.IdCargoAdministrativoNavigation).WithMany(p => p.Administrativo)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Administrativo_Cargo");
+
+            entity.HasOne(d => d.IdPersonaNavigation).WithMany(p => p.Administrativo)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Administrativo_Persona");
+
+                    });
+
+        modelBuilder.Entity<Auditoria>(entity =>
+        {
+            entity.Property(e => e.FechaCambio).HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.UsuarioDb).HasDefaultValueSql("(suser_sname())");
+        });
+
+        modelBuilder.Entity<CargoAdministrativo>(entity =>
+        {
+            entity.ToTable(tb => tb.HasTrigger("TRG_Audit_CargoAdministrativo"));
+
+            entity.Property(e => e.Estado).HasDefaultValue("Activo");
+        });
+
+        modelBuilder.Entity<Carrera>(entity =>
+        {
+            entity.ToTable(tb => tb.HasTrigger("TRG_Audit_Carrera"));
+
+            entity.Property(e => e.Estado).HasDefaultValue("Activo");
+
+            entity.HasOne(d => d.IdEscuelaNavigation).WithMany(p => p.Carrera)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Carrera_Escuela");
+        });
+
+        modelBuilder.Entity<Departamento>(entity =>
+        {
+            entity.ToTable(tb => tb.HasTrigger("TRG_Audit_Departamento"));
+
+            entity.Property(e => e.Estado).HasDefaultValue("Activo");
+        });
+
+        modelBuilder.Entity<Direccion>(entity =>
+        {
+            entity.ToTable(tb => tb.HasTrigger("TRG_Audit_Direccion"));
+
+            entity.Property(e => e.Estado).HasDefaultValue("Activo");
+            entity.Property(e => e.FechaRegistro).HasDefaultValueSql("(getdate())");
+
+            entity.HasOne(d => d.IdDistritoNavigation).WithMany(p => p.Direccion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Direccion_Distrito");
+        });
+
+        modelBuilder.Entity<Distrito>(entity =>
+        {
+            entity.ToTable(tb => tb.HasTrigger("TRG_Audit_Distrito"));
+
+            entity.Property(e => e.Estado).HasDefaultValue("Activo");
+
+            entity.HasOne(d => d.IdProvinciaNavigation).WithMany(p => p.Distrito)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Distrito_Provincia");
+        });
+
+        modelBuilder.Entity<Egresado>(entity =>
+        {
+            entity.ToTable(tb => tb.HasTrigger("TRG_Audit_Egresado"));
+
+            entity.Property(e => e.Estado).HasDefaultValue("Buscando Trabajo");
+
+            entity.HasOne(d => d.IdCarreraNavigation).WithMany(p => p.Egresado)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Egresado_Carrera");
+
+            entity.HasOne(d => d.IdPersonaNavigation).WithMany(p => p.Egresado)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Egresado_Persona");
+        });
+
+        modelBuilder.Entity<Empresa>(entity =>
+        {
+            entity.ToTable(tb => tb.HasTrigger("TRG_Audit_Empresa"));
+
+            entity.Property(e => e.Estado).HasDefaultValue("Registrada");
+            entity.Property(e => e.Ruc).IsFixedLength();
+
+            entity.HasOne(d => d.IdDireccionNavigation).WithMany(p => p.Empresa)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Empresa_Direccion");
+        });
+
+        modelBuilder.Entity<Escuela>(entity =>
+        {
+            entity.ToTable(tb => tb.HasTrigger("TRG_Audit_Escuela"));
+
+            entity.Property(e => e.Estado).HasDefaultValue("Activo");
+
+            entity.HasOne(d => d.IdFacultadNavigation).WithMany(p => p.Escuela)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Escuela_Facultad");
+        });
+
+        modelBuilder.Entity<ExperienciaLaboral>(entity =>
+        {
+            entity.ToTable(tb => tb.HasTrigger("TRG_Audit_ExperienciaLaboral"));
+
+            entity.Property(e => e.Estado).HasDefaultValue("Validado");
+
+            entity.HasOne(d => d.IdEgresadoNavigation).WithMany(p => p.ExperienciaLaboral).HasConstraintName("FK_Experiencia_Egresado_Cascade");
+
+            entity.HasOne(d => d.IdEmpresaRegistradaNavigation).WithMany(p => p.ExperienciaLaboral).HasConstraintName("FK_ExperienciaLaboral_Empresa");
+        });
+
+        modelBuilder.Entity<Facultad>(entity =>
+        {
+            entity.ToTable(tb => tb.HasTrigger("TRG_Audit_Facultad"));
+
+            entity.Property(e => e.Estado).HasDefaultValue("Activo");
+        });
+
+        modelBuilder.Entity<FormacionComplementaria>(entity =>
+        {
+            entity.ToTable(tb => tb.HasTrigger("TRG_Audit_FormacionComplementaria"));
+
+            entity.Property(e => e.Estado).HasDefaultValue("Validado");
+
+            entity.HasOne(d => d.IdEgresadoNavigation).WithMany(p => p.FormacionComplementaria).HasConstraintName("FK_Formacion_Egresado_Cascade");
+
+            entity.HasOne(d => d.IdTipoFormacionNavigation).WithMany(p => p.FormacionComplementaria)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Formacion_Tipo");
+        });
+
+        modelBuilder.Entity<ModalidadTrabajo>(entity =>
+        {
+            entity.ToTable(tb => tb.HasTrigger("TRG_Audit_ModalidadTrabajo"));
+
+            entity.Property(e => e.Estado).HasDefaultValue("Activo");
+        });
+
+        modelBuilder.Entity<OfertaLaboral>(entity =>
+        {
+            entity.ToTable(tb => tb.HasTrigger("TRG_Audit_OfertaLaboral"));
+
+            entity.Property(e => e.Estado).HasDefaultValue("Activa");
+            entity.Property(e => e.FechaPublicacion).HasDefaultValueSql("(getdate())");
+
+            entity.HasOne(d => d.IdDireccionNavigation).WithMany(p => p.OfertaLaboral)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OfertaLaboral_Direccion");
+
+            entity.HasOne(d => d.IdEgresadoGanadorNavigation).WithMany(p => p.OfertaLaboral).HasConstraintName("FK_OfertaLaboral_Ganador");
+
+            entity.HasOne(d => d.IdEmpresaNavigation).WithMany(p => p.OfertaLaboral)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OfertaLaboral_Empresa");
+
+            entity.HasOne(d => d.IdModalidadTrabajoNavigation).WithMany(p => p.OfertaLaboral)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OfertaLaboral_Modalidad");
+
+            entity.HasOne(d => d.IdTipoContratoNavigation).WithMany(p => p.OfertaLaboral)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OfertaLaboral_TipoContrato");
+        });
+
+        modelBuilder.Entity<Persona>(entity =>
+        {
+            entity.ToTable(tb => tb.HasTrigger("TRG_Audit_Persona"));
+
+            entity.Property(e => e.Estado).HasDefaultValue("Activo");
+
+            entity.HasOne(d => d.IdDireccionNavigation).WithMany(p => p.Persona)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Persona_Direccion");
+
+            entity.HasOne(d => d.IdTipoDocumentoNavigation).WithMany(p => p.Persona)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Persona_TipoDocumento");
+        });
+
+        modelBuilder.Entity<Postulacion>(entity =>
+        {
+            entity.ToTable(tb => tb.HasTrigger("TRG_Audit_Postulacion"));
+
+            entity.Property(e => e.Estado).HasDefaultValue("Pendiente");
+            entity.Property(e => e.FechaPostulacion).HasDefaultValueSql("(getdate())");
+
+            entity.HasOne(d => d.IdEgresadoNavigation).WithMany(p => p.Postulacion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Postulacion_Egresado");
+
+            entity.HasOne(d => d.IdOfertaNavigation).WithMany(p => p.Postulacion).HasConstraintName("FK_Postulacion_Oferta_Cascade");
+
+            entity.HasOne(d => d.IdRepresentanteEvaluadorNavigation).WithMany(p => p.Postulacion).HasConstraintName("FK_Postulacion_Representante");
+        });
+
+        modelBuilder.Entity<Provincia>(entity =>
+        {
+            entity.ToTable(tb => tb.HasTrigger("TRG_Audit_Provincia"));
+
+            entity.Property(e => e.Estado).HasDefaultValue("Activo");
+
+            entity.HasOne(d => d.IdDepartamentoNavigation).WithMany(p => p.Provincia)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Provincia_Departamento");
+        });
+
+        modelBuilder.Entity<Representante>(entity =>
+        {
+            entity.ToTable(tb => tb.HasTrigger("TRG_Audit_Representante"));
+
+            entity.Property(e => e.Estado).HasDefaultValue("Activo");
+
+            entity.HasOne(d => d.IdEmpresaNavigation).WithMany(p => p.Representante)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Representante_Empresa");
+
+            entity.HasOne(d => d.IdPersonaNavigation).WithMany(p => p.Representante)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Representante_Persona");
+        });
+
+        modelBuilder.Entity<TipoContrato>(entity =>
+        {
+            entity.ToTable(tb => tb.HasTrigger("TRG_Audit_TipoContrato"));
+
+            entity.Property(e => e.Estado).HasDefaultValue("Activo");
+        });
+
+        modelBuilder.Entity<TipoDocumento>(entity =>
+        {
+            entity.HasKey(e => e.IdTipoDocumento).HasName("PK__TipoDocu__61FDF9F5633C810D");
+
+            entity.ToTable(tb => tb.HasTrigger("TRG_Audit_TipoDocumento"));
+
+            entity.Property(e => e.Estado).HasDefaultValue("Activo");
+        });
+
+        modelBuilder.Entity<TipoFormacion>(entity =>
+        {
+            entity.ToTable(tb => tb.HasTrigger("TRG_Audit_TipoFormacion"));
+
+            entity.Property(e => e.Estado).HasDefaultValue("Activo");
+        });
+
+        OnModelCreatingPartial(modelBuilder);
+    }
+
+    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

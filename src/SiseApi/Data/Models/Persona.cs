@@ -6,9 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SiseApi.Data.Models;
 
-[Table("Persona")]
-[Index(nameof(DocumentoIdentidad), IsUnique = true)] // Índice único moderno
-public class Persona
+[Index("IdTipoDocumento", "NumeroDocumento", Name = "UQ_Persona_Documento", IsUnique = true)]
+public partial class Persona
 {
     [Key]
     [Column("idPersona")]
@@ -26,30 +25,43 @@ public class Persona
     [StringLength(100)]
     public string ApellidoMaterno { get; set; } = null!;
 
-    // CAMBIO: De Dni a DocumentoIdentidad para soportar C.E./Pasaporte
-    [Column("documentoIdentidad")]
+    [Column("numeroDocumento")]
     [StringLength(20)]
     [Unicode(false)]
-    public string DocumentoIdentidad { get; set; } = null!;
+    public string NumeroDocumento { get; set; } = null!;
+
+    [Column("idTipoDocumento")]
+    public int IdTipoDocumento { get; set; }
+
+    [Column("idDireccion")]
+    public int IdDireccion { get; set; }
 
     [Column("telefono")]
     [StringLength(15)]
     public string? Telefono { get; set; }
 
-    // Este es el correo de contacto personal, distinto al del login
     [Column("correoPersonal")]
     [StringLength(150)]
     public string? CorreoPersonal { get; set; }
 
     [Column("estado")]
-    public bool Estado { get; set; }
+    [StringLength(20)]
+    public string Estado { get; set; } = null!;
 
-    [InverseProperty("Persona")]
-    public virtual ICollection<Egresado> Egresados { get; set; } = new List<Egresado>();
+    [InverseProperty("IdPersonaNavigation")]
+    public virtual ICollection<Administrativo> Administrativo { get; set; } = new List<Administrativo>();
 
-    [InverseProperty("Persona")]
-    public virtual ICollection<Representante> Representantes { get; set; } = new List<Representante>();
+    [InverseProperty("IdPersonaNavigation")]
+    public virtual ICollection<Egresado> Egresado { get; set; } = new List<Egresado>();
 
+    [ForeignKey("IdDireccion")]
     [InverseProperty("Persona")]
-    public virtual ICollection<Administrativo> Administrativos { get; set; } = new List<Administrativo>();
+    public virtual Direccion IdDireccionNavigation { get; set; } = null!;
+
+    [ForeignKey("IdTipoDocumento")]
+    [InverseProperty("Persona")]
+    public virtual TipoDocumento IdTipoDocumentoNavigation { get; set; } = null!;
+
+    [InverseProperty("IdPersonaNavigation")]
+    public virtual ICollection<Representante> Representante { get; set; } = new List<Representante>();
 }

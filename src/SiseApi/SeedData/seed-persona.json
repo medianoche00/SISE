@@ -3,36 +3,36 @@
     "Nombres": "Administrador",
     "ApellidoPaterno": "Sistema",
     "ApellidoMaterno": "General",
-    "DocumentoIdentidad": "00000001",
+    "NumeroDocumento": "00000001",
     "Telefono": "999000111",
     "CorreoPersonal": "admin@university.edu.pe",
-    "Estado": true
+    "Estado": "Activo"
   },
   {
     "Nombres": "Juan Alberto",
     "ApellidoPaterno": "Pérez",
     "ApellidoMaterno": "Gómez",
-    "DocumentoIdentidad": "45879632",
+    "NumeroDocumento": "45879632",
     "Telefono": "987654321",
     "CorreoPersonal": "juan.perez@personal.com",
-    "Estado": true
+    "Estado": "Activo"
   },
   {
     "Nombres": "María Fernanda",
     "ApellidoPaterno": "López",
     "ApellidoMaterno": "Torres",
-    "DocumentoIdentidad": "10203040",
+    "NumeroDocumento": "10203040",
     "Telefono": "998877665",
     "CorreoPersonal": "maria.rrhh@techsolutions.com",
-    "Estado": true
+    "Estado": "Activo"
   },
   {
     "Nombres": "David Ochoa",
     "ApellidoPaterno": "Gomez",
     "ApellidoMaterno": "Cruz",
-    "DocumentoIdentidad": "45203042",
+    "NumeroDocumento": "45203042",
     "Telefono": "998123564",
     "CorreoPersonal": "rector.unp@university.edu.pe",
-    "Estado": true
+    "Estado": "Activo"
   }
 ]

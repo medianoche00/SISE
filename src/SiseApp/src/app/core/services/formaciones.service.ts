@@ -12,7 +12,7 @@ export interface FormacionComplementaria {
   institucion: string,
   fechaInicio: Date,
   fechaFin: Date,
-  estado: boolean,
+  estado: string,
 }
 
 @Injectable({ providedIn: 'root' })

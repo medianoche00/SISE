@@ -52,7 +52,7 @@ export class FormacionDialogComponent implements OnInit {
       institucion: formValue.institucion,
       fechaInicio: formValue.fechaInicio,
       fechaFin: formValue.fechaFin,
-      estado: true
+      estado: "Pendiente"
     };
 
     this.dialogRef.close(payload);

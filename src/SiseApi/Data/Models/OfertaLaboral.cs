@@ -1,10 +1,8 @@
-﻿using SiseApi.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SiseApi.Data.Models;
 
-[Table("OfertaLaboral")]
 public partial class OfertaLaboral
 {
     [Key]
@@ -13,6 +11,9 @@ public partial class OfertaLaboral
 
     [Column("idEmpresa")]
     public int IdEmpresa { get; set; }
+
+    [Column("idDireccion")]
+    public int IdDireccion { get; set; }
 
     [Column("titulo")]
     [StringLength(150)]
@@ -24,15 +25,11 @@ public partial class OfertaLaboral
     [Column("requisitos")]
     public string? Requisitos { get; set; }
 
-    [Column("ubicacion")]
-    [StringLength(150)]
-    public string? Ubicacion { get; set; }
-
     [Column("idTipoContrato")]
     public int IdTipoContrato { get; set; }
 
     [Column("sueldo", TypeName = "decimal(10, 2)")]
-    public decimal? Sueldo { get; set; }
+    public decimal Sueldo { get; set; }
 
     [Column("idModalidadTrabajo")]
     public int IdModalidadTrabajo { get; set; }
@@ -47,24 +44,29 @@ public partial class OfertaLaboral
     public int? IdEgresadoGanador { get; set; }
 
     [Column("estado")]
-    public bool Estado { get; set; }
+    [StringLength(20)]
+    public string Estado { get; set; } = null!;
+
+    [ForeignKey("IdDireccion")]
+    [InverseProperty("OfertaLaboral")]
+    public virtual Direccion IdDireccionNavigation { get; set; } = null!;
 
     [ForeignKey("IdEgresadoGanador")]
-    [InverseProperty("OfertaLaborals")]
+    [InverseProperty("OfertaLaboral")]
     public virtual Egresado? IdEgresadoGanadorNavigation { get; set; }
 
     [ForeignKey("IdEmpresa")]
-    [InverseProperty("OfertaLaborals")]
+    [InverseProperty("OfertaLaboral")]
     public virtual Empresa IdEmpresaNavigation { get; set; } = null!;
 
     [ForeignKey("IdModalidadTrabajo")]
-    [InverseProperty("OfertaLaborals")]
+    [InverseProperty("OfertaLaboral")]
     public virtual ModalidadTrabajo IdModalidadTrabajoNavigation { get; set; } = null!;
 
     [ForeignKey("IdTipoContrato")]
-    [InverseProperty("OfertaLaborals")]
+    [InverseProperty("OfertaLaboral")]
     public virtual TipoContrato IdTipoContratoNavigation { get; set; } = null!;
 
-    [InverseProperty("OfertaLaboral")]
-    public virtual ICollection<Postulacion> Postulaciones { get; set; } = new List<Postulacion>();
+    [InverseProperty("IdOfertaNavigation")]
+    public virtual ICollection<Postulacion> Postulacion { get; set; } = new List<Postulacion>();
 }

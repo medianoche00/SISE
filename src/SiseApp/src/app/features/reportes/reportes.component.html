@@ -1,0 +1,68 @@
+<div class="container-fluid p-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold text-dark mb-1">🏢 Reporte de Empresas Aliadas</h2>
+      <p class="text-muted">Gestión de convenios y estado de empresas.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary btn-sm" routerLink="/dashboard">
+            <i class="bi bi-arrow-left"></i> Volver
+        </button>
+        <button class="btn btn-success btn-sm">
+            <i class="bi bi-file-earmark-excel"></i> Exportar
+        </button>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <select class="form-select" [(ngModel)]="filtroSectorEmpresa">
+        <option value="">Todos los Sectores</option>
+        <option value="Tecnologia">Tecnología</option>
+        <option value="Banca">Banca</option>
+      </select>
+    </div>
+    <div class="col-md-3">
+      <select class="form-select" [(ngModel)]="filtroEstadoEmpresa">
+        <option value="">Todos los Estados</option>
+        <option value="Activa">Activas</option>
+        <option value="Vetada">Vetadas</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="bg-light">
+          <tr>
+            <th class="ps-4 py-3">Empresa</th>
+            <th>RUC</th>
+            <th>Sector</th>
+            <th class="text-center">Ofertas</th>
+            <th class="text-center">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let emp of empresas">
+            <td class="ps-4 fw-medium text-primary">{{ emp.nombreComercial }}</td>
+            <td class="text-muted small">{{ emp.ruc }}</td>
+            <td><span class="badge bg-light text-dark border">{{ emp.sector }}</span></td>
+            <td class="text-center fw-bold">{{ emp.nroOfertas }}</td>
+            <td class="text-center">
+              <span class="badge rounded-pill" 
+                    [ngClass]="{
+                      'bg-success': emp.estado === 'Activa',
+                      'bg-warning text-dark': emp.estado === 'Pendiente',
+                      'bg-danger': emp.estado === 'Vetada'
+                    }">
+                {{ emp.estado }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

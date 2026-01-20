@@ -6,13 +6,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SiseApi.Data.Models;
 
-[Table("Empresa")]
-[Index(nameof(Ruc), IsUnique = true)]
+[Index("Ruc", Name = "UQ_Empresa_RUC", IsUnique = true)]
 public partial class Empresa
 {
     [Key]
     [Column("idEmpresa")]
     public int IdEmpresa { get; set; }
+
+    [Column("idDireccion")]
+    public int IdDireccion { get; set; }
 
     [Column("ruc")]
     [StringLength(11)]
@@ -22,10 +24,6 @@ public partial class Empresa
     [Column("razonSocial")]
     [StringLength(150)]
     public string RazonSocial { get; set; } = null!;
-
-    [Column("direccion")]
-    [StringLength(255)]
-    public string? Direccion { get; set; }
 
     [Column("telefono")]
     [StringLength(15)]
@@ -40,11 +38,19 @@ public partial class Empresa
     public string? Descripcion { get; set; }
 
     [Column("estado")]
-    public bool Estado { get; set; }
+    [StringLength(20)]
+    public string Estado { get; set; } = null!;
+
+    [InverseProperty("IdEmpresaRegistradaNavigation")]
+    public virtual ICollection<ExperienciaLaboral> ExperienciaLaboral { get; set; } = new List<ExperienciaLaboral>();
+
+    [ForeignKey("IdDireccion")]
+    [InverseProperty("Empresa")]
+    public virtual Direccion IdDireccionNavigation { get; set; } = null!;
 
     [InverseProperty("IdEmpresaNavigation")]
-    public virtual ICollection<OfertaLaboral> OfertaLaborals { get; set; } = new List<OfertaLaboral>();
+    public virtual ICollection<OfertaLaboral> OfertaLaboral { get; set; } = new List<OfertaLaboral>();
 
-    [InverseProperty("Empresa")]
-    public virtual ICollection<Representante> Representantes { get; set; } = new List<Representante>();
+    [InverseProperty("IdEmpresaNavigation")]
+    public virtual ICollection<Representante> Representante { get; set; } = new List<Representante>();
 }

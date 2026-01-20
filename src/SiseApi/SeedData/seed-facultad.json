@@ -1,14 +1,14 @@
 ﻿[
   {
     "NombreFacultad": "Facultad de Ingeniería",
-    "Estado": true
+    "Estado": "Activo"
   },
   {
     "NombreFacultad": "Facultad de Ciencias de la Salud",
-    "Estado": true
+    "Estado": "Activo"
   },
   {
     "NombreFacultad": "Facultad de Ciencias Económicas",
-    "Estado": true
+    "Estado": "Activo"
   }
 ]

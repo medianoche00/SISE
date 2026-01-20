@@ -1,16 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SiseApi.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace SiseApi.Data.Models;
 
-[Table("Egresado")]
-[Index(nameof(CodigoUniversitario), IsUnique = true)]
-[Index(nameof(IdUsuario), IsUnique = true)] // Garantiza 1 Usuario = 1 Perfil Egresado
-public class Egresado
+[Index("CodigoUniversitario", Name = "UQ_Egresado_Codigo", IsUnique = true)]
+public partial class Egresado
 {
     [Key]
     [Column("idEgresado")]
@@ -29,35 +25,33 @@ public class Egresado
     [StringLength(20)]
     public string CodigoUniversitario { get; set; } = null!;
 
-    [Column("añoEgreso")]
-    public int AñoEgreso { get; set; }
+    [Column("anioEgreso")]
+    public int AnioEgreso { get; set; }
 
     [Column("estado")]
-    public bool Estado { get; set; }
+    [StringLength(20)]
+    public string Estado { get; set; } = null!;
 
-    // Navegaciones
-    [ForeignKey("IdPersona")]
-    [InverseProperty("Egresados")]
-    public virtual Persona Persona { get; set; } = null!;
-
-    [ForeignKey("IdUsuario")]
-    [InverseProperty("Egresados")]
-    public virtual ApplicationUser Usuario { get; set; } = null!;
-
-    [ForeignKey("IdCarrera")]
-    [InverseProperty("Egresados")]
-    public virtual Carrera Carrera { get; set; } = null!;
-
-    // Colecciones hijas
     [InverseProperty("IdEgresadoNavigation")]
-    public virtual ICollection<ExperienciaLaboral> ExperienciaLaborals { get; set; } = new List<ExperienciaLaboral>();
+    public virtual ICollection<ExperienciaLaboral> ExperienciaLaboral { get; set; } = new List<ExperienciaLaboral>();
 
     [InverseProperty("IdEgresadoNavigation")]
     public virtual ICollection<FormacionComplementaria> FormacionComplementaria { get; set; } = new List<FormacionComplementaria>();
 
-    [InverseProperty("IdEgresadoGanadorNavigation")]
-    public virtual ICollection<OfertaLaboral> OfertaLaborals { get; set; } = new List<OfertaLaboral>();
-
+    [ForeignKey("IdCarrera")]
     [InverseProperty("Egresado")]
-    public virtual ICollection<Postulacion> Postulaciones { get; set; } = new List<Postulacion>();
+    public virtual Carrera IdCarreraNavigation { get; set; } = null!;
+
+    [ForeignKey("IdPersona")]
+    [InverseProperty("Egresado")]
+    public virtual Persona IdPersonaNavigation { get; set; } = null!;
+
+    [ForeignKey("IdUsuario")]
+    public virtual IdentityUser<int>? IdUsuarioNavigation { get; set; } = null!;
+
+    [InverseProperty("IdEgresadoGanadorNavigation")]
+    public virtual ICollection<OfertaLaboral> OfertaLaboral { get; set; } = new List<OfertaLaboral>();
+
+    [InverseProperty("IdEgresadoNavigation")]
+    public virtual ICollection<Postulacion> Postulacion { get; set; } = new List<Postulacion>();
 }

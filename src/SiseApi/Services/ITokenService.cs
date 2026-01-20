@@ -1,10 +1,10 @@
-﻿using SiseApi.Data.Models;
+﻿using Microsoft.AspNetCore.Identity;
 using SiseApi.Models;
 
 namespace SiseApi.Services
 {
     public interface ITokenService
     {
-        Task<AuthResponse> CreateTokenAsync(ApplicationUser user);
+        Task<AuthResponse> CreateTokenAsync(IdentityUser<int> user);
     }
 }

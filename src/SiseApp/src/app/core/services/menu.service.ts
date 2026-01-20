@@ -16,20 +16,14 @@ export class MenuService {
         return [
           { label: 'Inicio', icon: 'home', route: '/dashboard' },
           {
-            label: 'Ofertas Laborales',
-            icon: 'work',
-            route: '/ofertasdisponibles',
-          }, //! -------------------QUITAR LUEGO------------------------
-          { label: 'Usuarios', icon: 'people', route: '/dashboard/users' },
-          {
-            label: 'Mi Perfil',
-            icon: 'person',
-            route: '/perfil',
+            label: 'Gestión Usuarios',
+            icon: 'supervised_user_circle',
+            route: '/admin/usuarios',
           },
           {
-            label: 'Configuración',
-            icon: 'settings',
-            route: '/dashboard/settings',
+            label: 'Gestión Personas',
+            icon: 'badge',
+            route: '/admin/personas',
           },
         ];
       case 'Egresado':
@@ -38,17 +32,17 @@ export class MenuService {
           {
             label: 'Mi Perfil',
             icon: 'person',
-            route: '/perfil',
+            route: '/egresado/perfil',
           },
           {
             label: 'Ofertas Laborales',
             icon: 'work',
-            route: '/ofertasdisponibles',
+            route: '/egresado/ofertas-disponibles',
           },
           {
             label: 'Mis Postulaciones',
             icon: 'assignment',
-            route: '/mis-postulaciones',
+            route: '/egresado/mis-postulaciones',
           },
         ];
       case 'Representante':
@@ -57,12 +51,12 @@ export class MenuService {
           {
             label: 'Publicar Oferta',
             icon: 'add_circle',
-            route: '/dashboard/post-job',
+            route: '/representante/post-job',
           },
           {
             label: 'Candidatos',
             icon: 'group',
-            route: '/dashboard/candidates',
+            route: '/representante/candidates',
           },
         ];
       case 'Administrativo':
@@ -71,12 +65,12 @@ export class MenuService {
           {
             label: 'Estadísticas',
             icon: 'bar_chart',
-            route: '/dashboard/stats',
+            route: '/administrativo/stats',
           },
           {
             label: 'Reportes',
             icon: 'description',
-            route: '/dashboard/reports',
+            route: '/administrativo/reports',
           },
         ];
       default:

@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SiseApi.Data.Models;
 
-[Table("ExperienciaLaboral")]
 public partial class ExperienciaLaboral
 {
     [Key]
@@ -20,7 +19,6 @@ public partial class ExperienciaLaboral
     [StringLength(150)]
     public string Empresa { get; set; } = null!;
 
-    // Opcional: si decidiste agregar idEmpresaRegistrada en el SQL
     [Column("idEmpresaRegistrada")]
     public int? IdEmpresaRegistrada { get; set; }
 
@@ -38,12 +36,14 @@ public partial class ExperienciaLaboral
     public string? Descripcion { get; set; }
 
     [Column("estado")]
-    public bool Estado { get; set; }
+    [StringLength(20)]
+    public string Estado { get; set; } = null!;
 
     [ForeignKey("IdEgresado")]
-    [InverseProperty("ExperienciaLaborals")]
+    [InverseProperty("ExperienciaLaboral")]
     public virtual Egresado IdEgresadoNavigation { get; set; } = null!;
 
     [ForeignKey("IdEmpresaRegistrada")]
-    public virtual Empresa? EmpresaRegistrada { get; set; }
+    [InverseProperty("ExperienciaLaboral")]
+    public virtual Empresa? IdEmpresaRegistradaNavigation { get; set; }
 }

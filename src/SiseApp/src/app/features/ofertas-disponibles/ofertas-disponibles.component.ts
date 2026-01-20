@@ -16,6 +16,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { PostularService } from '../../core/services/postular.service';
+import { ModalidadTrabajo, ModalidadTrabajoService } from '../../core/services/modalidadtrabajo.service';
+import { TipoContrato, TipoContratoService } from '../../core/services/tipocontrato.service';
+import { PostularDialogComponent } from '../../shared/postular-dialog/postular-dialog.component';
 
 @Component({
   selector: 'app-ofertas-disponibles',
@@ -40,6 +43,9 @@ export class OfertasDisponiblesComponent implements OnInit {
   ofertasOriginales: OfertaLaboral[] = [];
   ofertasFiltradas: OfertaLaboral[] = [];
 
+  modalidades: ModalidadTrabajo[] = [];
+  tiposContrato: TipoContrato[] = [];
+
   // Variables para filtros
   textoBusqueda: string = '';
   filtroModalidad: string = '';
@@ -49,18 +55,37 @@ export class OfertasDisponiblesComponent implements OnInit {
   constructor(
     private ofertaService: OfertaService,
     private postularService: PostularService,
+    private modalidadService: ModalidadTrabajoService,
+    private tipoContratoService: TipoContratoService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
     this.cargarOfertas();
+    this.cargarModalidades();
+    this.cargarTiposContrato();
   }
 
   cargarOfertas() {
     this.ofertaService.getOfertasDisponibles().subscribe((data) => {
       this.ofertasOriginales = data;
       this.aplicarFiltros(); // Aplicar filtros iniciales
+    });
+  }
+
+  cargarModalidades() {
+
+    this.modalidadService.getModalidades().subscribe((data) => {
+      this.modalidades = [{ idModalidad: -1, nombreModalidad: 'Todas' }];
+      this.modalidades.push(...data);
+    });
+  }
+
+  cargarTiposContrato() {
+    this.tipoContratoService.getTiposContrato().subscribe((data) => {
+      this.tiposContrato = [{ idTipoContrato: -1, nombreTipo: 'Todos' }];
+      this.tiposContrato.push(...data);
     });
   }
 
@@ -124,17 +149,25 @@ export class OfertasDisponiblesComponent implements OnInit {
   }
 
   realizarPostulacion(idOferta: number) {
-    // Llamar al servicio
-    this.postularService.postularOferta(idOferta, '').subscribe({ //! agregar campo de carta de presentacion
-      next: (response) => {
-        // ÉXITO (200 OK)
-        this.mostrarMensaje('¡Postulación enviada con éxito!', 'success');
-      },
-      error: (err) => {
-        // ERROR (400 BadRequest o 500)
-        const mensajeError = err.error || 'Ocurrió un error al postular.';
-        this.mostrarMensaje(mensajeError, 'error');
-      },
+    const dialogRef = this.dialog.open(PostularDialogComponent, {
+      width: '700px',
+      //data: { modo: 'POSTULAR' },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.postularService.postularOferta(idOferta, result).subscribe({
+          next: (response) => {
+            // ÉXITO (200 OK)
+            this.mostrarMensaje('¡Postulación enviada con éxito!', 'success');
+          },
+          error: (err) => {
+            // ERROR (400 BadRequest o 500)
+            const mensajeError = err.error || 'Ocurrió un error al postular.';
+            this.mostrarMensaje(mensajeError, 'error');
+          },
+        });
+      }
     });
   }
 

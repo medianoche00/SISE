@@ -26,7 +26,7 @@ namespace SiseApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<PersonaDto>>> GetAll()
         {
-            var idAdministrador = _usuarioActualService.GetIdAdministrativoActualAsync();
+            var idAdministrador = await _usuarioActualService.GetIdAdministrativoActualAsync();
             if (idAdministrador == null) return Unauthorized("Usuario no es administrador.");
 
             try

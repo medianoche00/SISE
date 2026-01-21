@@ -15,7 +15,6 @@
     public class AdministrativoCrearDto
     {
         public int IdPersona { get; set; }
-        public int IdDepartamento { get; set; }
         public int IdCargoAdministrativo { get; set; }
         public string DocumentoRespaldo { get; set; } = null!;
         public string Username { get; set; } = null!;

@@ -27,7 +27,7 @@ namespace SiseApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<RolDto>>> GetAll()
         {
-            var idAdministrador = _usuarioActualService.GetIdAdministrativoActualAsync();
+            var idAdministrador = await _usuarioActualService.GetIdAdministrativoActualAsync();
             if (idAdministrador == null) return Unauthorized("Usuario no es administrador.");
 
             try
@@ -128,6 +128,41 @@ namespace SiseApi.Controllers
             try
             {
                 await _userManager.AddToRoleAsync(user, "Administrativo");
+
+                await _context.EjecutarSpConAuditoriaAsync(
+                    dto.DocumentoRespaldo,
+                    _usuarioActualService.GetIdUsuarioLogueado(),
+                    @"EXEC sp_Administrativo_Rol_Guardar @IdPersona, @IdCargoAdministrativo, @IdUsuario",
+                    new SqlParameter("@IdPersona", dto.IdPersona),
+                    new SqlParameter("@IdCargoAdministrativo", dto.IdCargoAdministrativo),
+                    new SqlParameter("@IdUsuario", user.Id)
+                );
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                await _userManager.DeleteAsync(user);
+                throw new Exception($"Error: {ex.Message}");
+            }
+        }
+
+        [HttpPost("RegistrarAdministrador")]
+        public async Task<ActionResult> RegistrarAdministradorAsync([FromBody] AdministrativoCrearDto dto)
+        {
+            // Validaciones iniciales
+            if (string.IsNullOrWhiteSpace(dto.DocumentoRespaldo)) return BadRequest("Documento de respaldo obligatorio.");
+
+            var idAdminEjecutor = await _usuarioActualService.GetIdAdministrativoActualAsync();
+            if (idAdminEjecutor == null) return Unauthorized("No autorizado.");
+
+            var user = new IdentityUser<int> { UserName = dto.Username, Email = dto.Email, EmailConfirmed = true };
+            var result = await _userManager.CreateAsync(user, dto.Password);
+
+            if (!result.Succeeded) throw new Exception($"Error: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+
+            try
+            {
+                await _userManager.AddToRoleAsync(user, "Administrador");
 
                 await _context.EjecutarSpConAuditoriaAsync(
                     dto.DocumentoRespaldo,

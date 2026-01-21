@@ -23,8 +23,8 @@ namespace SiseApi.Controllers
         [HttpGet("UsernameEstaDisponible/{Username}")]
         public async Task<ActionResult<bool>> UsernameEstaDisponible(string Username)
         {
-            //var idAdministrador = await _usuarioActualService.GetIdAdministrativoActualAsync();
-            //if (idAdministrador == null) return Unauthorized("Usuario no es administrador.");
+            var idAdministrador = await _usuarioActualService.GetIdAdministrativoActualAsync();
+            if (idAdministrador == null) return Unauthorized("Usuario no es administrador.");
 
             try
             {

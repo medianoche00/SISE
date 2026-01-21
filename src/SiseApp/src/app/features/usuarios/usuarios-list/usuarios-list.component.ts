@@ -4,20 +4,20 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { RoleAssignmentComponent } from '../../../shared/role-assignment/role-assignment.component';
-import { Persona } from '../../../core/models/persona.interface';
+import { Persona } from '../../../core/models/persona.model';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatSelectModule } from '@angular/material/select'; 
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-usuarios-list',
   templateUrl: './usuarios-list.component.html',
   styleUrls: ['./usuarios-list.component.css'],
-  standalone: true, 
+  standalone: true,
   imports: [
     CommonModule,
     MatTableModule,
@@ -27,7 +27,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
-    MatSelectModule 
+    MatSelectModule
   ]
 })
 export class UsuariosListComponent implements OnInit, AfterViewInit {
@@ -43,10 +43,10 @@ export class UsuariosListComponent implements OnInit, AfterViewInit {
   datosOriginales: any[] = [
     {
       id: 1,
-      username: 'admin', 
+      username: 'admin',
       email: 'admin@sise.com',
       rol: 'Administrador',
-      activo: true, 
+      activo: true,
     },
     {
       id: 2,
@@ -73,7 +73,7 @@ export class UsuariosListComponent implements OnInit, AfterViewInit {
 
   constructor(
     private usuarioService: UsuarioService,
-    private dialog: MatDialog 
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -113,9 +113,18 @@ export class UsuariosListComponent implements OnInit, AfterViewInit {
       nombres: '',
       apellidoPaterno: '',
       apellidoMaterno: '',
-      tipoDocumento: '',
+      nombreTipoDocumento: '',
       numeroDocumento: '',
-      estado: 'Activo'
+      estado: 'Activo',
+      idTipoDocumento: 0,
+      telefono: null,
+      correoPersonal: '',
+      idDireccion: 0,
+      idDistrito: 0,
+      calle: '',
+      numero: '',
+      pisoDepartamento: null,
+      referencia: null
     };
 
     const dialogRef = this.dialog.open(RoleAssignmentComponent, {

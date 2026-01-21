@@ -28,7 +28,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogContent, MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
@@ -38,6 +38,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import {
   MAT_DATE_LOCALE,
   MatNativeDateModule,
+  MatOptionModule,
 } from '@angular/material/core';
 
 // Feature Modules
@@ -47,6 +48,9 @@ import { ReportesComponent } from './features/reportes/reportes.component';
 import { PersonasListComponent } from './features/personas/personas-list/personas-list.component';
 import { UsuariosListComponent } from './features/usuarios/usuarios-list/usuarios-list.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { UsuariosPersonaComponent } from './features/usuarios-persona/usuarios-persona.component';
+import { UsuarioDetailComponent } from './shared/usuario-detail/usuario-detail.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +62,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     EstadisticasComponent,
     ReportesComponent,
     PersonasListComponent,
+    UsuariosPersonaComponent,
+    UsuarioDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -88,7 +94,11 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatTooltipModule,
     MatToolbarModule,
     MatPaginatorModule,
-    UsuariosListComponent
+    UsuariosListComponent,
+    MatProgressSpinnerModule,
+    MatOptionModule,
+    NgModule,
+    MatDialogContent
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

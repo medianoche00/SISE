@@ -1,0 +1,51 @@
+.modal-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 16px;
+  background-color: transparent;
+}
+
+.modal-body {
+  padding: 0 20px 30px 20px;
+  min-height: 450px;
+}
+
+/* --- Panel Izquierdo --- */
+.left-panel {
+  border-right: 1px solid #dee2e6;
+  /* Separador sutil */
+  padding-right: 24px;
+}
+
+/* --- Panel Derecho --- */
+.right-panel {
+  /* Espaciado interno */
+}
+
+/* Botón + USUARIO */
+.btn-rounded {
+  border-radius: 50px;
+  border-width: 2px;
+  padding: 0 20px;
+}
+
+/* Tabla */
+.table-container {
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+}
+
+th.mat-header-cell {
+  background-color: #f8f9fa;
+  /* Fondo gris claro para cabecera */
+  border-bottom: 2px solid #e9ecef;
+  font-size: 13px;
+  text-transform: uppercase;
+  color: #495057;
+}
+
+td.mat-cell {
+  font-size: 14px;
+  padding: 12px 8px;
+  color: #333;
+}

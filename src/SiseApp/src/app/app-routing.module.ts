@@ -18,6 +18,7 @@ import { FormacionComplementariaComponent } from './features/registro-egresado/c
 import { PersonasListComponent } from './features/personas/personas-list/personas-list.component';
 import { UsuariosListComponent } from './features/usuarios/usuarios-list/usuarios-list.component';
 import { RoleGuard } from './core/guards/role.guard';
+import { UsuariosPersonaComponent } from './features/usuarios-persona/usuarios-persona.component';
 
 const routes: Routes = [
   // ----------------------------------------------------------------
@@ -58,6 +59,7 @@ const routes: Routes = [
         children: [
           { path: 'personas', component: PersonasListComponent },
           { path: 'usuarios', component: UsuariosListComponent },
+          //{ path: 'usuarios-persona/:id', component: UsuariosPersonaComponent }
         ],
       },
       {

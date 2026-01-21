@@ -8,7 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
-import { Persona } from '../../core/models/persona.interface';
+import { Persona } from '../../core/models/persona.model';
 
 @Component({
   selector: 'app-role-assignment',
@@ -78,7 +78,7 @@ export class RoleAssignmentComponent implements OnInit {
   guardar() {
     if (this.form.valid) {
       console.log('Creando usuario y perfil:', this.form.value);
-      this.dialogRef.close(true); 
+      this.dialogRef.close(true);
       this.router.navigate(['/usuarios']);
     }
   }

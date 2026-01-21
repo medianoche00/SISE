@@ -1,106 +1,102 @@
-<div class="container-fluid p-4 main-container">
+<div class="container-fluid p-4">
 
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <h2 class="text-primary fw-bold mb-0">Gestión de Personas</h2>
-      <p class="text-muted m-0">Administra el listado de personas registradas.</p>
+  <div class="row mb-3">
+    <div class="col-12">
+      <h2 class="fw-bold text-dark">Gestión de Personas</h2>
     </div>
-    <button mat-raised-button color="primary" class="btn-rounded-custom" (click)="abrirModal('crear')">
-      <mat-icon>add</mat-icon> NUEVA PERSONA
-    </button>
   </div>
 
-  <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-    <div class="card-body p-0">
+  <div class="card shadow-sm border-0 mb-4 rounded-card">
+    <div class="card-body py-3">
+      <div class="row align-items-center">
 
-      <div class="p-3 border-bottom bg-white">
-        <div class="search-box">
-          <mat-icon class="search-icon">search</mat-icon>
-          <input type="text" placeholder="Buscar por nombre, documento..." (keyup)="aplicarFiltro($event)">
+        <div class="col-md-6">
+          <mat-form-field appearance="outline" class="w-100 search-field">
+            <mat-icon matPrefix class="text-secondary">search</mat-icon>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Buscar por nombre, documento..." #input>
+          </mat-form-field>
         </div>
-      </div>
 
-      <div class="table-responsive">
-        <table mat-table [dataSource]="dataSource" class="w-100">
+        <div class="col-md-6 text-md-end mt-3 mt-md-0">
+          <button mat-flat-button color="primary" class="btn-rounded-pill px-4 py-2" (click)="nuevaPersona()">
+            <mat-icon class="me-1">add</mat-icon> PERSONA
+          </button>
+        </div>
 
-          <ng-container matColumnDef="nombre">
-            <th mat-header-cell *matHeaderCellDef> Nombre </th>
-            <td mat-cell *matCellDef="let element" class="fw-bold text-dark"> {{element.nombres}} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="apellidoPaterno">
-            <th mat-header-cell *matHeaderCellDef> Ap. Paterno </th>
-            <td mat-cell *matCellDef="let element"> {{element.apellidoPaterno}} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="apellidoMaterno">
-            <th mat-header-cell *matHeaderCellDef> Ap. Materno </th>
-            <td mat-cell *matCellDef="let element"> {{element.apellidoMaterno}} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="tipoDocumento">
-            <th mat-header-cell *matHeaderCellDef> Tipo Doc. </th>
-            <td mat-cell *matCellDef="let element">
-              <span class="badge-custom">{{element.tipoDocumento}}</span>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="numeroDocumento">
-            <th mat-header-cell *matHeaderCellDef> N° Documento </th>
-            <td mat-cell *matCellDef="let element"> {{element.numeroDocumento}} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="rol">
-            <th mat-header-cell *matHeaderCellDef> Rol Asignado </th>
-            <td mat-cell *matCellDef="let element">
-              <span *ngIf="element.rol" class="badge rounded-pill bg-info text-dark">
-                {{element.rol}}
-              </span>
-              <span *ngIf="!element.rol" class="text-muted fst-italic small">
-                Sin asignar
-              </span>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="acciones">
-            <th mat-header-cell *matHeaderCellDef class="text-end pe-4"> Acciones </th>
-            <td mat-cell *matCellDef="let element" class="text-end pe-4">
-
-              <button *ngIf="!element.rol"
-                      mat-stroked-button
-                      color="primary"
-                      class="me-2 btn-sm"
-                      (click)="asignarRol(element)">
-                <mat-icon class="icon-small">admin_panel_settings</mat-icon> Asignar
-              </button>
-
-              <button mat-icon-button color="primary" (click)="abrirModal('ver', element)" matTooltip="Ver Detalle">
-                <mat-icon>visibility</mat-icon>
-              </button>
-
-              <button mat-icon-button class="text-secondary" (click)="abrirModal('editar', element)" matTooltip="Editar">
-                <mat-icon>edit</mat-icon>
-              </button>
-
-              <button mat-icon-button color="warn" (click)="eliminar(element.idPersona)" matTooltip="Eliminar">
-                <mat-icon>delete</mat-icon>
-              </button>
-
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover-row"></tr>
-
-          <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell text-center py-4 text-muted" colspan="7">
-              No se encontraron datos.
-            </td>
-          </tr>
-        </table>
-
-        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
       </div>
     </div>
+  </div>
+
+  <div class="mat-elevation-z2 table-container rounded-card overflow-hidden bg-white">
+
+    <div *ngIf="!dataSource" class="d-flex justify-content-center p-5">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <table mat-table [dataSource]="dataSource" matSort *ngIf="dataSource">
+
+      <ng-container matColumnDef="nombres">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombres </th>
+        <td mat-cell *matCellDef="let row"> {{row.nombres}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="apellidoPaterno">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Apellido Paterno </th>
+        <td mat-cell *matCellDef="let row"> {{row.apellidoPaterno}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="apellidoMaterno">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Apellido Materno </th>
+        <td mat-cell *matCellDef="let row"> {{row.apellidoMaterno}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="tipoDoc">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Doc. </th>
+        <td mat-cell *matCellDef="let row">
+           <span class="badge bg-light text-dark border">{{row.nombreTipoDocumento}}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="numeroDocumento">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Documento Identidad </th>
+        <td mat-cell *matCellDef="let row" class="fw-bold text-dark"> {{row.numeroDocumento}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+        <td mat-cell *matCellDef="let row">
+          <span class="fw-bold"
+                [ngClass]="{'text-success': row.estado === 'Activo', 'text-secondary': row.estado !== 'Activo'}">
+            {{row.estado}}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef class="text-center"> Acciones </th>
+        <td mat-cell *matCellDef="let row" class="text-center">
+
+          <button mat-icon-button color="primary" matTooltip="Gestionar Usuarios" (click)="gestionarUsuario(row)">
+            <mat-icon>person</mat-icon>
+          </button>
+
+          <button mat-icon-button color="accent" matTooltip="Editar" (click)="editarPersona(row)">
+            <mat-icon>edit</mat-icon>
+          </button>
+
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover-row"></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell text-center py-4 text-muted" colspan="7">
+          No se encontraron datos para "{{input.value}}"
+        </td>
+      </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Seleccionar página"></mat-paginator>
   </div>
 </div>

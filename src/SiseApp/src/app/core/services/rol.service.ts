@@ -31,4 +31,16 @@ export class RolService {
   registrarAdministrador(dto: AdministrativoCrearDto): Observable<any> {
     return this.http.post(`${this.apiUrl}/RegistrarAdministrador`, dto);
   }
+
+  getEgresadoDatos(idEgresado: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/GetEgresadoDatos/${idEgresado}`);
+  }
+
+  getRepresentanteDatos(idRepresentante: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/GetRepresentanteDatos/${idRepresentante}`);
+  }
+
+  getAdministrativoDatos(idAdministrativo: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/GetAdministrativoDatos/${idAdministrativo}`);
+  }
 }

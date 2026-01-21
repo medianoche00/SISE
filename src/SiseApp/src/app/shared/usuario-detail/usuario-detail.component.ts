@@ -1,14 +1,19 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, NgModule, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 import { RolService } from '../../core/services/rol.service';
 import { RolOpcion } from '../../core/models/rol.model';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatOptionModule } from '@angular/material/core';
 import { Persona } from '../../core/models/persona.model';
 
 @Component({
   selector: 'app-usuario-detail',
   templateUrl: './usuario-detail.component.html',
   styleUrls: ['./usuario-detail.component.css'],
+  standalone: true,
+  imports: [MatDialogContent, MatFormFieldModule, MatIconModule, FormsModule, MatOptionModule, MatDialogActions, ReactiveFormsModule],
 })
 export class UsuarioDetailComponent implements OnInit {
   form: FormGroup;

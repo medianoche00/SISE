@@ -158,3 +158,61 @@ BEGIN
     END CATCH
 END
 GO
+
+/* ==================================================================================
+   Listar datos especificos del rol
+   ================================================================================== */
+
+CREATE OR ALTER PROCEDURE sp_Egresado_Rol_Listar
+    @idEgresado INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        E.idEgresado,
+        E.idCarrera,
+        C.nombreCarrera,
+        E.codigoUniversitario,
+        E.anioEgreso,
+        E.estado
+    FROM dbo.Egresado E
+    JOIN dbo.Carrera C ON E.idCarrera = C.idCarrera
+    WHERE E.idEgresado = @idEgresado;
+END
+GO
+
+CREATE OR ALTER PROCEDURE sp_Administrativo_Rol_Listar
+    @idAdministrativo INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        A.idAdministrativo,
+        A.idCargoAdministrativo,
+        CA.nombreCargo,
+        A.estado
+    FROM dbo.Administrativo A
+    JOIN dbo.CargoAdministrativo CA ON A.idCargoAdministrativo = CA.idCargoAdministrativo
+    WHERE A.idAdministrativo = @idAdministrativo;
+END
+GO
+
+CREATE OR ALTER PROCEDURE sp_Representante_Rol_Listar
+    @idRepresentante INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        R.idRepresentante,
+        R.idEmpresa,
+        E.razonSocial,
+        R.cargo,
+        R.estado
+    FROM dbo.Representante R
+    JOIN dbo.Empresa E ON R.idEmpresa = E.idEmpresa
+    WHERE R.idRepresentante = @idRepresentante;
+END
+GO

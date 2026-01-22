@@ -25,7 +25,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
+import { MatListModule, MatNavList } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogContent, MatDialogModule } from '@angular/material/dialog';
@@ -63,7 +63,6 @@ import { UsuarioDetailComponent } from './shared/usuario-detail/usuario-detail.c
     ReportesComponent,
     PersonasListComponent,
     UsuariosPersonaComponent,
-    UsuarioDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -71,7 +70,7 @@ import { UsuarioDetailComponent } from './shared/usuario-detail/usuario-detail.c
     AppRoutingModule,
     BrowserAnimationsModule,
     RouterModule,
-    FormsModule, // <--- Agregado para que funcionen los filtros del dashboard
+    FormsModule,
 
     // Angular Material
     MatToolbarModule,
@@ -97,8 +96,6 @@ import { UsuarioDetailComponent } from './shared/usuario-detail/usuario-detail.c
     UsuariosListComponent,
     MatProgressSpinnerModule,
     MatOptionModule,
-    NgModule,
-    MatDialogContent
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

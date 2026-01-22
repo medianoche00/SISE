@@ -32,10 +32,12 @@ namespace SiseApi.Controllers
 
             try
             {
-                var administrativo = await _context.Database.SqlQueryRaw<AdministrativoDto>(
+                var resultado = await _context.Database.SqlQueryRaw<AdministrativoDto>(
                     @"EXEC sp_Administrativo_Por_Id @IdAdministrativo",
                     new SqlParameter("@IdAdministrativo", IdAdministrativo)
-                ).FirstOrDefaultAsync();
+                ).ToListAsync();
+
+                var administrativo = resultado.FirstOrDefault();
 
                 if (administrativo == null) return NotFound("Administrativo no encontrado.");
 

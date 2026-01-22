@@ -31,10 +31,12 @@ namespace SiseApi.Controllers
 
             try
             {
-                var egresado = await _context.Database.SqlQueryRaw<EgresadoDto>(
+                var resultado = await _context.Database.SqlQueryRaw<EgresadoDto>(
                     @"EXEC sp_Egresado_Por_Id @IdEgresado",
                     new SqlParameter("@IdEgresado", IdEgresado)
-                ).FirstOrDefaultAsync();
+                ).ToListAsync();
+
+                var egresado = resultado.FirstOrDefault();
 
                 return Ok(egresado);
             }

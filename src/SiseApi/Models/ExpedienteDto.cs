@@ -10,6 +10,7 @@
         public int IdRol { get; set; }
         public int IdUsuario { get; set; }
         public string EstadoRol { get; set; } = null!;//el estado de adminstrativo, egresado o representante
+        public int IdEntidad { get; set; } //id de la entidad especifica
         //public string EstadoUsuario { get; set; } = null!;
 
     }

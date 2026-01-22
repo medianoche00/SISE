@@ -33,10 +33,12 @@ namespace SiseApi.Controllers
 
             try
             {
-                var representante = await _context.Database.SqlQueryRaw<RepresentanteDto>(
+                var resultado = await _context.Database.SqlQueryRaw<RepresentanteDto>(
                     @"EXEC sp_Representante_Por_Id @IdRepresentante",
                     new SqlParameter("@IdRepresentante", IdRepresentante)
-                ).FirstOrDefaultAsync();
+                ).ToListAsync();
+
+                var representante = resultado.FirstOrDefault();
 
                 if (representante == null) return NotFound("Representante no encontrado.");
 

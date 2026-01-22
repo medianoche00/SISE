@@ -2,7 +2,6 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SiseApi.Data;
-using SiseApi.Data.Models;
 using SiseApi.Models;
 using SiseApi.Services;
 using System.Data;

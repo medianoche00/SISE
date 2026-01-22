@@ -19,6 +19,7 @@ BEGIN
         U.UserName AS usuario,
         ROL.Id AS idRol,
         U.Id as idUsuario,
+        A.idAdministrativo AS idEntidad,
         A.estado AS estadoRol
     FROM Persona P
     INNER JOIN Administrativo A ON P.IdPersona = A.IdPersona
@@ -37,6 +38,7 @@ BEGIN
         U.UserName AS usuario,
         ROL.Id AS idRol,
         U.Id AS idUsuario,
+        E.idEgresado AS idEntidad,
         E.estado AS estadoRol
     FROM Persona P
     INNER JOIN Egresado E ON P.IdPersona = E.IdPersona
@@ -55,6 +57,7 @@ BEGIN
         U.UserName AS usuario,
         ROL.Id AS idRol,
         U.Id AS idUsuario,
+        R.idRepresentante AS idEntidad,
         R.estado AS estadoRol
     FROM Persona P
     INNER JOIN Representante R ON P.IdPersona = R.IdPersona

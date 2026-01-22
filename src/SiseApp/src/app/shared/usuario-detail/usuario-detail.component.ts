@@ -1,73 +1,114 @@
-import { Component, Inject, NgModule, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
-import { RolService } from '../../core/services/rol.service';
-import { RolOpcion } from '../../core/models/rol.model';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { forkJoin, Observable } from 'rxjs';
+
+// Services
+import { CatalogosService } from '../../core/services/catalogos.service';
+import { EgresadoService } from '../../core/services/egresado.service';
+import { RepresentanteService } from '../../core/services/representante.service';
+import { AdministrativoService } from '../../core/services/administrativo.service';
+
+// Models
+import { Persona } from '../../core/models/persona.model';
+import {
+  Carrera,
+  CargoAdministrativo,
+  Empresa,
+  Rol,
+} from '../../core/models/catalogos.model';
+import {
+  EgresadoCrearDto,
+  EgresadoActualizarDto,
+} from '../../core/models/egresado.model';
+import {
+  RepresentanteCrearDto,
+  RepresentanteActualizarDto,
+} from '../../core/models/representante.model';
+import {
+  AdministrativoCrearDto,
+  AdministrativoActualizarDto,
+} from '../../core/models/administrativo.model';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { MatOptionModule } from '@angular/material/core';
-import { Persona } from '../../core/models/persona.model';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
+
+// Interfaz auxiliar para lo que recibe el modal
+export interface UsuarioModalData {
+  persona: Persona;
+  usuario?: {
+    idUsuario: number;
+    rol: string;
+    idEntidad: number; // idEgresado, idAdministrativo, etc.
+  };
+}
 
 @Component({
   selector: 'app-usuario-detail',
   templateUrl: './usuario-detail.component.html',
   styleUrls: ['./usuario-detail.component.css'],
   standalone: true,
-  imports: [MatDialogContent, MatFormFieldModule, MatIconModule, FormsModule, MatOptionModule, MatDialogActions, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+  ],
 })
 export class UsuarioDetailComponent implements OnInit {
   form: FormGroup;
   titulo: string = 'Nuevo Usuario';
   isEditMode: boolean = false;
-  idPersona: number;
+  isLoading: boolean = true;
+  rolNoSoportado: boolean = false;
 
-  // Listas desplegables (Deberían venir de un MaestroService, aquí simuladas)
-  listaRoles: RolOpcion[] = [
-    { codigo: 'Egresado', nombre: 'Egresado' },
-    { codigo: 'Representante', nombre: 'Representante de Empresa' },
-    { codigo: 'Administrativo', nombre: 'Administrativo' },
-    { codigo: 'Administrador', nombre: 'Administrador del Sistema' },
-  ];
+  // Datos recibidos
+  persona: Persona;
+  usuarioEdicion: any | null = null;
 
-  // Listas simuladas para llenar los combos específicos
-  listaCarreras = [
-    { id: 1, nombre: 'Ing. Sistemas' },
-    { id: 2, nombre: 'Marketing' },
-  ];
-  listaEmpresas = [
-    { id: 1, nombre: 'Microsoft' },
-    { id: 2, nombre: 'Google' },
-  ];
-  listaCargos = [
-    { id: 1, nombre: 'Secretaria' },
-    { id: 2, nombre: 'Jefe de Area' },
-  ];
-  listaDepartamentos = [
-    { id: 1, nombre: 'Lima' },
-    { id: 2, nombre: 'Arequipa' },
-  ]; // Para administrativo
+  // Catalogos
+  listaRoles: Rol[] = [];
+  listaCarreras: Carrera[] = [];
+  listaCargos: CargoAdministrativo[] = [];
+  listaEmpresas: Empresa[] = [];
+
+  // Constantes de Roles
+  readonly ROL_EGRESADO = 'Egresado';
+  readonly ROL_REPRESENTANTE = 'Representante';
+  readonly ROL_ADMINISTRATIVO = 'Administrativo';
+  readonly ROL_ADMINISTRADOR = 'Administrador';
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<UsuarioDetailComponent>,
-    private rolService: RolService,
-    // data puede traer { persona: Persona, usuario: UsuarioAsignado (si es edit) }
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    private catalogosService: CatalogosService,
+    private egresadoService: EgresadoService,
+    private representanteService: RepresentanteService,
+    private administrativoService: AdministrativoService,
+    @Inject(MAT_DIALOG_DATA) public data: UsuarioModalData,
   ) {
-    this.idPersona = data.persona.idPersona;
+    this.persona = data.persona;
+    this.usuarioEdicion = data.usuario;
+    this.isEditMode = !!data.usuario;
 
-    // Si viene 'usuario' en la data, es edición
-    if (data.usuario) {
-      this.isEditMode = true;
-      this.titulo = `Editar Usuario (${data.usuario.usuario})`;
+    if (this.isEditMode) {
+      this.titulo = `Editar ${this.usuarioEdicion.rol}`;
     }
 
     this.form = this.fb.group({
-      // Campo común y selector principal
-      rol: ['', Validators.required],
+      idRol: ['', Validators.required],
       documentoRespaldo: ['', Validators.required],
 
-      // Campos de Identity (Solo requeridos si es NUEVO)
+      // Credenciales (Solo CREATE)
       username: [''],
       email: ['', [Validators.email]],
       password: [''],
@@ -79,38 +120,70 @@ export class UsuarioDetailComponent implements OnInit {
 
       // Campos Representante
       idEmpresa: [null],
-      cargoRepresentante: [''],
+      cargoRepresentante: [''], // Mapeado a 'cargo' o 'cargoRepresentante'
 
-      // Campos Administrativo/Admin
+      // Campos Administrativo
       idCargoAdministrativo: [null],
-      idDepartamento: [null], // Agregado por cumplir DTO
     });
   }
 
   ngOnInit(): void {
-    // Escuchar cambios en el Rol para activar/desactivar validaciones
-    this.form.get('rol')?.valueChanges.subscribe((rol) => {
-      this.actualizarValidaciones(rol);
-    });
-
-    // Validaciones iniciales para Identity (Solo si es nuevo)
-    if (!this.isEditMode) {
-      this.form.get('username')?.setValidators(Validators.required);
-      this.form
-        .get('email')
-        ?.setValidators([Validators.required, Validators.email]);
-      this.form.get('password')?.setValidators(Validators.required);
-    } else {
-      // Si es editar, deshabilitamos el rol porque usualmente no se cambia el rol base al editar,
-      // o cargamos los datos existentes.
-      // TODO: Aquí cargarías this.form.patchValue(data.usuario)
-      // Como tu API actual de edición no fue provista, nos enfocamos en CREAR.
-      this.form.get('rol')?.disable();
-    }
+    this.cargarCatalogos();
+    this.setupValidations();
   }
 
-  actualizarValidaciones(rol: string) {
-    // 1. Limpiar validadores específicos primero
+  // 1. CARGA DE CATALOGOS
+  cargarCatalogos() {
+    this.isLoading = true;
+    forkJoin({
+      roles: this.catalogosService.getRoles(),
+      carreras: this.catalogosService.getCarreras(),
+      cargos: this.catalogosService.getCargosAdministrativos(),
+      empresas: this.catalogosService.getEmpresas(),
+    }).subscribe({
+      next: (res) => {
+        this.listaRoles = res.roles;
+        this.listaCarreras = res.carreras;
+        this.listaCargos = res.cargos;
+        this.listaEmpresas = res.empresas;
+
+        this.isLoading = false;
+
+        if (this.isEditMode) {
+          this.cargarDatosEdicion();
+        } else {
+          // Validadores Identity para CREAR
+          this.form.get('username')?.setValidators(Validators.required);
+          this.form
+            .get('email')
+            ?.setValidators([Validators.required, Validators.email]);
+          this.form.get('password')?.setValidators(Validators.required);
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        this.isLoading = false;
+      },
+    });
+  }
+
+  // 2. VALIDACIONES DINAMICAS
+  setupValidations() {
+    this.form.get('idRol')?.valueChanges.subscribe((idRol) => {
+      this.actualizarCamposSegunRol(idRol);
+    });
+  }
+
+  obtenerNombreRol(idRol: number): string {
+    const rol = this.listaRoles.find((r) => r.idRol === idRol);
+    return rol ? rol.nombreRol : '';
+  }
+
+  actualizarCamposSegunRol(idRol: number) {
+    const nombreRol = this.obtenerNombreRol(idRol);
+    this.rolNoSoportado = false;
+
+    // Limpiar validadores previos
     const controles = [
       'idCarrera',
       'codigoUniversitario',
@@ -118,109 +191,212 @@ export class UsuarioDetailComponent implements OnInit {
       'idEmpresa',
       'cargoRepresentante',
       'idCargoAdministrativo',
-      'idDepartamento',
     ];
     controles.forEach((c) => {
       this.form.get(c)?.clearValidators();
       this.form.get(c)?.updateValueAndValidity();
     });
 
-    // 2. Asignar validadores según rol
-    if (rol === 'Egresado') {
-      this.establecerRequerido('idCarrera');
-      this.establecerRequerido('codigoUniversitario');
-      this.establecerRequerido('anioEgreso');
-    } else if (rol === 'Representante') {
-      this.establecerRequerido('idEmpresa');
-      // Cargo es opcional en la BD (nullable), pero si quieres obligatorio descomenta:
-      // this.establecerRequerido('cargoRepresentante');
-    } else if (rol === 'Administrativo' || rol === 'Administrador') {
-      this.establecerRequerido('idCargoAdministrativo');
-      this.establecerRequerido('idDepartamento');
+    // Asignar nuevos
+    switch (nombreRol) {
+      case this.ROL_EGRESADO:
+        this.establecerRequerido([
+          'idCarrera',
+          'codigoUniversitario',
+          'anioEgreso',
+        ]);
+        break;
+      case this.ROL_REPRESENTANTE:
+        this.establecerRequerido(['idEmpresa']);
+        // Cargo es opcional
+        break;
+      case this.ROL_ADMINISTRATIVO:
+      case this.ROL_ADMINISTRADOR:
+        this.establecerRequerido(['idCargoAdministrativo']);
+        break;
+      default:
+        this.rolNoSoportado = true;
     }
   }
 
-  establecerRequerido(nombreControl: string) {
-    this.form.get(nombreControl)?.setValidators(Validators.required);
-    this.form.get(nombreControl)?.updateValueAndValidity();
+  establecerRequerido(campos: string[]) {
+    campos.forEach((c) => {
+      this.form.get(c)?.setValidators(Validators.required);
+      this.form.get(c)?.updateValueAndValidity();
+    });
   }
 
+  // LOGICA DE EDICIÓN (GET DATA)
+  cargarDatosEdicion() {
+    if (!this.usuarioEdicion) return;
+
+    // Buscamos el ID del rol en base al nombre que viene en la tabla
+    const rolObj = this.listaRoles.find(
+      (r) => r.nombreRol === this.usuarioEdicion.rol,
+    );
+    if (rolObj) {
+      this.form.get('idRol')?.setValue(rolObj.idRol);
+    }
+
+    this.form.get('idRol')?.disable();
+    this.form.get('username')?.disable();
+    this.form.get('email')?.disable();
+    this.form.get('password')?.disable();
+
+    const nombreRol = this.usuarioEdicion.rol;
+    const idEntidad = this.usuarioEdicion.idEntidad; // ID Específico (EgresadoID, etc.)
+
+    this.isLoading = true;
+    let request$: import('rxjs').Observable<any> | undefined;
+
+    switch (nombreRol) {
+      case this.ROL_EGRESADO:
+        request$ = this.egresadoService.getPorId(idEntidad);
+        break;
+      case this.ROL_REPRESENTANTE:
+        request$ = this.representanteService.getPorId(idEntidad);
+        break;
+      case this.ROL_ADMINISTRATIVO:
+      case this.ROL_ADMINISTRADOR:
+        request$ = this.administrativoService.getPorId(idEntidad);
+        break;
+    }
+
+    if (request$) {
+      request$.subscribe({
+        next: (data: any) => {
+          this.form.patchValue(data);
+          // Mapeos manuales si los nombres difieren
+          if (nombreRol === this.ROL_REPRESENTANTE && data.cargo) {
+            this.form.get('cargoRepresentante')?.setValue(data.cargo);
+          }
+          this.isLoading = false;
+        },
+        error: () => {
+          this.isLoading = false;
+          this.cancelar();
+        },
+      });
+    } else {
+      this.isLoading = false;
+    }
+  }
+
+  // GUARDAR (CREATE & UPDATE)
   guardar() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    const val = this.form.value;
-    // Si estamos editando y el rol está disabled, lo sacamos de getRawValue()
-    const rolSeleccionado = this.form.getRawValue().rol;
+    const val = this.form.getRawValue();
+    const nombreRol = this.obtenerNombreRol(val.idRol);
+    let request$;
 
-    // Lógica de guardado (Switch API)
+    // === MODO CREACIÓN ===
     if (!this.isEditMode) {
-      this.crearUsuario(rolSeleccionado, val);
-    } else {
-      // TODO: Lógica de Update cuando tengas el endpoint
-      console.log('Edición no implementada aún en API');
-      this.dialogRef.close(true);
+      // Datos base de identidad
+      const baseIdentity = {
+        username: val.username,
+        email: val.email,
+        password: val.password,
+        documentoRespaldo: val.documentoRespaldo,
+        idPersona: this.persona.idPersona,
+      };
+
+      switch (nombreRol) {
+        case this.ROL_EGRESADO:
+          const dtoEg: EgresadoCrearDto = {
+            ...baseIdentity,
+            idCarrera: val.idCarrera,
+            codigoUniversitario: val.codigoUniversitario,
+            anioEgreso: val.anioEgreso,
+          };
+          request$ = this.egresadoService.registrar(dtoEg);
+          break;
+
+        case this.ROL_REPRESENTANTE:
+          const dtoRep: RepresentanteCrearDto = {
+            ...baseIdentity,
+            idEmpresa: val.idEmpresa,
+            cargo: val.cargoRepresentante,
+          };
+          request$ = this.representanteService.registrar(dtoRep);
+          break;
+
+        case this.ROL_ADMINISTRATIVO:
+          const dtoAdmin: AdministrativoCrearDto = {
+            ...baseIdentity,
+            idCargoAdministrativo: val.idCargoAdministrativo,
+          };
+          request$ =
+            this.administrativoService.registrarAdministrativo(dtoAdmin);
+          break;
+
+        case this.ROL_ADMINISTRADOR:
+          const dtoAdminSys: AdministrativoCrearDto = {
+            ...baseIdentity,
+            idCargoAdministrativo: val.idCargoAdministrativo,
+          };
+          request$ =
+            this.administrativoService.registrarAdministrador(dtoAdminSys);
+          break;
+      }
     }
-  }
 
-  crearUsuario(rol: string, val: any) {
-    // Objeto base común
-    const baseIdentity = {
-      idPersona: this.idPersona,
-      documentoRespaldo: val.documentoRespaldo,
-      username: val.username,
-      email: val.email,
-      password: val.password,
-    };
+    // === MODO EDICIÓN ===
+    else {
+      const idEntidad = this.usuarioEdicion.idEntidad;
+      const docRespaldo = val.documentoRespaldo;
 
-    switch (rol) {
-      case 'Egresado':
-        const dtoEgresado = {
-          ...baseIdentity,
-          idCarrera: val.idCarrera,
-          codigoUniversitario: val.codigoUniversitario,
-          anioEgreso: val.anioEgreso,
-        };
-        this.rolService.registrarEgresado(dtoEgresado).subscribe({
-          next: () => this.dialogRef.close(true),
-          error: (e) => alert(e.message), // Manejar error mejor con SnackBar
-        });
-        break;
+      switch (nombreRol) {
+        case this.ROL_EGRESADO:
+          const updateEg: EgresadoActualizarDto = {
+            idEgresado: idEntidad,
+            idCarrera: val.idCarrera,
+            anioEgreso: val.anioEgreso,
+            codigoUniversitario: val.codigoUniversitario,
+            documentoRespaldo: docRespaldo,
+          };
+          request$ = this.egresadoService.actualizar(updateEg);
+          break;
 
-      case 'Representante':
-        const dtoRep = {
-          ...baseIdentity,
-          idEmpresa: val.idEmpresa,
-          cargo: val.cargoRepresentante,
-        };
-        this.rolService.registrarRepresentante(dtoRep).subscribe({
-          next: () => this.dialogRef.close(true),
-          error: (e) => alert(e.message),
-        });
-        break;
+        case this.ROL_REPRESENTANTE:
+          const updateRep: RepresentanteActualizarDto = {
+            idRepresentante: idEntidad,
+            idEmpresa: val.idEmpresa,
+            cargo: val.cargoRepresentante,
+            documentoRespaldo: docRespaldo,
+          };
+          request$ = this.representanteService.actualizar(updateRep);
+          break;
 
-      case 'Administrativo':
-      case 'Administrador':
-        const dtoAdmin = {
-          ...baseIdentity,
-          idCargoAdministrativo: val.idCargoAdministrativo,
-          idDepartamento: val.idDepartamento || 0, // Manejo de nulos por si acaso
-        };
+        case this.ROL_ADMINISTRATIVO:
+        case this.ROL_ADMINISTRADOR:
+          const updateAdmin: AdministrativoActualizarDto = {
+            idAdministrativo: idEntidad,
+            idCargoAdministrativo: val.idCargoAdministrativo,
+            documentoRespaldo: docRespaldo,
+          };
+          request$ = this.administrativoService.actualizar(updateAdmin);
+          break;
+      }
+    }
 
-        if (rol === 'Administrador') {
-          this.rolService.registrarAdministrador(dtoAdmin).subscribe({
-            next: () => this.dialogRef.close(true),
-            error: (e) => alert(e.message),
-          });
-        } else {
-          this.rolService.registrarAdministrativo(dtoAdmin).subscribe({
-            next: () => this.dialogRef.close(true),
-            error: (e) => alert(e.message),
-          });
-        }
-        break;
+    // Ejecutar Petición
+    if (request$) {
+      this.isLoading = true; // Bloquear botón
+      request$.subscribe({
+        next: () => {
+          this.dialogRef.close(true); // Cerrar y notificar éxito
+        },
+        error: (err) => {
+          this.isLoading = false;
+          alert(
+            'Error: ' + (err.error?.message || 'Ocurrió un error inesperado.'),
+          );
+        },
+      });
     }
   }
 

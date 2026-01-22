@@ -5,4 +5,5 @@ export interface UsuarioAsignado {
   contexto: string;
   rol: string;
   estadoRol: string;
+  idEntidad: number;
 }

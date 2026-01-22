@@ -1,1 +1,27 @@
+/* Asegura que el contenido del diálogo aproveche el espacio */
+mat-dialog-content {
+  max-height: 80vh;
+  /* Evita que el modal sea más alto que la pantalla */
+  min-width: 400px;
+  /* Ancho mínimo para que no se vea aplastado */
+}
 
+/* Ajuste visual para la tarjeta de credenciales */
+.card {
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  /* Color gris suave de Bootstrap */
+}
+
+/* Icono de alerta alineado */
+.alert mat-icon {
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+  margin-right: 8px;
+}
+
+/* Espaciado del spinner */
+mat-spinner {
+  margin: 0 auto;
+}

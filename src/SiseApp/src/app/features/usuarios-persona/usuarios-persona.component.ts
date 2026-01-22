@@ -64,29 +64,34 @@ export class UsuariosPersonaComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  // --- Acciones de la Tabla ---
-
-  // 1. Icono Lápiz -> Editar Usuario
-  editarUsuario(usuario: UsuarioAsignado) {
-    console.log('Abriendo modal UsuarioDetail (Editar) para:', usuario.usuario);
-
-    /* TODO: Descomentar cuando crees el componente
+  editarUsuario(usuarioRow: UsuarioAsignado) {
     const dialogRef = this.dialog.open(UsuarioDetailComponent, {
-      width: '600px',
-      data: usuario // Pasamos el usuario a editar
+      width: '650px',
+      disableClose: true,
+      data: {
+        persona: this.persona,
+        usuario: {
+          idUsuario: usuarioRow.idUsuario,
+          rol: usuarioRow.rol,
+          idEntidad: usuarioRow.idEntidad
+        }
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) this.cargarUsuarios(); // Recargar si hubo cambios
+      // Si devolvió true, significa que guardó cambios
+      if (result) {
+        this.cargarUsuarios();
+      }
     });
-    */
   }
 
   // 2. Icono Llave -> Gestionar Credenciales
   gestionarCredenciales(usuario: UsuarioAsignado) {
     console.log('Abriendo modal CredencialesDetail para:', usuario.usuario);
 
-    /* TODO: Descomentar cuando crees el componente
+    /*
+    TODO: Descomentar cuando crees el componente
     const dialogRef = this.dialog.open(CredencialesDetailComponent, {
       width: '500px',
       data: usuario
@@ -99,7 +104,7 @@ export class UsuariosPersonaComponent implements OnInit {
       width: '650px',
       disableClose: true,
       data: {
-        persona: this.persona, // IMPORTANTE: pasar la persona completa
+        persona: this.persona,
         usuario: null,
       },
     });

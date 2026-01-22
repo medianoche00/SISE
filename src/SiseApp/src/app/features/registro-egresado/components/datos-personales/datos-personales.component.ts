@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EgresadoService } from '../../../../core/services/egresado.service';
+import { PerfilEgresadoService } from '../../../../core/services/perfil-egresado.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -14,11 +14,11 @@ export class DatosPersonalesComponent implements OnInit {
   enviando: boolean = false;
   cargandoDatos: boolean = true;
 
-  constructor(private fb: FormBuilder, private egresadoService: EgresadoService, private snackBar: MatSnackBar) {
+  constructor(private fb: FormBuilder, private egresadoService: PerfilEgresadoService, private snackBar: MatSnackBar) {
     this.datosForm = this.initForm();
   }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     this.cargarDatosPersonales();
   }
 
@@ -87,7 +87,7 @@ export class DatosPersonalesComponent implements OnInit {
   guardarDatos() {
     if (this.datosForm.invalid) return;
     this.enviando = true;
-    
+
     const formValue = this.datosForm.getRawValue();
 
     const payload = {

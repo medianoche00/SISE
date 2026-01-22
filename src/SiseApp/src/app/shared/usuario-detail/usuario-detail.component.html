@@ -1,6 +1,10 @@
 <h2 mat-dialog-title>{{ titulo }}</h2>
 
-<mat-dialog-content class="mat-typography">
+<div *ngIf="isLoading" class="d-flex justify-content-center align-items-center p-5">
+  <mat-spinner diameter="40"></mat-spinner>
+</div>
+
+<mat-dialog-content class="mat-typography" *ngIf="!isLoading">
   <form [formGroup]="form">
 
     <div class="container-fluid p-0">
@@ -9,129 +13,142 @@
         <div class="col-12">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Rol Asignado</mat-label>
-            <mat-select formControlName="rol">
-              <mat-option *ngFor="let r of listaRoles" [value]="r.codigo">
-                {{ r.nombre }}
+            <mat-select formControlName="idRol">
+              <mat-option *ngFor="let r of listaRoles" [value]="r.idRol">
+                {{ r.nombreRol }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="form.get('rol')?.hasError('required')">Requerido</mat-error>
+            <mat-error *ngIf="form.get('idRol')?.hasError('required')">Seleccione un rol</mat-error>
           </mat-form-field>
         </div>
       </div>
 
-      <div class="row bg-light p-2 mb-3 rounded border" *ngIf="!isEditMode">
-        <h6 class="text-secondary small fw-bold">CREDENCIALES DE ACCESO</h6>
-
-        <div class="col-md-6">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Username</mat-label>
-            <input matInput formControlName="username" autocomplete="off">
-            <mat-error>Requerido</mat-error>
-          </mat-form-field>
-        </div>
-
-        <div class="col-md-6">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Password</mat-label>
-            <input matInput formControlName="password" type="password" autocomplete="new-password">
-            <mat-error>Requerido</mat-error>
-          </mat-form-field>
-        </div>
-
-        <div class="col-12">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Email</mat-label>
-            <input matInput formControlName="email" type="email">
-            <mat-error>Email inválido</mat-error>
-          </mat-form-field>
-        </div>
+      <div class="alert alert-warning" *ngIf="rolNoSoportado">
+        <mat-icon class="align-middle me-2">warning</mat-icon>
+        <span>Este rol no tiene un formulario de configuración habilitado.</span>
       </div>
 
-      <div class="row">
-        <div class="col-12">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Documento de Respaldo (Resolución/Memo)</mat-label>
-            <input matInput formControlName="documentoRespaldo">
-            <mat-error>Requerido</mat-error>
-            <mat-hint>Nro de documento que autoriza este rol</mat-hint>
-          </mat-form-field>
+      <div *ngIf="!rolNoSoportado && form.get('idRol')?.value">
+
+        <div *ngIf="!isEditMode"> <!-- class="card bg-light mb-3 border-0" -->
+          <div class="card-body pt-2 pb-0">
+            <h6 class="ttext-secondary mt-2 border-bottom pb-1">Credenciales de Acceso</h6>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field appearance="outline" class="w-100 bg-white">
+                  <mat-label>Username</mat-label>
+                  <input matInput formControlName="username" autocomplete="off">
+                  <mat-error>Requerido</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field appearance="outline" class="w-100 bg-white">
+                  <mat-label>Password</mat-label>
+                  <input matInput formControlName="password" type="password" autocomplete="new-password">
+                  <mat-error>Requerido</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-12">
+                <mat-form-field appearance="outline" class="w-100 bg-white">
+                  <mat-label>Email</mat-label>
+                  <input matInput formControlName="email" type="email">
+                  <mat-error>Email inválido</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <ng-container *ngIf="obtenerNombreRol(form.get('idRol')?.value) === ROL_EGRESADO">
+          <h6 class="text-secondary mt-2 border-bottom pb-1">Datos Académicos</h6>
+          <div class="row mt-2">
+            <div class="col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Carrera Profesional</mat-label>
+                <mat-select formControlName="idCarrera">
+                  <mat-option *ngFor="let c of listaCarreras" [value]="c.idCarrera">
+                    {{ c.nombreCarrera }}
+                  </mat-option>
+                </mat-select>
+                <mat-error>Requerido</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Código Universitario</mat-label>
+                <input matInput formControlName="codigoUniversitario">
+                <mat-error>Requerido</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Año Egreso</mat-label>
+                <input matInput type="number" formControlName="anioEgreso">
+                <mat-error>Requerido</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="obtenerNombreRol(form.get('idRol')?.value) === ROL_REPRESENTANTE">
+          <h6 class="text-secondary mt-2 border-bottom pb-1">Datos Empresariales</h6>
+          <div class="row mt-2">
+            <div class="col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Empresa</mat-label>
+                <mat-select formControlName="idEmpresa">
+                  <mat-option *ngFor="let e of listaEmpresas" [value]="e.idEmpresa">
+                    {{ e.razonSocial }}
+                  </mat-option>
+                </mat-select>
+                <mat-error>Requerido</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Cargo en Empresa</mat-label>
+                <input matInput formControlName="cargoRepresentante">
+              </mat-form-field>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="[ROL_ADMINISTRADOR, ROL_ADMINISTRATIVO].includes(obtenerNombreRol(form.get('idRol')?.value))">
+          <h6 class="text-secondary mt-2 border-bottom pb-1">Datos Administrativos</h6>
+          <div class="row mt-2">
+            <div class="col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Cargo Administrativo</mat-label>
+                <mat-select formControlName="idCargoAdministrativo">
+                  <mat-option *ngFor="let ca of listaCargos" [value]="ca.idCargoAdministrativo">
+                    {{ ca.nombreCargo }}
+                  </mat-option>
+                </mat-select>
+                <mat-error>Requerido</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </ng-container>
+
+        <div class="row">
+          <div class="col-12">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Documento de Respaldo</mat-label>
+              <input matInput formControlName="documentoRespaldo" placeholder="Ej: Memo Nro 123">
+              <mat-error>Requerido</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
       </div>
-
-      <div class="row mt-3" *ngIf="form.get('rol')?.value === 'Egresado'">
-        <div class="col-md-6">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Carrera</mat-label>
-            <mat-select formControlName="idCarrera">
-              <mat-option *ngFor="let c of listaCarreras" [value]="c.id">{{ c.nombre }}</mat-option>
-            </mat-select>
-            <mat-error>Requerido</mat-error>
-          </mat-form-field>
-        </div>
-
-        <div class="col-md-6">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Año Egreso</mat-label>
-            <input matInput type="number" formControlName="anioEgreso">
-            <mat-error>Requerido</mat-error>
-          </mat-form-field>
-        </div>
-
-        <div class="col-12">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Código Universitario</mat-label>
-            <input matInput formControlName="codigoUniversitario">
-            <mat-error>Requerido</mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-
-      <div class="row mt-3" *ngIf="form.get('rol')?.value === 'Representante'">
-        <div class="col-md-6">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Empresa</mat-label>
-            <mat-select formControlName="idEmpresa">
-              <mat-option *ngFor="let e of listaEmpresas" [value]="e.id">{{ e.nombre }}</mat-option>
-            </mat-select>
-            <mat-error>Requerido</mat-error>
-          </mat-form-field>
-        </div>
-
-        <div class="col-md-6">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Cargo en Empresa</mat-label>
-            <input matInput formControlName="cargoRepresentante">
-          </mat-form-field>
-        </div>
-      </div>
-
-      <div class="row mt-3" *ngIf="['Administrativo', 'Administrador'].includes(form.get('rol')?.value)">
-        <div class="col-md-6">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Departamento / Área</mat-label>
-            <mat-select formControlName="idDepartamento">
-              <mat-option *ngFor="let d of listaDepartamentos" [value]="d.id">{{ d.nombre }}</mat-option>
-            </mat-select>
-            <mat-error>Requerido</mat-error>
-          </mat-form-field>
-        </div>
-
-        <div class="col-md-6">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Cargo Administrativo</mat-label>
-            <mat-select formControlName="idCargoAdministrativo">
-              <mat-option *ngFor="let c of listaCargos" [value]="c.id">{{ c.nombre }}</mat-option>
-            </mat-select>
-            <mat-error>Requerido</mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-
     </div>
   </form>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end" class="pe-3 pb-3">
   <button mat-button (click)="cancelar()">Cancelar</button>
-  <button mat-flat-button color="primary" (click)="guardar()">Guardar</button>
+  <button mat-flat-button color="primary" (click)="guardar()"
+          [disabled]="isLoading || rolNoSoportado || form.invalid">
+    {{ isEditMode ? 'Actualizar' : 'Guardar' }}
+  </button>
 </mat-dialog-actions>

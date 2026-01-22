@@ -1,20 +1,28 @@
-export interface RegistroEgresadoRequest {
-  // Datos Personales
-  nombres: string;
-  apellidoPaterno: string;
-  apellidoMaterno: string;
-  documentoIdentidad: string;
-  telefono?: string;
-  correoPersonal?: string;
 
-  // Datos Académicos
-  idCarrera: number;
-  codigoUniversitario: string;
-  añoEgreso: number;
-  carrera: string;
-}
-
-export interface Carrera {
+export interface Egresado {
+  idEgresado: number;
   idCarrera: number;
   nombreCarrera: string;
+  codigoUniversitario: string;
+  anioEgreso: number;
+  estado: string;
+}
+
+export interface EgresadoCrearDto {
+  idPersona: number;
+  idCarrera: number;
+  anioEgreso: number;
+  codigoUniversitario: string;
+  documentoRespaldo: string;
+  username: string;
+  email: string;
+  password: string;
+}
+
+export interface EgresadoActualizarDto {
+  idEgresado: number;
+  idCarrera: number;
+  anioEgreso: number;
+  codigoUniversitario: string;
+  documentoRespaldo: string;
 }

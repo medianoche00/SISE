@@ -1,27 +1,34 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Carrera } from '../models/egresado.model';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment.development';
+import { Egresado, EgresadoActualizarDto, EgresadoCrearDto } from '../models/egresado.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EgresadoService {
+  private apiUrl = `${environment.apiUrl}/Egresado`;
 
-  private apiUrl = `${environment.apiUrl}/Egresados`;
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-  obtenerCarreras(): Observable<Carrera[]> {
-    return this.http.get<Carrera[]>(`${this.apiUrl}/carreras`);
+  getPorId(idEgresado: number): Observable<Egresado> {
+    return this.http.get<Egresado>(`${this.apiUrl}/${idEgresado}`);
   }
 
-  actualizarPerfil(datos: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/actualizar-perfil`, datos);
+  registrar(dto: EgresadoCrearDto): Observable<void> {
+    return this.http.post<void>(this.apiUrl, dto);
   }
 
-  obtenerMiPerfil() {
-  return this.http.get<any>(`${this.apiUrl}/mi-perfil-egresado`);
-}
+  actualizar(dto: EgresadoActualizarDto): Observable<void> {
+    return this.http.put<void>(this.apiUrl, dto);
+  }
+
+  eliminar(idEgresado: number, documentoRespaldo: string): Observable<void> {
+    let params = new HttpParams().set('DocumentoRespaldo', documentoRespaldo);
+
+    return this.http.delete<void>(`${this.apiUrl}/${idEgresado}`, {
+      params: params,
+    });
+  }
 }

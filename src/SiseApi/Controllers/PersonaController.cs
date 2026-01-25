@@ -30,7 +30,8 @@ namespace SiseApi.Controllers
 
             try
             {
-                var personas = await _context.Database.SqlQueryRaw<PersonaListDto>(
+                // Usamos PersonaDto para la salida
+                var personas = await _context.Database.SqlQueryRaw<PersonaDto>(
                     "EXEC dbo.sp_Persona_Listar"
                 ).ToListAsync();
 
@@ -42,17 +43,40 @@ namespace SiseApi.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Ocurrió un error interno al obtener las personas.");
+                return StatusCode(500, $"Ocurrió un error interno: {ex.Message}");
             }
         }
 
-        [HttpPost]
-        public async Task<ActionResult> CrearPersona([FromBody] PersonaDto personaDto)
+        // GET: api/Persona/5
+        [HttpGet("{idPersona:int}")]
+        public async Task<ActionResult<PersonaDto>> GetById(int idPersona)
         {
-            if (string.IsNullOrWhiteSpace(personaDto.DocumentoRespaldo))
+            var idAdministrador = await _usuarioActualService.GetIdAdministrativoActualAsync();
+            if (idAdministrador == null) return Unauthorized("Usuario no es administrador.");
+
+            try
             {
-                return BadRequest("Es obligatorio indicar el documento que respalda la eliminación.");
+                // Lo ideal sería: "EXEC sp_Persona_ObtenerPorId @IdPersona"
+                var resultado = await _context.Database.SqlQueryRaw<PersonaDto>(
+                    "EXEC dbo.sp_Persona_Listar" // Si este lista todo, filtramos en memoria (no ideal para mucha data) o crea un SP especifico
+                ).ToListAsync();
+
+                var persona = resultado.FirstOrDefault(p => p.IdPersona == idPersona);
+
+                if (persona == null) return NotFound("Persona no encontrada.");
+
+                return Ok(persona);
             }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        // POST: api/Persona
+        [HttpPost]
+        public async Task<ActionResult> CrearPersona([FromBody] PersonaCrearDto dto)
+        {
 
             var idAdministrador = await _usuarioActualService.GetIdAdministrativoActualAsync();
             if (idAdministrador == null) return Unauthorized("Usuario no es administrador.");
@@ -67,7 +91,7 @@ namespace SiseApi.Controllers
                 };
 
                 await _context.EjecutarSpConAuditoriaAsync(
-                    personaDto.DocumentoRespaldo,
+                    dto.DocumentoRespaldo,
                     idUsuario,
                     @"EXEC sp_Persona_Insertar 
                     @Nombres, @ApellidoPaterno, @ApellidoMaterno, 
@@ -76,26 +100,26 @@ namespace SiseApi.Controllers
                     @IdDistrito, @Calle, @Numero, @PisoDepartamento, @Referencia,
                     @IdPersonaGenerado OUTPUT",
 
-                    new SqlParameter("@Nombres", personaDto.Nombres),
-                    new SqlParameter("@ApellidoPaterno", personaDto.ApellidoPaterno),
-                    new SqlParameter("@ApellidoMaterno", personaDto.ApellidoMaterno),
-                    new SqlParameter("@IdTipoDocumento", personaDto.IdTipoDocumento),
-                    new SqlParameter("@NumeroDocumento", personaDto.NumeroDocumento),
-                    new SqlParameter("@Telefono", (object?)personaDto.Telefono ?? DBNull.Value),
-                    new SqlParameter("@CorreoPersonal", (object?)personaDto.CorreoPersonal ?? DBNull.Value),
+                    new SqlParameter("@Nombres", dto.Nombres),
+                    new SqlParameter("@ApellidoPaterno", dto.ApellidoPaterno),
+                    new SqlParameter("@ApellidoMaterno", dto.ApellidoMaterno),
+                    new SqlParameter("@IdTipoDocumento", dto.IdTipoDocumento),
+                    new SqlParameter("@NumeroDocumento", dto.NumeroDocumento),
+                    new SqlParameter("@Telefono", (object?)dto.Telefono ?? DBNull.Value),
+                    new SqlParameter("@CorreoPersonal", (object?)dto.CorreoPersonal ?? DBNull.Value),
 
-                    new SqlParameter("@IdDistrito", personaDto.IdDistrito),
-                    new SqlParameter("@Calle", personaDto.Calle),
-                    new SqlParameter("@Numero", (object?)personaDto.Numero ?? DBNull.Value),
-                    new SqlParameter("@PisoDepartamento", (object?)personaDto.PisoDepartamento ?? DBNull.Value),
-                    new SqlParameter("@Referencia", (object?)personaDto.Referencia ?? DBNull.Value),
+                    new SqlParameter("@IdDistrito", dto.IdDistrito),
+                    new SqlParameter("@Calle", dto.Calle),
+                    new SqlParameter("@Numero", (object?)dto.Numero ?? DBNull.Value),
+                    new SqlParameter("@PisoDepartamento", (object?)dto.PisoDepartamento ?? DBNull.Value),
+                    new SqlParameter("@Referencia", (object?)dto.Referencia ?? DBNull.Value),
 
-                    paramIdSalida // parámetro de salida
+                    paramIdSalida
                 );
 
                 int idGenerado = (int)paramIdSalida.Value;
 
-                return CreatedAtAction(nameof(GetAll), new { id = idGenerado }, idGenerado);
+                return CreatedAtAction(nameof(GetById), new { idPersona = idGenerado }, new { id = idGenerado });
             }
             catch (SqlException ex)
             {
@@ -103,21 +127,14 @@ namespace SiseApi.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Ocurrió un error interno.");
+                return StatusCode(500, $"Error al crear persona: {ex.Message}");
             }
         }
 
-        // PUT: api/Persona/{idPersona}
-        [HttpPut("{idPersona:int}")]
-        public async Task<ActionResult> ActualizarPersona(int idPersona, [FromBody] PersonaDto personaDto)
+        // PUT: api/Persona
+        [HttpPut]
+        public async Task<ActionResult> ActualizarPersona([FromBody] PersonaActualizarDto dto)
         {
-            if (idPersona != personaDto.IdPersona) return BadRequest("El ID de la URL no coincide con el cuerpo.");
-
-            if (string.IsNullOrWhiteSpace(personaDto.DocumentoRespaldo))
-            {
-                return BadRequest("Es obligatorio indicar el documento que respalda la eliminación.");
-            }
-
             var idAdministrador = await _usuarioActualService.GetIdAdministrativoActualAsync();
             if (idAdministrador == null) return Unauthorized("Usuario no es administrador.");
 
@@ -125,9 +142,8 @@ namespace SiseApi.Controllers
 
             try
             {
-                // Nota: Se ha actualizado la cadena EXEC y los parámetros para incluir la dirección plana
                 await _context.EjecutarSpConAuditoriaAsync(
-                    personaDto.DocumentoRespaldo,
+                    dto.DocumentoRespaldo, // Viene dentro del objeto JSON
                     idUsuario,
                     @"EXEC sp_Persona_Actualizar 
                     @IdPersona, 
@@ -136,23 +152,23 @@ namespace SiseApi.Controllers
                     @Telefono, @CorreoPersonal,
                     @IdDistrito, @Calle, @Numero, @PisoDepartamento, @Referencia",
 
-                    new SqlParameter("@IdPersona", personaDto.IdPersona),
-                    new SqlParameter("@Nombres", personaDto.Nombres),
-                    new SqlParameter("@ApellidoPaterno", personaDto.ApellidoPaterno),
-                    new SqlParameter("@ApellidoMaterno", personaDto.ApellidoMaterno),
-                    new SqlParameter("@IdTipoDocumento", personaDto.IdTipoDocumento),
-                    new SqlParameter("@NumeroDocumento", personaDto.NumeroDocumento),
-                    new SqlParameter("@Telefono", (object?)personaDto.Telefono ?? DBNull.Value),
-                    new SqlParameter("@CorreoPersonal", (object?)personaDto.CorreoPersonal ?? DBNull.Value),
+                    new SqlParameter("@IdPersona", dto.IdPersona),
+                    new SqlParameter("@Nombres", dto.Nombres),
+                    new SqlParameter("@ApellidoPaterno", dto.ApellidoPaterno),
+                    new SqlParameter("@ApellidoMaterno", dto.ApellidoMaterno),
+                    new SqlParameter("@IdTipoDocumento", dto.IdTipoDocumento),
+                    new SqlParameter("@NumeroDocumento", dto.NumeroDocumento),
+                    new SqlParameter("@Telefono", (object?)dto.Telefono ?? DBNull.Value),
+                    new SqlParameter("@CorreoPersonal", (object?)dto.CorreoPersonal ?? DBNull.Value),
 
-                    new SqlParameter("@IdDistrito", personaDto.IdDistrito),
-                    new SqlParameter("@Calle", personaDto.Calle),
-                    new SqlParameter("@Numero", (object?)personaDto.Numero ?? DBNull.Value),
-                    new SqlParameter("@PisoDepartamento", (object?)personaDto.PisoDepartamento ?? DBNull.Value),
-                    new SqlParameter("@Referencia", (object?)personaDto.Referencia ?? DBNull.Value)
+                    new SqlParameter("@IdDistrito", dto.IdDistrito),
+                    new SqlParameter("@Calle", dto.Calle),
+                    new SqlParameter("@Numero", (object?)dto.Numero ?? DBNull.Value),
+                    new SqlParameter("@PisoDepartamento", (object?)dto.PisoDepartamento ?? DBNull.Value),
+                    new SqlParameter("@Referencia", (object?)dto.Referencia ?? DBNull.Value)
                 );
 
-                return NoContent();
+                return Ok(new { message = "Persona actualizada correctamente" });
             }
             catch (SqlException ex)
             {
@@ -160,11 +176,12 @@ namespace SiseApi.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Ocurrió un error interno.");
+                return StatusCode(500, $"Error al actualizar persona: {ex.Message}");
             }
         }
 
-        // DELETE: api/Persona/{idPersona}
+        // DELETE: api/Persona/{id}
+        // Nota: Para eliminar mantenemos el DocumentoRespaldo por QueryString ya que DELETE usualmente no lleva Body
         [HttpDelete("{idPersona:int}")]
         public async Task<ActionResult> EliminarPersona(int idPersona, [FromQuery] string documentoRespaldo)
         {
@@ -186,7 +203,7 @@ namespace SiseApi.Controllers
                     "EXEC sp_Persona_Eliminar @IdPersona",
                     new SqlParameter("@IdPersona", idPersona)
                 );
-                return NoContent();
+                return Ok(new { message = "Persona eliminada correctamente" });
             }
             catch (SqlException ex)
             {
@@ -194,7 +211,7 @@ namespace SiseApi.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Ocurrió un error interno.");
+                return StatusCode(500, $"Error al eliminar persona: {ex.Message}");
             }
         }
     }

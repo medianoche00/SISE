@@ -9,6 +9,7 @@ import { Persona } from '../../core/models/persona.model';
 import { UsuarioAsignado } from '../../core/models/usuario-asignado.model';
 import { ExpedienteService } from '../../core/services/expediente.service';
 import { UsuarioDetailComponent } from '../../shared/usuario-detail/usuario-detail.component';
+import { CredencialesDetailComponent } from '../../shared/credenciales-detail/credenciales-detail.component';
 
 @Component({
   selector: 'app-usuarios-persona',
@@ -86,17 +87,21 @@ export class UsuariosPersonaComponent implements OnInit {
     });
   }
 
-  // 2. Icono Llave -> Gestionar Credenciales
-  gestionarCredenciales(usuario: UsuarioAsignado) {
-    console.log('Abriendo modal CredencialesDetail para:', usuario.usuario);
-
-    /*
-    TODO: Descomentar cuando crees el componente
+  gestionarCredenciales(usuarioRow: UsuarioAsignado) {
     const dialogRef = this.dialog.open(CredencialesDetailComponent, {
-      width: '500px',
-      data: usuario
+      width: '400px',
+      disableClose: true,
+      data: {
+        idUsuario: usuarioRow.idUsuario,
+        username: usuarioRow.usuario
+      }
     });
-    */
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.cargarUsuarios();
+      }
+    });
   }
 
   agregarUsuario() {

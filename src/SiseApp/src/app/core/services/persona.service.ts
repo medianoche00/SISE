@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Persona } from '../models/persona.model';
 import { environment } from '../../../environments/environment.development';
+import {
+  Persona,
+  PersonaCrearDto,
+  PersonaActualizarDto,
+} from '../models/persona.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,32 +16,33 @@ export class PersonaService {
 
   constructor(private http: HttpClient) {}
 
+  // GET: Obtener todas las personas
   getAll(): Observable<Persona[]> {
     return this.http.get<Persona[]>(this.apiUrl);
   }
 
-  create(persona: Persona, docRespaldo: string): Observable<Persona> {
-    const payload = {
-      ...persona,
-      DocumentoRespaldo: docRespaldo,
-    };
-
-    return this.http.post<Persona>(this.apiUrl, payload);
+  // GET: Obtener por ID (si lo implementaste en el backend)
+  getById(id: number): Observable<Persona> {
+    return this.http.get<Persona>(`${this.apiUrl}/${id}`);
   }
 
-  update(persona: Persona, docRespaldo: string): Observable<Persona> {
-    const payload = {
-      ...persona,
-      DocumentoRespaldo: docRespaldo,
-    };
-
-    return this.http.put<Persona>(
-      `${this.apiUrl}/${persona.idPersona}`,
-      payload,
-    );
+  // POST: Crear persona
+  create(dto: PersonaCrearDto): Observable<Persona> {
+    return this.http.post<Persona>(this.apiUrl, dto);
   }
 
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  // PUT: Actualizar persona
+  update(dto: PersonaActualizarDto): Observable<void> {
+    return this.http.put<void>(this.apiUrl, dto);
+  }
+
+  // DELETE: Eliminar persona
+  // El documento de respaldo viaja como Query Parameter (?documentoRespaldo=xyz)
+  delete(id: number, documentoRespaldo: string): Observable<void> {
+    let params = new HttpParams().set('documentoRespaldo', documentoRespaldo);
+
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, {
+      params: params,
+    });
   }
 }

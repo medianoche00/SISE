@@ -3,13 +3,17 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar'; // Opcional para notificaciones
+import { MatSnackBar } from '@angular/material/snack-bar';
 
-// Importaciones de tus archivos
-import { Persona } from '../../../core/models/persona.model';
+// Importaciones de tus modelos actualizados
+import {
+  Persona,
+  PersonaCrearDto,
+  PersonaActualizarDto
+} from '../../../core/models/persona.model';
+
 import { PersonaService } from '../../../core/services/persona.service';
 import { PersonaDetailComponent } from '../../../shared/persona-detail/persona-detail.component';
-import { RouterLink } from '@angular/router';
 import { UsuariosPersonaComponent } from '../../usuarios-persona/usuarios-persona.component';
 
 @Component({
@@ -36,7 +40,7 @@ export class PersonasListComponent implements OnInit {
   constructor(
     private personaService: PersonaService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar, // Para mostrar mensajes de éxito
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
@@ -69,6 +73,7 @@ export class PersonasListComponent implements OnInit {
     }
   }
 
+  // --- Modal ---
   abrirModal(persona?: Persona) {
     const dialogRef = this.dialog.open(PersonaDetailComponent, {
       width: '900px',
@@ -77,33 +82,53 @@ export class PersonasListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((formularioResult) => {
+      // formularioResult ahora contiene todos los datos + documentoRespaldo
       if (formularioResult) {
         this.procesarGuardado(formularioResult);
       }
     });
   }
 
-  procesarGuardado(datosPersona: Persona) {
-    // Definimos el documento de respaldo
-    const docRespaldo = 'DOC-SISTEMA-' + new Date().getTime(); //! cambiar por un dialogo para ingresar el doc
+  /**
+   * Procesa la respuesta del modal y decide si llamar a Create o Update
+   * usando los nuevos DTOs.
+   */
+  procesarGuardado(datosFormulario: any) {
 
-    if (datosPersona.idPersona && datosPersona.idPersona > 0) {
-      // EDITAR
-      this.personaService.update(datosPersona, docRespaldo).subscribe({
-        next: (resp) => {
+    // CASO: EDITAR
+    if (datosFormulario.idPersona && datosFormulario.idPersona > 0) {
+
+      // Mapeamos al DTO de actualización
+      // Como el formulario tiene los mismos nombres de campos que el DTO, usamos spread operator (...)
+      const dto: PersonaActualizarDto = {
+        ...datosFormulario
+        // Aquí ya viaja 'documentoRespaldo' que viene del input del usuario en el dialog
+      };
+
+      this.personaService.update(dto).subscribe({
+        next: () => {
           this.mostrarMensaje('Persona actualizada correctamente');
-          this.cargarPersonas(); // Recargar tabla
+          this.cargarPersonas();
         },
-        error: (err) => this.mostrarMensaje('Error al actualizar:' + err, 'error'),
+        error: (err) => this.mostrarMensaje('Error al actualizar: ' + err.message, 'error'),
       });
-    } else {
-      // CREAR
-      this.personaService.create(datosPersona, docRespaldo).subscribe({
-        next: (resp) => {
+
+    }
+    // CASO: CREAR
+    else {
+
+      // Mapeamos al DTO de creación
+      const dto: PersonaCrearDto = {
+        ...datosFormulario
+        // Aquí ya viaja 'documentoRespaldo' que viene del input del usuario en el dialog
+      };
+
+      this.personaService.create(dto).subscribe({
+        next: () => {
           this.mostrarMensaje('Persona creada correctamente');
-          this.cargarPersonas(); // Recargar tabla
+          this.cargarPersonas();
         },
-        error: (err) => this.mostrarMensaje('Error al crear' + err, 'error'),
+        error: (err) => this.mostrarMensaje('Error al crear: ' + err.message, 'error'),
       });
     }
   }

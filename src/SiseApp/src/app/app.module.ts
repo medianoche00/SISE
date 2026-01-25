@@ -51,6 +51,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UsuariosPersonaComponent } from './features/usuarios-persona/usuarios-persona.component';
 import { UsuarioDetailComponent } from './shared/usuario-detail/usuario-detail.component';
+import { CredencialesDetailComponent } from './shared/credenciales-detail/credenciales-detail.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,7 @@ import { UsuarioDetailComponent } from './shared/usuario-detail/usuario-detail.c
     EstadisticasComponent,
     ReportesComponent,
     PersonasListComponent,
-    UsuariosPersonaComponent,
+    UsuariosPersonaComponent
   ],
   imports: [
     BrowserModule,

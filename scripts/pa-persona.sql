@@ -227,7 +227,7 @@ BEGIN
     FROM dbo.Persona P
     INNER JOIN dbo.TipoDocumento TD ON P.idTipoDocumento = TD.idTipoDocumento
     INNER JOIN dbo.Direccion D ON P.idDireccion = D.idDireccion
-    WHERE P.estado = 'Activo';
+    -- WHERE P.estado = 'Activo';
 END
 GO
 

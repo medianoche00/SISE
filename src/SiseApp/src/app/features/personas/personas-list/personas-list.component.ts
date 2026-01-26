@@ -86,6 +86,7 @@ export class PersonasListComponent implements OnInit {
       // formularioResult ahora contiene todos los datos + documentoRespaldo
       if (formularioResult) {
         this.procesarGuardado(formularioResult);
+        this.cargarPersonas();
       }
     });
   }
@@ -144,6 +145,7 @@ export class PersonasListComponent implements OnInit {
   // Botón Lápiz
   editarPersona(persona: Persona) {
     this.abrirModal(persona);
+    this.cargarPersonas();
   }
 
   eliminarPersona(persona: Persona) {
@@ -166,7 +168,7 @@ export class PersonasListComponent implements OnInit {
   restaurarPersona(persona: Persona) {
     persona.estado = 'Activo';
     this.editarPersona(persona);
-    this.cargarPersonas();
+    //this.cargarPersonas();
   }
 
   // Botón User (Gestionar)

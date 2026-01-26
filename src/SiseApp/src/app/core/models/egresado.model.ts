@@ -25,4 +25,5 @@ export interface EgresadoActualizarDto {
   anioEgreso: number;
   codigoUniversitario: string;
   documentoRespaldo: string;
+  estado: string;
 }

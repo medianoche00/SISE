@@ -23,4 +23,5 @@ export interface RepresentanteActualizarDto {
   idEmpresa: number;
   cargo?: string;
   documentoRespaldo: string;
+  estado: string;
 }

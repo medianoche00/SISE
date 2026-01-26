@@ -67,4 +67,6 @@ export interface PersonaActualizarDto {
 
   // Auditoría
   documentoRespaldo: string;
+
+  estado: string;
 }

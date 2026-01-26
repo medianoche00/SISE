@@ -130,11 +130,22 @@
           </div>
         </ng-container>
 
-        <div class="row">
-          <div class="col-12">
+        <div class="row mt-3">
+          <div class="col-md-6">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Documento de Respaldo</mat-label>
               <input matInput formControlName="documentoRespaldo" placeholder="Ej: Memo Nro 123">
+              <mat-error>Requerido</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Estado</mat-label>
+              <mat-select formControlName="estado">
+                <mat-option *ngFor="let est of estadosDisponibles" [value]="est">
+                  {{ est }}
+                </mat-option>
+              </mat-select>
               <mat-error>Requerido</mat-error>
             </mat-form-field>
           </div>

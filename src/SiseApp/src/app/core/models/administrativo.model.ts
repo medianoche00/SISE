@@ -20,4 +20,5 @@ export interface AdministrativoActualizarDto {
   idAdministrativo: number;
   idCargoAdministrativo: number;
   documentoRespaldo: string;
+  estado: string;
 }

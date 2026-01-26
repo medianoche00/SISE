@@ -87,6 +87,18 @@ export class UsuarioDetailComponent implements OnInit {
   readonly ROL_ADMINISTRATIVO = 'Administrativo';
   readonly ROL_ADMINISTRADOR = 'Administrador';
 
+  readonly ESTADOS_EGRESADO = [
+    'Buscando Trabajo',
+    'Trabajando',
+    'Estudiando',
+    'Inactivo',
+    'Eliminado',
+  ];
+  readonly ESTADOS_ADMINISTRATIVO = ['Activo', 'Eliminado'];
+  readonly ESTADOS_REPRESENTANTE = ['Activo', 'Eliminado'];
+
+  estadosDisponibles: string[] = [];
+
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<UsuarioDetailComponent>,
@@ -111,7 +123,14 @@ export class UsuarioDetailComponent implements OnInit {
       // Credenciales (Solo CREATE)
       username: [''],
       email: ['', [Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6), Validators.pattern(/^(?=.*[a-z])(?=.*\d).+$/)]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.pattern(/^(?=.*[a-z])(?=.*\d).+$/),
+        ],
+      ],
 
       // Campos Egresado
       idCarrera: [null],
@@ -124,6 +143,8 @@ export class UsuarioDetailComponent implements OnInit {
 
       // Campos Administrativo
       idCargoAdministrativo: [null],
+
+      estado: ['', Validators.required],
     });
   }
 
@@ -216,6 +237,48 @@ export class UsuarioDetailComponent implements OnInit {
         break;
       default:
         this.rolNoSoportado = true;
+    }
+
+    this.estadosDisponibles = []; // Reiniciar
+
+    switch (nombreRol) {
+      case this.ROL_EGRESADO:
+        this.establecerRequerido([
+          'idCarrera',
+          'codigoUniversitario',
+          'anioEgreso',
+        ]);
+
+        // logica de estados por rol
+        this.estadosDisponibles = this.ESTADOS_EGRESADO;
+
+        if (!this.isEditMode) {
+          this.form.get('estado')?.setValue('Buscando Trabajo');
+        }
+        break;
+
+      case this.ROL_REPRESENTANTE:
+        this.establecerRequerido(['idEmpresa']);
+
+        this.estadosDisponibles = this.ESTADOS_REPRESENTANTE;
+        if (!this.isEditMode) {
+          this.form.get('estado')?.setValue('Activo');
+        }
+        break;
+
+      case this.ROL_ADMINISTRATIVO:
+      case this.ROL_ADMINISTRADOR:
+        this.establecerRequerido(['idCargoAdministrativo']);
+
+        this.estadosDisponibles = this.ESTADOS_ADMINISTRATIVO;
+        if (!this.isEditMode) {
+          this.form.get('estado')?.setValue('Activo');
+        }
+        break;
+
+      default:
+        this.rolNoSoportado = true;
+        this.form.get('estado')?.setValue('');
     }
   }
 
@@ -348,6 +411,7 @@ export class UsuarioDetailComponent implements OnInit {
     else {
       const idEntidad = this.usuarioEdicion.idEntidad;
       const docRespaldo = val.documentoRespaldo;
+      const estadoActual = val.estado;;
 
       switch (nombreRol) {
         case this.ROL_EGRESADO:
@@ -357,6 +421,7 @@ export class UsuarioDetailComponent implements OnInit {
             anioEgreso: val.anioEgreso,
             codigoUniversitario: val.codigoUniversitario,
             documentoRespaldo: docRespaldo,
+            estado: estadoActual,
           };
           request$ = this.egresadoService.actualizar(updateEg);
           break;
@@ -367,6 +432,7 @@ export class UsuarioDetailComponent implements OnInit {
             idEmpresa: val.idEmpresa,
             cargo: val.cargoRepresentante,
             documentoRespaldo: docRespaldo,
+            estado: estadoActual,
           };
           request$ = this.representanteService.actualizar(updateRep);
           break;
@@ -377,6 +443,7 @@ export class UsuarioDetailComponent implements OnInit {
             idAdministrativo: idEntidad,
             idCargoAdministrativo: val.idCargoAdministrativo,
             documentoRespaldo: docRespaldo,
+            estado: estadoActual,
           };
           request$ = this.administrativoService.actualizar(updateAdmin);
           break;

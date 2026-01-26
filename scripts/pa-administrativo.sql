@@ -75,7 +75,8 @@ GO
 
 CREATE OR ALTER PROCEDURE sp_Administrativo_Actualizar
     @idAdministrativo INT,
-    @idCargoAdministrativo INT
+    @idCargoAdministrativo INT,
+    @estado NVARCHAR(20)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -98,7 +99,8 @@ BEGIN
 
         UPDATE dbo.Administrativo
         SET
-            idCargoAdministrativo = @idCargoAdministrativo
+            idCargoAdministrativo = @idCargoAdministrativo,
+            estado = @estado
         WHERE idAdministrativo = @idAdministrativo;
 
         COMMIT TRANSACTION;

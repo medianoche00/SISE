@@ -80,7 +80,8 @@ GO
 CREATE OR ALTER PROCEDURE sp_Representante_Actualizar
     @idRepresentante INT,
     @idEmpresa INT,
-    @cargo NVARCHAR(100)
+    @cargo NVARCHAR(100),
+    @estado NVARCHAR(20)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -104,7 +105,8 @@ BEGIN
         UPDATE dbo.Representante
         SET
             idEmpresa = @idEmpresa,
-            cargo = @cargo
+            cargo = @cargo,
+            estado = @estado
         WHERE idRepresentante = @idRepresentante;
 
         COMMIT TRANSACTION;

@@ -93,7 +93,9 @@ CREATE OR ALTER PROCEDURE sp_Persona_Actualizar
     @Calle NVARCHAR(150),
     @Numero VARCHAR(20) = NULL,
     @PisoDepartamento VARCHAR(20) = NULL,
-    @Referencia NVARCHAR(200) = NULL
+    @Referencia NVARCHAR(200) = NULL,
+
+    @estado NVARCHAR(20)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -142,7 +144,8 @@ BEGIN
             numeroDocumento = @NumeroDocumento,
             idTipoDocumento = @IdTipoDocumento,
             telefono = @Telefono,
-            correoPersonal = LOWER(@CorreoPersonal)
+            correoPersonal = LOWER(@CorreoPersonal),
+            estado = @estado
         WHERE idPersona = @IdPersona;
 
         COMMIT TRANSACTION;

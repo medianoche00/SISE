@@ -83,7 +83,8 @@ CREATE OR ALTER PROCEDURE sp_Egresado_Actualizar
     @idEgresado INT,
     @idCarrera INT,
     @codigoUniversitario NVARCHAR(20),
-    @anioEgreso INT
+    @anioEgreso INT,
+    @estado NVARCHAR(20)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -104,7 +105,8 @@ BEGIN
         SET
             idCarrera = @idCarrera,
             codigoUniversitario = @codigoUniversitario,
-            anioEgreso = @anioEgreso
+            anioEgreso = @anioEgreso,
+            estado = @estado
         WHERE idEgresado = @idEgresado;
 
         COMMIT TRANSACTION;

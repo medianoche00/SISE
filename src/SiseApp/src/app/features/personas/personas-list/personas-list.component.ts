@@ -15,6 +15,7 @@ import {
 import { PersonaService } from '../../../core/services/persona.service';
 import { PersonaDetailComponent } from '../../../shared/persona-detail/persona-detail.component';
 import { UsuariosPersonaComponent } from '../../usuarios-persona/usuarios-persona.component';
+import { EliminarModalComponent } from '../../../shared/eliminar-modal/eliminar-modal.component';
 
 @Component({
   selector: 'app-personas-list',
@@ -143,6 +144,23 @@ export class PersonasListComponent implements OnInit {
   // Botón Lápiz
   editarPersona(persona: Persona) {
     this.abrirModal(persona);
+  }
+
+  eliminarPersona(persona: Persona) {
+    this.dialog.open(EliminarModalComponent, {
+      width: '400px',
+      data: { mensaje: "¿Está seguro de eliminar la persona con documento: " + persona.numeroDocumento + "?" }
+    }).afterClosed().subscribe(documento => {
+      if (documento) {
+        this.personaService.delete(persona.idPersona, documento).subscribe({
+          next: () => {
+            this.mostrarMensaje('Persona eliminada correctamente');
+            this.cargarPersonas();
+          },
+          error: (err) => this.mostrarMensaje('Error al eliminar: ' + err.message, 'error'),
+        });
+      }
+    });
   }
 
   // Botón User (Gestionar)

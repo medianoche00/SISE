@@ -111,7 +111,7 @@ export class UsuarioDetailComponent implements OnInit {
       // Credenciales (Solo CREATE)
       username: [''],
       email: ['', [Validators.email]],
-      password: [''],
+      password: ['', [Validators.required, Validators.minLength(6), Validators.pattern(/^(?=.*[a-z])(?=.*\d).+$/)]],
 
       // Campos Egresado
       idCarrera: [null],

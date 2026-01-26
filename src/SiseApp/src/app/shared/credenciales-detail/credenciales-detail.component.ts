@@ -43,7 +43,8 @@ export class CredencialesDetailComponent implements OnInit {
   ) {
     this.form = this.fb.group({
       username: [data.username || '', [Validators.required]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      // contraseña de minimo 6 caracteres y con minusculas y digitos
+      password: ['', [Validators.required, Validators.minLength(6), Validators.pattern(/^(?=.*[a-z])(?=.*\d).+$/)]],
       documentoRespaldo: ['', [Validators.required]],
     });
   }

@@ -142,10 +142,11 @@ namespace SiseApi.Controllers
                     dto.DocumentoRespaldo,
                     idUsuarioLogueado,
                     @"EXEC sp_Representante_Actualizar
-                    @IdRepresentante, @IdEmpresa, @Cargo",
+                    @IdRepresentante, @IdEmpresa, @Cargo, @Estado",
                     new SqlParameter("@IdRepresentante", dto.IdRepresentante),
                     new SqlParameter("@IdEmpresa", dto.IdEmpresa),
-                    new SqlParameter("@Cargo", dto.Cargo ?? (object)DBNull.Value)
+                    new SqlParameter("@Cargo", dto.Cargo ?? (object)DBNull.Value),
+                    new SqlParameter("@Estado", dto.Estado)
                 );
 
                 return Ok();

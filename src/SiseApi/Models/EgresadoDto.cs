@@ -29,5 +29,6 @@
         public int AnioEgreso { get; set; }
         public string CodigoUniversitario { get; set; } = null!;
         public string DocumentoRespaldo { get; set; } = null!;
+        public string Estado { get; set; } = null!;
     }
 }

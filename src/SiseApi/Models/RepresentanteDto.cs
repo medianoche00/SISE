@@ -57,5 +57,8 @@ namespace SiseApi.Models
         // --- Auditoría ---
         [Required(ErrorMessage = "El documento de respaldo es obligatorio.")]
         public string DocumentoRespaldo { get; set; }
+
+        [Required(ErrorMessage = "El estado es obligatorio.")]
+        public string Estado { get; set; }
     }
 }

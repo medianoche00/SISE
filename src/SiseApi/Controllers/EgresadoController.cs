@@ -132,11 +132,12 @@ namespace SiseApi.Controllers
                     dto.DocumentoRespaldo,
                     idUsuario,
                     @"EXEC sp_Egresado_Actualizar
-                    @IdEgresado, @IdCarrera, @CodigoUniversitario, @AnioEgreso",
+                    @IdEgresado, @IdCarrera, @CodigoUniversitario, @AnioEgreso, @Estado",
                     new SqlParameter("@IdEgresado", dto.IdEgresado),
                     new SqlParameter("@IdCarrera", dto.IdCarrera),
                     new SqlParameter("@CodigoUniversitario", dto.CodigoUniversitario),
-                    new SqlParameter("@AnioEgreso", dto.AnioEgreso)
+                    new SqlParameter("@AnioEgreso", dto.AnioEgreso),
+                    new SqlParameter("@Estado", dto.Estado)
                 );
 
                 return Ok();

@@ -150,7 +150,7 @@ namespace SiseApi.Controllers
                     @Nombres, @ApellidoPaterno, @ApellidoMaterno, 
                     @IdTipoDocumento, @NumeroDocumento, 
                     @Telefono, @CorreoPersonal,
-                    @IdDistrito, @Calle, @Numero, @PisoDepartamento, @Referencia",
+                    @IdDistrito, @Calle, @Numero, @PisoDepartamento, @Referencia, @Estado",
 
                     new SqlParameter("@IdPersona", dto.IdPersona),
                     new SqlParameter("@Nombres", dto.Nombres),
@@ -165,7 +165,8 @@ namespace SiseApi.Controllers
                     new SqlParameter("@Calle", dto.Calle),
                     new SqlParameter("@Numero", (object?)dto.Numero ?? DBNull.Value),
                     new SqlParameter("@PisoDepartamento", (object?)dto.PisoDepartamento ?? DBNull.Value),
-                    new SqlParameter("@Referencia", (object?)dto.Referencia ?? DBNull.Value)
+                    new SqlParameter("@Referencia", (object?)dto.Referencia ?? DBNull.Value),
+                    new SqlParameter("@Estado", dto.Estado)
                 );
 
                 return Ok(new { message = "Persona actualizada correctamente" });

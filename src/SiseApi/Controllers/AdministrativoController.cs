@@ -166,7 +166,7 @@ namespace SiseApi.Controllers
                     dto.DocumentoRespaldo,
                     idUsuarioLogueado,
                     @"EXEC sp_Administrativo_Crear
-                @IdCargoAdministrativo, @IdPersona, @IdUsuario",
+                    @IdCargoAdministrativo, @IdPersona, @IdUsuario",
                     new SqlParameter("@IdCargoAdministrativo", dto.IdCargoAdministrativo),
                     new SqlParameter("@IdPersona", dto.IdPersona),
                     new SqlParameter("@IdUsuario", user.Id)
@@ -206,9 +206,10 @@ namespace SiseApi.Controllers
                     dto.DocumentoRespaldo,
                     idUsuarioLogueado,
                     @"EXEC sp_Administrativo_Actualizar
-                @IdAdministrativo, @IdCargoAdministrativo",
+                @IdAdministrativo, @IdCargoAdministrativo, @Estado",
                     new SqlParameter("@IdAdministrativo", dto.IdAdministrativo),
-                    new SqlParameter("@IdCargoAdministrativo", dto.IdCargoAdministrativo)
+                    new SqlParameter("@IdCargoAdministrativo", dto.IdCargoAdministrativo),
+                    new SqlParameter("@Estado", dto.Estado)
                 );
 
                 return Ok();

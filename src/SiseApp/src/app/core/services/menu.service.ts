@@ -16,9 +16,9 @@ export class MenuService {
         return [
           { label: 'Inicio', icon: 'home', route: '/dashboard' },
           {
-            label: 'Gestión Usuarios',
-            icon: 'supervised_user_circle',
-            route: '/admin/usuarios',
+            label: 'Gestión Empresas',
+            icon: 'corporate_fare',
+            route: '/admin/empresas',
           },
           {
             label: 'Gestión Personas',

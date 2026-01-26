@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Confirmar eliminación</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="fill" class="full-width">
+    <p>{{data.mensaje}}</p>
+    <mat-label>Documento de Respaldo</mat-label>
+    <input matInput [(ngModel)]="documentoRespaldo" placeholder="Ej. MEMO-001-2024" name="respaldo">
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">Cancelar</button>
+  <button mat-raised-button color="primary" [disabled]="!documentoRespaldo.trim()" [mat-dialog-close]="documentoRespaldo">Enviar</button>
+</mat-dialog-actions>

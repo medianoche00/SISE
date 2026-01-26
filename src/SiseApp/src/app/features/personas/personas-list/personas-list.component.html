@@ -84,8 +84,12 @@
             <mat-icon>edit</mat-icon>
           </button>
 
-          <button mat-icon-button color="red" matTooltip="Eliminar" (click)="eliminarPersona(row)">
-            <mat-icon>edit</mat-icon>
+          <button *ngIf="row.estado!='Eliminado'" mat-icon-button color="warn" matTooltip="Eliminar" (click)="eliminarPersona(row)">
+            <mat-icon>delete</mat-icon>
+          </button>
+
+          <button *ngIf="row.estado=='Eliminado'" mat-icon-button color="green" matTooltip="Restaurar" (click)="restaurarPersona(row)">
+            <mat-icon>restore_from_trash</mat-icon>
           </button>
 
         </td>

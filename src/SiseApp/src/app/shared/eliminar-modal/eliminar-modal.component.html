@@ -1,12 +1,48 @@
 <h2 mat-dialog-title>Confirmar eliminación</h2>
-<mat-dialog-content>
-  <mat-form-field appearance="fill" class="full-width">
-    <p>{{data.mensaje}}</p>
-    <mat-label>Documento de Respaldo</mat-label>
-    <input matInput [(ngModel)]="documentoRespaldo" placeholder="Ej. MEMO-001-2024" name="respaldo">
-  </mat-form-field>
+
+<mat-dialog-content class="mat-typography">
+  <div class="container-fluid p-0">
+
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="alert alert-warning d-flex align-items-center" role="alert">
+            <mat-icon class="me-2">warning</mat-icon>
+            <div>{{ data.mensaje }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+
+        <h6 class="text-secondary mt-2 border-bottom pb-1">Justificación</h6>
+
+        <div class="mt-3">
+          <mat-form-field appearance="outline" class="w-100 bg-white">
+            <mat-label>Documento de Respaldo</mat-label>
+            <input matInput
+                   [(ngModel)]="documentoRespaldo"
+                   placeholder="Ej. MEMO-001-2024"
+                   name="respaldo"
+                   required
+                   autocomplete="off">
+            <mat-error>Requerido</mat-error>
+          </mat-form-field>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
 </mat-dialog-content>
-<mat-dialog-actions align="end">
+
+<mat-dialog-actions align="end" class="pe-3 pb-3">
   <button mat-button (click)="onNoClick()">Cancelar</button>
-  <button mat-raised-button color="primary" [disabled]="!documentoRespaldo.trim()" [mat-dialog-close]="documentoRespaldo">Enviar</button>
+
+  <button mat-flat-button
+          color="primary"
+          [disabled]="!documentoRespaldo || !documentoRespaldo.trim()"
+          [mat-dialog-close]="documentoRespaldo">
+    Confirmar
+  </button>
 </mat-dialog-actions>

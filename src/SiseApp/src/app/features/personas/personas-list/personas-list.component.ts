@@ -163,6 +163,12 @@ export class PersonasListComponent implements OnInit {
     });
   }
 
+  restaurarPersona(persona: Persona) {
+    persona.estado = 'Activo';
+    this.editarPersona(persona);
+    this.cargarPersonas();
+  }
+
   // Botón User (Gestionar)
   gestionarUsuario(persona: Persona) {
     this.dialog.open(UsuariosPersonaComponent, {

@@ -1,0 +1,6 @@
+mat-dialog-content {
+  max-height: 80vh;
+  /* Evita que el modal sea más alto que la pantalla */
+  min-width: 400px;
+  /* Ancho mínimo para que no se vea aplastado */
+}

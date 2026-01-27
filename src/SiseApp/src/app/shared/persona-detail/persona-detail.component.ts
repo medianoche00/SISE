@@ -44,7 +44,7 @@ export class PersonaDetailComponent implements OnInit {
   listaDepartamentos: DepartamentoDto[] = [];
   listaProvincias: ProvinciaDto[] = [];
   listaDistritos: DistritoDto[] = [];
-  listaEstados: string[] = ['Activo', 'Eliminado'];
+  //listaEstados: string[] = ['Activo', 'Eliminado'];
 
   constructor(
     private fb: FormBuilder,
@@ -113,9 +113,7 @@ export class PersonaDetailComponent implements OnInit {
       numero: persona.numero,
       pisoDepartamento: persona.pisoDepartamento,
       referencia: persona.referencia,
-      estado: persona.estado,
-      // IMPORTANTE: NO cargamos documentoRespaldo aquí.
-      // Queremos que el usuario ingrese el nuevo documento que justifica este cambio.
+      //estado: persona.estado,
       documentoRespaldo: ''
     });
 

@@ -88,9 +88,17 @@
                 <button mat-icon-button matTooltip="Editar Usuario" color="primary" (click)="editarUsuario(element)">
                   <mat-icon>edit</mat-icon>
                 </button>
-
+<!--
                 <button mat-icon-button matTooltip="Gestionar Credenciales" color="warn" (click)="gestionarCredenciales(element)">
                   <mat-icon>vpn_key</mat-icon>
+                </button>
+-->
+                <button *ngIf="element.estadoRol!='Eliminado'" mat-icon-button color="warn" matTooltip="Eliminar" (click)="eliminarUsuario(element)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+
+                <button *ngIf="element.estadoRol=='Eliminado'" mat-icon-button color="green" matTooltip="Restaurar" (click)="restaurarUsuario(element)">
+                  <mat-icon>restore_from_trash</mat-icon>
                 </button>
 
               </td>

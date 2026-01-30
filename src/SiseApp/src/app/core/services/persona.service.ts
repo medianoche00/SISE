@@ -45,4 +45,8 @@ export class PersonaService {
       params: params,
     });
   }
+
+  restaurar(idPersona: number, documento: any) {
+    return this.http.post<Persona>(this.apiUrl+'/Restaurar/'+idPersona, "");
+  }
 }

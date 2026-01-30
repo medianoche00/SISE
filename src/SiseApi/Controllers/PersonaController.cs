@@ -214,5 +214,36 @@ namespace SiseApi.Controllers
                 return StatusCode(500, $"Error al eliminar persona: {ex.Message}");
             }
         }
+
+        [HttpPost("Restaurar/{IdPersona:int}")]
+        public async Task<ActionResult> RestaurarPersona(int IdPersona)
+        {
+            var DocumentoRespaldo = "SOLIC123";
+            if (string.IsNullOrWhiteSpace(DocumentoRespaldo))
+            {
+                return BadRequest("Es obligatorio indicar el documento que respalda la restauración.");
+            }
+            var idAdministrador = await _usuarioActualService.GetIdAdministrativoActualAsync();
+            if (idAdministrador == null) return Unauthorized("Usuario no es administrador.");
+            var idUsuario = _usuarioActualService.GetIdUsuarioLogueado();
+            try
+            {
+                await _context.EjecutarSpConAuditoriaAsync(
+                    DocumentoRespaldo,
+                    idUsuario,
+                    "EXEC sp_Persona_Restaurar @IdPersona",
+                    new SqlParameter("@IdPersona", IdPersona)
+                );
+                return Ok(new { message = "Persona restaurada correctamente" });
+            }
+            catch (SqlException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error al restaurar persona: {ex.Message}");
+            }
+        }
     }
 }

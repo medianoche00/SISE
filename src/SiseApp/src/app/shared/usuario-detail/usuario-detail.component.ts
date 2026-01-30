@@ -109,9 +109,9 @@ export class UsuarioDetailComponent implements OnInit {
       documentoRespaldo: ['', Validators.required],
 
       // Credenciales (Solo CREATE)
-      username: [''],
-      email: ['', [Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6), Validators.pattern(/^(?=.*[a-z])(?=.*\d).+$/)]],
+      //username: [''],
+      //email: ['', [Validators.email]],
+      //password: ['', [Validators.required, Validators.minLength(6), Validators.pattern(/^(?=.*[a-z])(?=.*\d).+$/)]],
 
       // Campos Egresado
       idCarrera: [null],
@@ -153,11 +153,11 @@ export class UsuarioDetailComponent implements OnInit {
           this.cargarDatosEdicion();
         } else {
           // Validadores Identity para CREAR
-          this.form.get('username')?.setValidators(Validators.required);
-          this.form
-            .get('email')
-            ?.setValidators([Validators.required, Validators.email]);
-          this.form.get('password')?.setValidators(Validators.required);
+          //this.form.get('username')?.setValidators(Validators.required);
+          //this.form
+          //  .get('email')
+          //  ?.setValidators([Validators.required, Validators.email]);
+          //this.form.get('password')?.setValidators(Validators.required);
         }
       },
       error: (err) => {
@@ -239,9 +239,9 @@ export class UsuarioDetailComponent implements OnInit {
     }
 
     this.form.get('idRol')?.disable();
-    this.form.get('username')?.disable();
-    this.form.get('email')?.disable();
-    this.form.get('password')?.disable();
+    //this.form.get('username')?.disable();
+    //this.form.get('email')?.disable();
+    //this.form.get('password')?.disable();
 
     const nombreRol = this.usuarioEdicion.rol;
     const idEntidad = this.usuarioEdicion.idEntidad; // ID Específico (EgresadoID, etc.)
@@ -297,9 +297,19 @@ export class UsuarioDetailComponent implements OnInit {
     if (!this.isEditMode) {
       // Datos base de identidad
       const baseIdentity = {
-        username: val.username,
-        email: val.email,
-        password: val.password,
+        username:
+          this.persona.nombres +
+          '.' +
+          this.persona.apellidoPaterno +
+          '.' +
+          this.persona.idPersona,
+        email:
+          this.persona.nombres +
+          '.' +
+          this.persona.apellidoPaterno +
+          '.' +
+          this.persona.idPersona+'@unp.edu.pe',
+        password: 'MiContra123#',
         documentoRespaldo: val.documentoRespaldo,
         idPersona: this.persona.idPersona,
       };

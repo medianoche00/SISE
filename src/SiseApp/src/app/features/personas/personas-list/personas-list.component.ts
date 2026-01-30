@@ -164,9 +164,29 @@ export class PersonasListComponent implements OnInit {
   }
 
   restaurarPersona(persona: Persona) {
-    persona.estado = 'Activo';
-    this.editarPersona(persona);
-    this.cargarPersonas();
+    this.dialog
+      .open(EliminarModalComponent, {
+        width: '400px',
+        data: {
+          mensaje:
+            '¿Está seguro de restaurar la persona con documento: ' +
+            persona.numeroDocumento +
+            '?',
+        },
+      })
+      .afterClosed()
+      .subscribe((documento) => {
+        if (documento) {
+          this.personaService.restaurar(persona.idPersona, documento).subscribe({
+            next: () => {
+              this.mostrarMensaje('Persona restaurada correctamente');
+              this.cargarPersonas();
+            },
+            error: (err) =>
+              this.mostrarMensaje('Error al restaurar: ' + err.message, 'error'),
+          });
+        }
+      });
   }
 
   // Botón User (Gestionar)

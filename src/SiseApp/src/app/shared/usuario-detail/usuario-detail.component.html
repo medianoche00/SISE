@@ -29,8 +29,9 @@
       </div>
 
       <div *ngIf="!rolNoSoportado && form.get('idRol')?.value">
-
+<!--
         <div *ngIf="!isEditMode"> <!-- class="card bg-light mb-3 border-0" -->
+<!--
           <div class="card-body pt-2 pb-0">
             <h6 class="ttext-secondary mt-2 border-bottom pb-1">Credenciales de Acceso</h6>
             <div class="row">
@@ -58,7 +59,7 @@
             </div>
           </div>
         </div>
-
+-->
         <ng-container *ngIf="obtenerNombreRol(form.get('idRol')?.value) === ROL_EGRESADO">
           <h6 class="text-secondary mt-2 border-bottom pb-1">Datos Académicos</h6>
           <div class="row mt-2">

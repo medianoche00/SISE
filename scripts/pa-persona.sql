@@ -292,3 +292,40 @@ BEGIN
       AND P.numeroDocumento = @NumeroDocumento;
 END
 GO
+
+/* ==================================================================================
+   3. RESTAURAR PERSONA
+   ================================================================================== */
+CREATE OR ALTER PROCEDURE sp_Persona_Restaurar
+    @IdPersona INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        IF NOT EXISTS (SELECT 1 FROM dbo.Persona WHERE idPersona = @IdPersona)
+        BEGIN
+            RAISERROR('La persona no existe.', 16, 1);
+        END
+
+        UPDATE dbo.Persona
+        SET estado = 'Activo'
+        WHERE idPersona = @IdPersona;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END
+
+        -- Propagar el error al aplicativo
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH
+END
+GO
